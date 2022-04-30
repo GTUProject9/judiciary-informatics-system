@@ -31,7 +31,18 @@ public class SystemClass
 
         stateAttorneyReferences = new LinkedList<>();
         jobAdvertisementsReferences = new LinkedList<>();
-        lawsuits = new PriorityQueue<>();
+        
+        // Lambda method
+        lawsuits = new PriorityQueue<>((lawsuit1, lawsuit2) -> lawsuit1.getDate().compareTo(lawsuit2.getDate()));
+
+        //  Anonymous class
+        // lawsuits = new PriorityQueue<>(new Comparator<Lawsuit>() {
+        //     @Override
+        //     public int compare(Lawsuit lawsuit1, Lawsuit lawsuit2) {
+        //         return lawsuit1.getDate().compareTo(lawsuit2.getDate());
+        //     }
+        // });
+
     }
     
     // register and get system object
@@ -42,14 +53,8 @@ public class SystemClass
         // Codes starts from 1.
         int index = systemObjectType.getSystemObjectCode() - 1;
 
-        // System.out.println("index: " + index);
-
         if (systemObjectType == SystemObjectTypes.LAWSUIT)
         {
-            // Burada tarihe gore siralama yapmasi lazim ama nasil olacagidan emin degilim.
-            // compareTo methodu abstract user class'ta id kiyasliyor,
-            // lawsuit'te date kiyaslayacak sekilde override ettim.
-            // bu sekilde fakat bu sefer de bst'ye eklerken hata aliyorum.
             lawsuits.add((Lawsuit)systemObject);
         }
         if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).getStateAttorney())
@@ -57,7 +62,6 @@ public class SystemClass
             stateAttorneyReferences.add((Lawyer) systemObject);
         }
         systemObjects.get(index).add(systemObject);  
-        
     }
     
     public AbstractSystemObject getSystemObject(int id)
@@ -66,7 +70,7 @@ public class SystemClass
         // Codes starts from 1.
         int index = systemObjectCode.getSystemObjectCode() - 1;
         // Code'a gore arraylist'ten bst'yi get yap.
-        // Local class yaratip oradan find'a pass edip id compare ederek, aradigimiz objeyi buluruz.
+        // Anonymous class yaratip oradan find'a pass edip id compare ederek, aradigimiz objeyi buluruz.
         return systemObjects.get(index).find(new AbstractSystemObject(id) {
             @Override
             public int getId() {
