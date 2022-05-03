@@ -24,9 +24,6 @@ public class SystemClass
     // Owner, is ilani olustururken, bir referans da buraya eklenecek
     private Queue<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
 
-    private ArrayList<String> firstNames;
-    private ArrayList<String> lastNames;
-
 
     public SystemClass() 
     {
@@ -50,35 +47,15 @@ public class SystemClass
         //     }
         // });
         
-        firstNames = new ArrayList<>();
-        lastNames = new ArrayList<>();
         
-        readFileIntoAList(firstNames, "text-first-names.txt");
-        readFileIntoAList(lastNames, "text-last-names.txt");
-    }
-
-    /**
-     * This function reads a file into a list
-     * 
-     * @param theList the list you want to add the strings to
-     * @param filePath The path to the file you want to read.
-     */
-    private void readFileIntoAList(List theList, String filePath) {
-        
-        try {
-            Scanner s = new Scanner(new File(filePath));
-            while (s.hasNext()){
-                theList.add(s.next());
-            }
-            s.close();
-        } 
-        catch (Exception e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
     }
     
-    // register and get system object
+    
+    /**
+     * It adds the given system object to the appropriate Binary Search Tree
+     * 
+     * @param systemObject The object to be registered.
+     */
     public void registerSystemObject(AbstractSystemObject systemObject)
     {
         // SystemObjectsCodes'a gore bst'yi getir ve objeyi ekle.
@@ -97,6 +74,13 @@ public class SystemClass
         systemObjects.get(index).add(systemObject);  
     }
     
+
+    /**
+     * Find the correct Binary Search Tree, then get the system object.
+     * 
+     * @param id The id of the system object.
+     * @return AbstractSystemObject
+     */
     public AbstractSystemObject getSystemObject(int id)
     {
         SystemObjectTypes systemObjectCode = findSystemObjectType(id);
@@ -142,16 +126,33 @@ public class SystemClass
     }
 
     // Helpers
+
+    /**
+     * This function adds a Lawyer object to the stateAttorneyReferences ArrayList.
+     * 
+     * @param stateAttorney The state attorney to add to the list of state attorneys.
+     */
     public void addStateAttorney(Lawyer stateAttorney)
     {
         stateAttorneyReferences.add(stateAttorney);
     }
 
+
+    /**
+     * This function adds a lawsuit to the list of lawsuits.
+     * 
+     * @param lawsuit The lawsuit to add to the list of lawsuits.
+     */
     public void addLawsuit(Lawsuit lawsuit)
     {
         lawsuits.add(lawsuit);
     }
 
+    /**
+     * Adds a job advertisement to the list of job advertisements.
+     * 
+     * @param jobAdvertisement The job advertisement to be added to the list of job advertisements.
+     */
     public void addJobAdvertisement(LawOffice.JobAdvertisement jobAdvertisement)
     {
         jobAdvertisementsReferences.add(jobAdvertisement);
@@ -173,12 +174,5 @@ public class SystemClass
 
     public Queue<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
         return jobAdvertisementsReferences;
-    }
-
-    public ArrayList<String> getFirstNames(){
-        return firstNames;
-    }
-    public ArrayList<String> getLastNames() {
-        return lastNames;
     }
 }
