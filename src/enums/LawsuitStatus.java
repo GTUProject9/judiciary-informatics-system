@@ -1,6 +1,6 @@
 package enums;
 
-public enum Status
+public enum LawsuitStatus
 {
     HOLD_ON, STILL_GOING, SUING_WON, SUED_WON;
     public String getStatus()

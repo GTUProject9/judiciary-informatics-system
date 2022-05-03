@@ -1,8 +1,11 @@
+import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Scanner;
 
 import binarysearchtree.BinarySearchTree;
 import enums.SystemObjectTypes;
@@ -20,6 +23,10 @@ public class SystemClass
 
     // Owner, is ilani olustururken, bir referans da buraya eklenecek
     private Queue<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
+
+    private ArrayList<String> firstNames;
+    private ArrayList<String> lastNames;
+
 
     public SystemClass() 
     {
@@ -42,7 +49,27 @@ public class SystemClass
         //         return lawsuit1.getDate().compareTo(lawsuit2.getDate());
         //     }
         // });
+        
+        firstNames = new ArrayList<>();
+        lastNames = new ArrayList<>();
+        
+        readFileIntoAList(firstNames, "text-first-names.txt");
+        readFileIntoAList(lastNames, "text-last-names.txt");
+    }
 
+    private void readFileIntoAList(List theList, String filePath) {
+        
+        try {
+            Scanner s = new Scanner(new File(filePath));
+            while (s.hasNext()){
+                theList.add(s.next());
+            }
+            s.close();
+        } 
+        catch (Exception e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
     
     // register and get system object
@@ -82,6 +109,8 @@ public class SystemClass
     // Id'den hangi type system object oldugunu bul
     public static SystemObjectTypes findSystemObjectType(int id)
     {
+        // Error check gelebilir
+
         int code = id / (int) Math.pow(10, AbstractSystemObject.ID_LENGTH - 1);
         int index = code - 1;
         // Kriptik version
@@ -138,5 +167,12 @@ public class SystemClass
 
     public Queue<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
         return jobAdvertisementsReferences;
+    }
+
+    public ArrayList<String> getFirstName(){
+        return firstNames;
+    }
+    public ArrayList<String> getLastNames() {
+        return lastNames;
     }
 }
