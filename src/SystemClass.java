@@ -169,7 +169,7 @@ public class SystemClass
         return jobAdvertisementsReferences;
     }
 
-    public ArrayList<String> getFirstName(){
+    public ArrayList<String> getFirstNames(){
         return firstNames;
     }
     public ArrayList<String> getLastNames() {
