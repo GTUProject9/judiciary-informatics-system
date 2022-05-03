@@ -1,5 +1,6 @@
 /**
- * Comparable System Object, it contains an if field and compareTo method.
+ * Super class of all system objects that contains an id.
+ * It contains an id as field and compareTo method. 
  */
 public abstract class AbstractSystemObject implements Comparable<AbstractSystemObject>
 {
