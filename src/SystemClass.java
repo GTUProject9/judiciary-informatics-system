@@ -57,6 +57,12 @@ public class SystemClass
         readFileIntoAList(lastNames, "text-last-names.txt");
     }
 
+    /**
+     * This function reads a file into a list
+     * 
+     * @param theList the list you want to add the strings to
+     * @param filePath The path to the file you want to read.
+     */
     private void readFileIntoAList(List theList, String filePath) {
         
         try {
