@@ -46,14 +46,6 @@ public class Judge extends Citizen{
     }
 
 
-    public static void menu(SystemClass systemClassObject) {
-        // Burada id ve password istenir.
-        int id = 0;
-        
-        Citizen Judge = (Judge) systemClassObject.getSystemObject(id);
-
-    }
-
     /**
      * Assigns given lawsuit to judge
      * @param lawsuit lawsuit
@@ -62,4 +54,11 @@ public class Judge extends Citizen{
         assignedLawsuits.add(lawsuit);
     }
 
+    public static void menu(SystemClass systemClassObject) {
+        // Burada id ve password istenir.
+        int id = 0;
+        
+        Citizen Judge = (Judge) systemClassObject.getSystemObject(id);
+
+    }
 }
