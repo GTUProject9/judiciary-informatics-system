@@ -1,6 +1,8 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import binarysearchtree.*;
+
 public class Driver {
     public static void main(String[] args) throws Exception 
     {
@@ -48,7 +50,7 @@ public class Driver {
         // System.out.println(systemClassObject.getSystemObjects());
 
         SystemObjectCreator.createRandomCitizens(systemClassObject);
-        // System.out.println(systemClassObject.getSystemObjects());
+        System.out.println(systemClassObject.getSystemObjects());
 
     }
 
