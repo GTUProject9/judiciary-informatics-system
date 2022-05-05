@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Citizen extends AbstractUser
 {
-    private ArrayList<Integer> lawsuitsId;
-    private ArrayList<Integer> personalLawyersId;
+    private ArrayList<Integer> lawsuitsIds;
+    private ArrayList<Integer> personalLawyersIds;
     
     public Citizen() {
         super();
@@ -12,9 +13,8 @@ public class Citizen extends AbstractUser
 
     public Citizen(int id, String password, String name, String surname, String email, String phone) {
         super(id, password, name, surname, email, phone);
-        insertPersonalInformations();
     }
-
+    
     private void insertPersonalInformations() {
         // burada lawsuits ve personalLawyers eklenecek.
     }
@@ -29,9 +29,9 @@ public class Citizen extends AbstractUser
         return null;
     }
 
-    public void createLawsuit() {
+    public static Lawsuit createLawsuit() {
         // bir dava olusturulacak.
-        Object lawsuit = new Object();
+        Lawsuit lawsuit = new Lawsuit();
 
         
         // dava status "waiting" olacak.
@@ -45,18 +45,20 @@ public class Citizen extends AbstractUser
         //  -- OR --
 
         // dava status "assigned" olacak.
-        assignLawyerByCmk();
+        assignLawyerByState();
+
+        return lawsuit;
     }
     
-    private void selectLawyerFromPersonalLawyers() {
+    private static void selectLawyerFromPersonalLawyers() {
     }
 
-    private void selectLawyer() {
+    private static void selectLawyer() {
         // Is basvurusu eklenir
         // TODO Auto-generated method stub
     }
 
-    private void assignLawyerByCmk() {
+    private static void assignLawyerByState() {
         // TODO Auto-generated method stub
     }
 
@@ -64,15 +66,38 @@ public class Citizen extends AbstractUser
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        sb.append("lawsuitsId: ").append(lawsuitsId).append("\n");
-        sb.append("personalLawyersId: ").append(personalLawyersId).append("\n");
+        sb.append("lawsuitsId: ").append(lawsuitsIds).append("\n");
+        sb.append("personalLawyersId: ").append(personalLawyersIds).append("\n");
         return sb.toString();
     }
 
     public static void menu(SystemClass systemClassObject) {
-        // Burada id ve password istenir.
-        int id = 0;
+        
+        int id;
+        String password;
+
+        // Get id and password from user
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter your id: ");
+        id = scanner.nextInt();
+        System.out.print("Enter your password: ");
+        password = scanner.next();
+
+        // Check if id and password are correct
         Citizen citizen = (Citizen) systemClassObject.getSystemObject(id);
+
+        if (citizen != null && citizen.getPassword().equals(password)) 
+        {
+            System.out.println("\nWelcome " + citizen.getFirstName() + " " + citizen.getLastName() + "!");
+            
+
+
+        } 
+        else 
+        {
+            System.out.println("Invalid id or password!");
+        }
     }
     
 }

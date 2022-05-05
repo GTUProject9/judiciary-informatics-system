@@ -1,7 +1,7 @@
-public class GovermentOfficial extends Citizen 
+public class GovernmentOfficial extends Citizen 
 {
-    GovermentOfficial(){}
-    GovermentOfficial(int id, String password, String firstName, String lastName, String phone, String email)
+    GovernmentOfficial(){}
+    GovernmentOfficial(int id, String password, String firstName, String lastName, String phone, String email)
     {
         super(id, password, firstName, lastName, phone, email);
     }
@@ -30,6 +30,6 @@ public class GovermentOfficial extends Citizen
     public static void menu(SystemClass systemClassObject) {
         // Burada id ve password istenir.
         int id = 0;
-        GovermentOfficial govermentOfficial = (GovermentOfficial) systemClassObject.getSystemObject(id);
+        GovernmentOfficial govermentOfficial = (GovernmentOfficial) systemClassObject.getSystemObject(id);
     }
 }

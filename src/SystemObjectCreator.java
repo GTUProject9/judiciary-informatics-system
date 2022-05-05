@@ -37,7 +37,7 @@ public final class SystemObjectCreator {
      * @param systemClassObject The SystemClass object that will be used to register the new Citizen
      * objects.
      */
-    public static void createRandomCitizens(SystemClass systemClassObject)
+    public static void createCitizens(SystemClass systemClassObject)
     {
         int userCode = SystemObjectTypes.CITIZEN.getSystemObjectCode();
         int id = createInitialId(userCode);
