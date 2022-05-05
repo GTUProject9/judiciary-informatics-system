@@ -6,7 +6,7 @@ public class Driver {
     {
         SystemClass systemClassObject = new SystemClass();
         
-        // System.out.println("--> Create a citizen and print its information.");
+        // System.out.println("--> Create a citizen and print its information."); 
         // Citizen citizen = new Citizen();
         // System.out.println(citizen);
         // System.out.println("--> get null: " + systemClassObject.getSystemObject(20001) + "\n");
