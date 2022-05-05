@@ -48,7 +48,8 @@ public class Driver {
         // System.out.println(systemClassObject.getSystemObjects());
 
         SystemObjectCreator.createRandomCitizens(systemClassObject);
-        System.out.println(systemClassObject.getSystemObjects());
+        // System.out.println(systemClassObject.getSystemObjects());
+
     }
 
 }

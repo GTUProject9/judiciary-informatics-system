@@ -7,11 +7,11 @@ import enums.LawsuitStatus;
 public class Lawsuit extends AbstractSystemObject
 {
     private Date date;
-    private Judge judge;
-    private Citizen suingCitizen;
-    private Citizen suedCitizen;
-    private Lawyer suingLawyer;
-    private Lawyer suedLawyer;
+    private Integer judge;
+    private Integer suingCitizen;
+    private Integer suedCitizen;
+    private Integer suingLawyer;
+    private Integer suedLawyer;
 
     //Personal Injury Lawsuit, Product Liability Lawsuit, Divorce and Family Law Disputes, Criminal Cases
     private LawsuitTypes lawsuitType;
@@ -20,8 +20,8 @@ public class Lawsuit extends AbstractSystemObject
     private LawsuitStatus status;
 
     Lawsuit(){}
-    public Lawsuit(Integer id, Date date, Judge judge, Citizen suingCitizen, Citizen suedCitizen,
-                   Lawyer suingLawyer, Lawyer suedLawyer, LawsuitTypes lawsuitType, LawsuitStatus status,
+    public Lawsuit(Integer id, Date date, Integer judge, Integer suingCitizen, Integer suedCitizen,
+                   Integer suingLawyer, Integer suedLawyer, LawsuitTypes lawsuitType, LawsuitStatus status,
                    String caseFile, String courtRecords) {
         super(id);
         this.date = date;
@@ -62,43 +62,43 @@ public class Lawsuit extends AbstractSystemObject
         return this.date;
     }
 
-    public void setJudge(Judge judge){
+    public void setJudge(Integer judge){
         this.judge = judge;
     }
 
-    public Judge getJudge(){
+    public Integer getJudge(){
         return this.judge;
     }
 
-    public void setSuingCitizen(Citizen citizen){
+    public void setSuingCitizen(Integer citizen){
         this.suingCitizen = citizen;
     }
 
-    public Citizen getSuingCitizen(){
+    public Integer getSuingCitizen(){
         return this.suingCitizen;
     }
 
-    public void setSuedCitizen(Citizen citizen){
+    public void setSuedCitizen(Integer citizen){
         this.suedCitizen = citizen;
     }
 
-    public Citizen getSuedCitizen(){
+    public Integer getSuedCitizen(){
         return this.suedCitizen;
     }
 
-    public void setSuingLawyer(Lawyer lawyer){
+    public void setSuingLawyer(Integer lawyer){
         this.suingLawyer = lawyer;
     }
 
-    public Lawyer getSuingLawyer(){
+    public Integer getSuingLawyer(){
         return this.suingLawyer;
     }
 
-    public void setSuedLawyer(Lawyer lawyer){
+    public void setSuedLawyer(Integer lawyer){
         this.suedLawyer = lawyer;
     }
 
-    public Lawyer getSuedLawyer(){
+    public Integer getSuedLawyer(){
         return suedLawyer;
     }
 
