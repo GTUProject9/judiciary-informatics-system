@@ -50,9 +50,7 @@ public class Judge extends Citizen{
         // Burada id ve password istenir.
         int id = 0;
         
-        
         Citizen Judge = (Judge) systemClassObject.getSystemObject(id);
-        
 
     }
 
