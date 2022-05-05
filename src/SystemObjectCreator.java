@@ -47,7 +47,7 @@ public final class SystemObjectCreator {
         
         for (int i = 0; i < NUMBER_OF_CITIZENS; i++)
         {
-            int randIndex = rand.nextInt(firstNames.size());
+            int randIndex = rand.nextInt(firstNames.size()) - 1;
             String firstName = firstNames.get(randIndex);
             String lastName = lastNames.get(randIndex);
             String email = firstName + lastName + id + EMAIL_DOMAIN;
