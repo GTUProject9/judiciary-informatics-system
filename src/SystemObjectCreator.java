@@ -3,7 +3,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 import enums.SystemObjectTypes;
@@ -43,13 +42,11 @@ public final class SystemObjectCreator {
         int userCode = SystemObjectTypes.CITIZEN.getSystemObjectCode();
         int id = createInitialId(userCode);
         setFirstNamesAndLastNames();
-        Random rand = new Random();
         
         for (int i = 0; i < NUMBER_OF_CITIZENS; i++)
         {
-            int randIndex = rand.nextInt(firstNames.size());
-            String firstName = firstNames.get(randIndex);
-            String lastName = lastNames.get(randIndex);
+            String firstName = firstNames.get(i % firstNames.size());
+            String lastName = lastNames.get(i % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
 
             systemClassObject.registerSystemObject(new Citizen(
