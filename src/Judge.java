@@ -45,10 +45,14 @@ public class Judge extends Citizen{
         concludedLawsuits.add(lawsuit);
     }
 
-    /**
-     * Menu for Judge
-     */
-    public void menu() {
+
+    public static void menu(SystemClass systemClassObject) {
+        // Burada id ve password istenir.
+        int id = 0;
+        
+        
+        Citizen Judge = (Judge) systemClassObject.getSystemObject(id);
+        
 
     }
 
