@@ -1,7 +1,6 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import binarysearchtree.*;
 
 public class Driver {
     public static void main(String[] args) throws Exception 
