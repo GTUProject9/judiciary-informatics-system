@@ -429,7 +429,6 @@ Andriana
 Codee
 Shellie
 Lacee
-Zsa Zsa
 Twila
 Becki
 Annamaria
@@ -926,7 +925,6 @@ Tanya
 Ginni
 Lura
 Babs
-Jo Ann
 Aeriela
 Alys
 Mariellen
@@ -998,3 +996,5 @@ Dulcine
 Alika
 Nora
 Cristine
+Godira
+Hazer
