@@ -2,13 +2,13 @@ package enums;
 
 public enum LawsuitStatus
 {
-    HOLD_ON, STILL_GOING, SUING_WON, SUED_WON;
+    ON_HOLD, STILL_GOING, SUING_WON, SUED_WON;
     public String getStatus()
     {
         switch(this)
         {
-            case HOLD_ON:
-                return "Hold On";
+            case ON_HOLD:
+                return "On Hold";
             case STILL_GOING:
                 return "Still Going";
             case SUING_WON:
