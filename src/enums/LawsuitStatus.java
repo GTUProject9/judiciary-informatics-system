@@ -1,5 +1,6 @@
 package enums;
 
+// An enum that has a method that returns a string.
 public enum LawsuitStatus
 {
     HOLD_ON, STILL_GOING, SUING_WON, SUED_WON;
