@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.Scanner;
 
 import binarysearchtree.BinarySearchTree;
+import enums.LawsuitStatus;
 import enums.SystemObjectTypes;
 
 public class SystemClass 
@@ -17,12 +18,16 @@ public class SystemClass
     // sistemObjects olusturulurken cmk avukatlari da bir taraftan buraya eklenecek, boolean degere gore
     private Queue<Lawyer> stateAttorneyReferences;
     
-    // sistemObjects olusturulurken lawsuit'ler, date'e gore priority queue'e eklenecek
-    private PriorityQueue<Lawsuit> lawsuits;
+
+    private List<PriorityQueue<Lawsuit>> lawsuitsByDate;
 
     // Owner, is ilani olustururken, bir referans da buraya eklenecek
     private Queue<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
 
+    private int lawyerCounter = 0;
+    private int lawsuitCounter = 0;
+
+    private static final int JUDGE_NUMBER = 10;
 
     public SystemClass() 
     {
@@ -34,22 +39,14 @@ public class SystemClass
 
         stateAttorneyReferences = new LinkedList<>();
         jobAdvertisementsReferences = new LinkedList<>();
+       
         
-        // Lambda method
-        lawsuits = new PriorityQueue<>((lawsuit1, lawsuit2) -> lawsuit1.getDate().compareTo(lawsuit2.getDate()));
-
-        //  Anonymous class
-        // lawsuits = new PriorityQueue<>(new Comparator<Lawsuit>() {
-        //     @Override
-        //     public int compare(Lawsuit lawsuit1, Lawsuit lawsuit2) {
-        //         return lawsuit1.getDate().compareTo(lawsuit2.getDate());
-        //     }
-        // });
-        
-        
+        lawsuitsByDate = new ArrayList<>(JUDGE_NUMBER);
+        for (int i = 0; i < JUDGE_NUMBER; i++)
+            lawsuitsByDate.add(new PriorityQueue<>((lawsuit1, lawsuit2) -> lawsuit1.getDate().compareTo(lawsuit2.getDate())));
     }
     
-    
+    // ============ TEMEL SISTEM CLASSI METHODLARI ============
     /**
      * It adds the given system object to the appropriate Binary Search Tree
      * 
@@ -64,16 +61,53 @@ public class SystemClass
 
         if (systemObjectType == SystemObjectTypes.LAWSUIT)
         {
-            lawsuits.add((Lawsuit)systemObject);
+            Lawsuit lawsuit = (Lawsuit) systemObject;
+            if (lawsuit.getJudge() != null)
+            {
+                lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit);
+            }
+        }
+        if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).getStateAttorney())
+        {
+            stateAttorneyReferences.offer((Lawyer) systemObject);
+        }
+        if (systemObjectType == SystemObjectTypes.LAWYER)
+        {
+            lawyerCounter++;
+        }
+        if (systemObjectType == SystemObjectTypes.LAWSUIT)
+        {
+            lawsuitCounter++;
+        }
+        systemObjects.get(index).add(systemObject);  
+    }
+
+    public void deleteSystemObject(AbstractSystemObject systemObject)
+    {
+        // SystemObjectsCodes'a gore bst'yi getir ve objeyi ekle.
+        SystemObjectTypes systemObjectType = findSystemObjectType(systemObject.getId());
+        // Codes starts from 1.
+        int index = systemObjectType.getSystemObjectCode() - 1;
+
+        if (systemObjectType == SystemObjectTypes.LAWSUIT)
+        {
+            Lawsuit lawsuit = (Lawsuit) systemObject;
+            if (lawsuit.getJudge() != null)
+            {
+                lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).remove(lawsuit);
+            }
         }
         if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).getStateAttorney())
         {
             stateAttorneyReferences.add((Lawyer) systemObject);
         }
+        if (systemObjectType == SystemObjectTypes.LAWYER)
+        {
+            lawyerCounter++;
+        }
         systemObjects.get(index).add(systemObject);  
     }
     
-
     /**
      * Find the correct Binary Search Tree, then get the system object.
      * 
@@ -95,6 +129,18 @@ public class SystemClass
         });
     }
 
+    /**
+     * This function adds a Lawyer object to the stateAttorneyReferences ArrayList.
+     * 
+     * @param stateAttorney The state attorney to add to the list of state attorneys.
+     */
+    public void addStateAttorney(Lawyer stateAttorney)
+    {
+        stateAttorneyReferences.add(stateAttorney);
+    }
+
+    
+    // ============ HELPERS ============
     // Id'den hangi type system object oldugunu bul
     public static SystemObjectTypes findSystemObjectType(int id)
     {
@@ -124,29 +170,18 @@ public class SystemClass
         }
     }
 
-    // Helpers
-
-    /**
-     * This function adds a Lawyer object to the stateAttorneyReferences ArrayList.
-     * 
-     * @param stateAttorney The state attorney to add to the list of state attorneys.
-     */
-    public void addStateAttorney(Lawyer stateAttorney)
+    // Check password from ID
+    public boolean checkPassword(int id, String password)
     {
-        stateAttorneyReferences.add(stateAttorney);
+        Citizen citizen = (Citizen) getSystemObject(id);
+        if (citizen == null)
+            return false;
+        
+        return citizen.getPassword().equals(password);
     }
 
 
-    /**
-     * This function adds a lawsuit to the list of lawsuits.
-     * 
-     * @param lawsuit The lawsuit to add to the list of lawsuits.
-     */
-    public void addLawsuit(Lawsuit lawsuit)
-    {
-        lawsuits.add(lawsuit);
-    }
-
+    // ============ LAW OFFICE OWNER ============
     /**
      * Adds a job advertisement to the list of job advertisements.
      * 
@@ -157,21 +192,62 @@ public class SystemClass
         jobAdvertisementsReferences.add(jobAdvertisement);
     }
 
-    // Getters
+
+
+    // ============ GOVERNMENT OFFICAL ============
+    public void addLawyer(Lawyer lawyer)
+    {
+        int initialId = SystemObjectCreator.createInitialId(SystemObjectTypes.LAWYER.getSystemObjectCode());
+        lawyer.setId(initialId + lawyerCounter);
+        registerSystemObject(lawyer);
+    }
+
+
+    // ============ JUDGE ============
+    public Lawsuit concludeLawsuit(int judgeId)
+    {
+        Lawsuit lawsuit = lawsuitsByDate.get(judgeId % 10 - 1).poll();
+        return lawsuit;
+    }
+    
+
+    /**
+     * This function adds a lawsuit to the list of lawsuits.
+     * 
+     * @param lawsuit The lawsuit to add to the list of lawsuits.
+     */
+    public void addLawsuit(Lawsuit lawsuit)
+    {
+        int initialId = SystemObjectCreator.createInitialId(SystemObjectTypes.LAWSUIT.getSystemObjectCode());
+        lawsuit.setId(initialId + lawsuitCounter);
+        registerSystemObject(lawsuit);
+    }
+
+    /**
+     * This method, set a lawsuit to the priority queue after assignation lawsuit to a judge.
+     * @param lawsuit
+     */
+    public void addLawsuitByDate(Lawsuit lawsuit)
+    {
+        lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit);
+    }
+
+    // ============ GETTERS ============
     public List<BinarySearchTree<AbstractSystemObject>> getSystemObjects()
     {
         return systemObjects;
     }
 
+    // Gerekli !!
     public Queue<Lawyer> getStateAttorneyReferences() {
         return stateAttorneyReferences;
-    }
-
-    public PriorityQueue<Lawsuit> getLawsuits() {
-        return lawsuits;
     }
 
     public Queue<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
         return jobAdvertisementsReferences;
     }
+
+    public List<PriorityQueue<Lawsuit>> getLawsuitsByDate() {
+        return lawsuitsByDate;
+    } 
 }

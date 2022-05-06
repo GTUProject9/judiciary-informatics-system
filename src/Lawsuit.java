@@ -19,7 +19,8 @@ public class Lawsuit extends AbstractSystemObject
     private String courtRecords;
     private LawsuitStatus status;
 
-    Lawsuit(){}
+    public Lawsuit(){}
+
     public Lawsuit(Integer id, Date date, Integer judge, Integer suingCitizen, Integer suedCitizen,
                    Integer suingLawyer, Integer suedLawyer, LawsuitTypes lawsuitType, LawsuitStatus status,
                    String caseFile, String courtRecords) {
@@ -34,6 +35,22 @@ public class Lawsuit extends AbstractSystemObject
         this.caseFile = caseFile;
         this.courtRecords = courtRecords;
         this.status = status;
+    }
+    
+    public Lawsuit(Integer id, Date date, Integer suingCitizen, Integer suedCitizen,
+                   Integer suingLawyer, LawsuitTypes lawsuitType,
+                   String caseFile) {
+        super(id);
+        this.date = date;
+        this.judge = null;
+        this.suingCitizen = suingCitizen;
+        this.suedCitizen = suedCitizen;
+        this.suingLawyer = suingLawyer;
+        this.suedLawyer = null;
+        this.lawsuitType = lawsuitType;
+        this.caseFile = caseFile;
+        this.courtRecords = null;
+        this.status = LawsuitStatus.STILL_GOING;
     }
     
     //Ends lawsuit with a decision of the judge.

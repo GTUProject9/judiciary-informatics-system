@@ -71,33 +71,9 @@ public class Citizen extends AbstractUser
         return sb.toString();
     }
 
-    public static void menu(SystemClass systemClassObject) {
+    @Override
+    public void menu(SystemClass systemClassObject) {
         
-        int id;
-        String password;
-
-        // Get id and password from user
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter your id: ");
-        id = scanner.nextInt();
-        System.out.print("Enter your password: ");
-        password = scanner.next();
-
-        // Check if id and password are correct
-        Citizen citizen = (Citizen) systemClassObject.getSystemObject(id);
-
-        if (citizen != null && citizen.getPassword().equals(password)) 
-        {
-            System.out.println("\nWelcome " + citizen.getFirstName() + " " + citizen.getLastName() + "!");
-            
-
-
-        } 
-        else 
-        {
-            System.out.println("Invalid id or password!");
-        }
     }
     
 }

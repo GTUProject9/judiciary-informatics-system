@@ -2,43 +2,146 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+import enums.SystemObjectTypes;
+
 public class Driver {
     public static void main(String[] args) throws Exception 
     {
         SystemClass systemClassObject = new SystemClass();
         // Create other objects
         SystemObjectCreator.createCitizens(systemClassObject);
+        SystemObjectCreator.createLawyers(systemClassObject);
+        SystemObjectCreator.createLawOfficeOwners(systemClassObject);
+        SystemObjectCreator.createGovernmentOfficials(systemClassObject);
+        SystemObjectCreator.createJudges(systemClassObject);
+        SystemObjectCreator.createLawsuits(systemClassObject);
+
         // System.out.println(systemClassObject.getSystemObjects());
+        GovernmentOfficial temp = (GovernmentOfficial) systemClassObject.getSystemObject(60001);
+        temp.menu(systemClassObject);
+        System.out.println(systemClassObject.getLawsuitsByDate() + "\n");
 
 
         Scanner scanner = new Scanner(System.in);
         
         // Menu
         System.out.println("\n ---------- Judiciary Informatics System ---------- \n\n");
+        System.out.println("--- Users ---");
         System.out.println("1. Login as a Citizen");
-        System.out.println("3. Login as a Lawyer");
-        System.out.println("4. Login as a Law Office Owner");
-        System.out.println("2. Login as a Judge");
+        System.out.println("2. Login as a Lawyer");
+        System.out.println("3. Login as a Law Office Owner");
+        System.out.println("4. Login as a Judge");
         System.out.println("5. Login as a Government Official");
         System.out.println("0 - Exit");
-        System.out.print("\nEnter your choice: ");
+
         int choice = scanner.nextInt();
-        if (choice == 1)
-            Citizen.menu(systemClassObject);
-        else if (choice == 2)
-            Judge.menu(systemClassObject);
-        else if (choice == 3)
-            Lawyer.menu(systemClassObject);
-        else if (choice == 4)
-            LawOfficeOwner.menu(systemClassObject);
-        else if (choice == 5)
-            GovernmentOfficial.menu(systemClassObject);
-        else if (choice == 0)
+
+        if (choice == 0)
+        {
+            System.out.println("Exiting...");
             System.exit(0);
-        else
-            System.out.println("Invalid choice!");
+        }
+        System.out.println("\n Enter your ID: ");
+        int id = scanner.nextInt();
+        
+        System.out.println("\n Enter your password: ");
+        String password = scanner.next();
+
+        if (choice == 1)
+        {
+            Citizen citizen = (Citizen) systemClassObject.getSystemObject(id);
+            if (citizen == null)
+            {
+                System.out.println("\n Invalid ID.\n");
+                System.exit(0);
+            }
+            else if (!citizen.getPassword().equals(password))
+            {
+                System.out.println("\n Invalid password.\n");
+                System.exit(0);
+            }
+            else
+            {
+                citizen.menu(systemClassObject);
+            }
+        }
+        else if (choice == 2)
+        {
+            Lawyer lawyer = (Lawyer) systemClassObject.getSystemObject(id);
+            if (lawyer == null)
+            {
+                System.out.println("\n Invalid ID.\n");
+                System.exit(0);
+            }
+            else if (!lawyer.getPassword().equals(password))
+            {
+                System.out.println("\n Invalid password.\n");
+                System.exit(0);
+            }
+            else
+            {
+                lawyer.menu(systemClassObject);
+            }
+        }
+        else if (choice == 3)
+        {
+            LawOfficeOwner lawOfficeOwner = (LawOfficeOwner) systemClassObject.getSystemObject(id);
+            if (lawOfficeOwner == null)
+            {
+                System.out.println("\n Invalid ID.\n");
+                System.exit(0);
+            }
+            else if (!lawOfficeOwner.getPassword().equals(password))
+            {
+                System.out.println("\n Invalid password.\n");
+                System.exit(0);
+            }
+            else
+            {
+                lawOfficeOwner.menu(systemClassObject);
+            }
+        }
+        else if (choice == 4)
+        {
+            Judge judge = (Judge) systemClassObject.getSystemObject(id);
+            if (judge == null)
+            {
+                System.out.println("\n Invalid ID.\n");
+                System.exit(0);
+            }
+            else if (!judge.getPassword().equals(password))
+            {
+                System.out.println("\n Invalid password.\n");
+                System.exit(0);
+            }
+            else
+            {
+                judge.menu(systemClassObject);
+            }
+        }
+        else if (choice == 5)
+        {
+            GovernmentOfficial governmentOfficial = (GovernmentOfficial) systemClassObject.getSystemObject(id);
+            if (governmentOfficial == null)
+            {
+                System.out.println("\n Invalid ID.\n");
+                System.exit(0);
+            }
+            else if (!governmentOfficial.getPassword().equals(password))
+            {
+                System.out.println("\n Invalid password.\n");
+                System.exit(0);
+            }
+            else
+            {
+                governmentOfficial.menu(systemClassObject);
+            }
+        }
 
         scanner.close();
+        // System.out.println(systemClassObject.getSystemObjects());
+        System.out.println(systemClassObject.getLawsuitsByDate());
+
     }
 
 }

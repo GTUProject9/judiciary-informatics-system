@@ -37,10 +37,18 @@ public class Lawyer extends Citizen {
 
     private List<JobApplication> jobApplications = new LinkedList<>();
 
-    public  Lawyer(int id,String password,String name,String surname, String email,String phone){
-       super(id, password, name, surname,  email, phone);
-       stateAttorney = false;
+    private Integer employerId = null; 
 
+    public Lawyer() {}
+
+    public Lawyer(int id,String password,String name,String surname, String email,String phone){
+        super(id, password, name, surname,  email, phone);
+        stateAttorney = false;
+    }
+
+    public Lawyer(int id,String password,String name,String surname, String email,String phone, boolean stateAttorney){
+       super(id, password, name, surname,  email, phone);
+       this.stateAttorney = stateAttorney;
     }
 
     public void viewJobsRequests(){
@@ -126,9 +134,8 @@ public class Lawyer extends Citizen {
         this.stateAttorney = stateAttorney;
     }
     
-    public static void menu(SystemClass systemClassObject) {
-        // Burada id ve password istenir.
-        int id = 0;
-        Lawyer lawyer = (Lawyer) systemClassObject.getSystemObject(id);
+    @Override
+    public void menu(SystemClass systemClassObject) {
+        
     }
 }

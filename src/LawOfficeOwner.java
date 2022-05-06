@@ -16,12 +16,12 @@ public class LawOfficeOwner extends Lawyer{
      *This function returns the advertisement content to the system.
      *The system saves the advertisement to the system using the officeId and the advertisement message.
      */
-    public LawOffice.JobAdvertisement publishAdvertisementForLawyers(String title, String description) 
+    public void publishAdvertisementForLawyers(String title, String description, SystemClass systemClassObject) 
     {
         // Sistem classindaki jobAdvertisementsReferences'a da olusturulan ilan eklenmeli,
         // Aksi taktirde is arayan avukarlar tum owner'lari gezmek zorunda kalacak.
         //input title and description
-        return lawOffice.createJobAdvertisement(id, title, description);
+        // systemClassObject.getJobAdvertisementsReferences()
     }
 
 
@@ -47,9 +47,7 @@ public class LawOfficeOwner extends Lawyer{
         //delete from lawyer datafield and change jop status of lawyer.
     }
 
-    public static void menu(SystemClass systemClassObject) {
-        // Burada id ve password istenir.
-        int id = 0;
-        LawOfficeOwner lawOfficeOwner = (LawOfficeOwner) systemClassObject.getSystemObject(id);
+    @Override
+    public void menu(SystemClass systemClassObject) {
     }
 }

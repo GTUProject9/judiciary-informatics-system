@@ -1,5 +1,9 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+
+import enums.LawsuitStatus;
 
 /**
  * Class for Judge User
@@ -13,26 +17,38 @@ public class Judge extends Citizen{
     private List<Integer> concludedLawsuits;
 
     // Constructors
-
     public Judge() {
         super();
-        assignedLawsuits = new LinkedList<Integer>();
-        concludedLawsuits = new LinkedList<Integer>();
+        assignedLawsuits = new ArrayList<>();
+        concludedLawsuits = new ArrayList<>();
     }
 
-    // Methods
+    public  Judge(int id,String password,String name,String surname, String email,String phone){
+        super(id, password, name, surname,  email, phone);
+        assignedLawsuits = new ArrayList<>();
+        concludedLawsuits = new ArrayList<>();
+     }
 
+    // Methods
     /**
      * Displays assigned lawsuits to judge
      */
-    private void showAssignedLawsuits() {
+    private void showAssignedLawsuits(SystemClass systemClassObjectReference) {
+        for (int i = 0; i < assignedLawsuits.size(); i++) {
+            System.out.println("\n" + (i + 1) + ". " + 
+                               systemClassObjectReference.getSystemObject(assignedLawsuits.get(i)));
+        }
         System.out.println(assignedLawsuits);
     }
 
     /**
      * Displays concluded lawsuits to judge
      */
-    private void showConcludedLawsuits() {
+    private void showConcludedLawsuits(SystemClass systemClassObjectReference) {
+        for (int i = 0; i < concludedLawsuits.size(); i++) {
+            System.out.println("\n" + (i + 1) + ". " + 
+                               systemClassObjectReference.getSystemObject(concludedLawsuits.get(i)));
+        }
         System.out.println(concludedLawsuits);
     }
 
@@ -40,11 +56,20 @@ public class Judge extends Citizen{
      * Concludes given lawsuit
      * @param lawsuit lawsuit
      */
-    private void concludeLawsuit(Integer lawsuit) {
-        assignedLawsuits.remove(lawsuit);
-        concludedLawsuits.add(lawsuit);
-    }
+    private void concludeLawsuit(SystemClass systemClassObjectReference) {
+        
+        Lawsuit lawsuit = systemClassObjectReference.concludeLawsuit(id);
+        lawsuit.setStatus(LawsuitStatus.SUING_WON);
 
+        ListIterator listIterator = assignedLawsuits.listIterator();
+        while (listIterator.hasNext()) {
+            if (listIterator.next() == (Integer) lawsuit.getId()) {
+                listIterator.remove();
+            }
+        }
+
+        concludedLawsuits.add(lawsuit.getId());
+    }
 
     /**
      * Assigns given lawsuit to judge
@@ -54,11 +79,12 @@ public class Judge extends Citizen{
         assignedLawsuits.add(lawsuit);
     }
 
-    public static void menu(SystemClass systemClassObject) {
-        // Burada id ve password istenir.
-        int id = 0;
-        
-        Citizen Judge = (Judge) systemClassObject.getSystemObject(id);
-
+    @Override
+    public void menu(SystemClass systemClassObject) {
+        assignLawsuit(10001);
+        assignLawsuit(10002);
+        assignLawsuit(10003);
+        assignLawsuit(10004);
+        concludeLawsuit(systemClassObject);
     }
 }
