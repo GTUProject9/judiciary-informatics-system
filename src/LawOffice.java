@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -6,14 +7,17 @@ public class LawOffice
 {
     public static class JobAdvertisement
     {
-        private int ownerId;
-        private String title;
-        private String description;
+        public int ownerId;
+        public String title;
+        public String description;
 
         public JobAdvertisement(int ownerId, String title, String description) {
             this.ownerId = ownerId;
             this.title = title;
             this.description = description;
+        }
+        public int getOwnerId() {
+            return ownerId;
         }
 
         @Override
@@ -25,9 +29,9 @@ public class LawOffice
     private String name;
     private int ownerId;
 
-    private List<Integer> employeeIds = new LinkedList<>();
+    private List<Integer> employeeIds = new ArrayList<>();
     private List<JobAdvertisement> jobAdvertisements = new LinkedList<>();
-    private Queue<Lawyer.JobApplication> jobApplications = new LinkedList<>();
+    private List<Lawyer.JobApplication> jobApplications = new ArrayList<>();
 
     public LawOffice()
     {
@@ -62,13 +66,13 @@ public class LawOffice
     }
 
     public int addEmployee(int employeeId) {
-        // Check if it already exists, if it is return null / Or change return type to boolean
+        // Check if it already exist, if it is return null / Or change return type to boolean
         employeeIds.add(employeeId);
         return employeeId;
     }
 
     public int removeEmployee(int index) {
-        // Check if it already exists, if it is return null / Or change return type to boolean
+        // Check if it already exist, if it is return null / Or change return type to boolean
         return employeeIds.remove(index);
     }
 
@@ -76,19 +80,41 @@ public class LawOffice
         return jobAdvertisements;
     }
 
-    public JobAdvertisement createJobAdvertisement(int id, String title, String description) {
-        return new JobAdvertisement(id, title, description);
+    public LawOffice.JobAdvertisement createJobAdvertisement(int id, String title, String description) {
+        return new LawOffice.JobAdvertisement(id, title, description);
     }
     
-    public void addJobAdvertisement(JobAdvertisement jobAdvertisement) {
-        jobAdvertisements.add(jobAdvertisement);
+    public void addJobAdvertisement(LawOffice.JobAdvertisement jobAdvertisement) {
+        this.jobAdvertisements.add(jobAdvertisement);
     }
     
-    public JobAdvertisement removeJobAdvertisement(int index) {
-        return jobAdvertisements.remove(index);
+    public LawOffice.JobAdvertisement removeJobAdvertisement(int index) {
+        return this.jobAdvertisements.remove(index);
     }
 
-    public Queue<Lawyer.JobApplication> getJobApplications() {
+    public void addJobApplication(Lawyer.JobApplication jobApplication) {
+        this.jobApplications.add(jobApplication);
+    }
+
+    public List<Lawyer.JobApplication> getJobApplications() {
         return jobApplications;
     }
+
+    public Lawyer.JobApplication getJobApplication(int index) {
+        return jobApplications.get(index);
+    }
+
+    public void displayEmployees(SystemClass systemClassObject)
+    {
+        for (int i = 0; i < employeeIds.size(); i++)
+        {
+            System.out.println(i + ". " + systemClassObject.getLawyer(employeeIds.get(i)));
+        }
+    }
+
+    public int getEmployee(int index) {
+        return employeeIds.get(index);
+    }
+
+    
 }

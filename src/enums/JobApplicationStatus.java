@@ -1,7 +1,7 @@
 package enums;
 
 public enum JobApplicationStatus {
-    PENDING, ACCEPTED, REJECTED, CANCELLED;
+    PENDING, CANCELLED, ACCEPTED, REJECTED;
     public String getStatus() {
         switch (this) {
             case PENDING:

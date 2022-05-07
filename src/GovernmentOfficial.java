@@ -1,3 +1,5 @@
+import enums.LawsuitStatus;
+
 public class GovernmentOfficial extends Citizen 
 {
     GovernmentOfficial(){}
@@ -8,7 +10,6 @@ public class GovernmentOfficial extends Citizen
 
     public boolean addLawyer(SystemClass systemClassObjectReference)
     {
-        int id;
         String password, firstName, lastName, email, phone;
         boolean stateAttorney;
         systemClassObjectReference.addLawyer(new Lawyer()); 
@@ -23,8 +24,9 @@ public class GovernmentOfficial extends Citizen
         systemClassObjectReference.deleteSystemObject(lawyer);
         return true;
     }
-    public boolean assignLawsuit(SystemClass systemClassObjectReference, int lawsuitId)
+    public boolean assignLawsuitToJudge(SystemClass systemClassObjectReference, int lawsuitId)
     {
+        // Eger bir tarafin bile avukati yoksa atama yapamaz.
         int judgeId = 50001;
 
         Judge judge = (Judge) systemClassObjectReference.getSystemObject(judgeId);
@@ -32,21 +34,25 @@ public class GovernmentOfficial extends Citizen
 
         Lawsuit lawsuit = (Lawsuit) systemClassObjectReference.getSystemObject(lawsuitId);
         lawsuit.setJudge(judgeId);
-
+        lawsuit.setStatus(LawsuitStatus.STILL_GOING);
         systemClassObjectReference.addLawsuitByDate(lawsuit);
         return true;
     }
-    public boolean assginStateAttorney(SystemClass systemClassObjectReference)
+    public boolean addStateAttorney(SystemClass systemClassObjectReference)
     {
-        int localId = -1;
-        Lawyer lawyer = (Lawyer) systemClassObjectReference.getSystemObject(localId);
+        Lawyer lawyer = systemClassObjectReference.getStateAttorneyApplicant();
         lawyer.setStateAttorney(true);
         systemClassObjectReference.getStateAttorneyReferences().offer(lawyer);
         return true;
     }
+
     public boolean publishLawsuit(SystemClass systemClassObjectReference)
     {
+        // Tamamlanmis bir lawsuit olusturur.
         Lawsuit lawsuit = new Lawsuit();
+        // cmk'dan davali ve davaci icin 2 avukat atanir ve judge'a assign edilir. 
+
+        lawsuit.setStatus(LawsuitStatus.STILL_GOING);
         systemClassObjectReference.addLawsuit(lawsuit);
         return true;
     }
@@ -56,9 +62,9 @@ public class GovernmentOfficial extends Citizen
         // addLawyer(systemClassObject);
         // addLawyer(systemClassObject);
 
-        assignLawsuit(systemClassObject, 10001);
-        assignLawsuit(systemClassObject, 10002);
-        assignLawsuit(systemClassObject, 10003);
-        assignLawsuit(systemClassObject, 10004);
+        assignLawsuitToJudge(systemClassObject, 10001);
+        assignLawsuitToJudge(systemClassObject, 10002);
+        assignLawsuitToJudge(systemClassObject, 10003);
+        assignLawsuitToJudge(systemClassObject, 10004);
     }
 }

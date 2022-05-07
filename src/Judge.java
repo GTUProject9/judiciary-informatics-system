@@ -13,7 +13,6 @@ public class Judge extends Citizen{
     // Creating a list of cases that the judge is assigned to.
     private List<Integer> assignedLawsuits;
 
-    // Creating a list of cases those judge concluded.
     private List<Integer> concludedLawsuits;
 
     // Constructors
@@ -57,13 +56,16 @@ public class Judge extends Citizen{
      * @param lawsuit lawsuit
      */
     private void concludeLawsuit(SystemClass systemClassObjectReference) {
-        
-        Lawsuit lawsuit = systemClassObjectReference.concludeLawsuit(id);
-        lawsuit.setStatus(LawsuitStatus.SUING_WON);
+        // Casefile'i olmayan dava sonlandirilamaz.
 
-        ListIterator listIterator = assignedLawsuits.listIterator();
+        Lawsuit lawsuit = systemClassObjectReference.concludeLawsuit(id);
+        lawsuit.concludeLawsuit(LawsuitStatus.SUING_WON);
+
+        String caseFile = "Judge case file olusturup bunu lawsuit'e ekler.";
+        lawsuit.addCaseFile(caseFile);
+        ListIterator<Integer> listIterator = assignedLawsuits.listIterator();
         while (listIterator.hasNext()) {
-            if (listIterator.next() == (Integer) lawsuit.getId()) {
+            if (listIterator.next().equals(lawsuit.getId())) {
                 listIterator.remove();
             }
         }

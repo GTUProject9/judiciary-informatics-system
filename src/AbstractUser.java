@@ -5,11 +5,11 @@
  */
 public abstract class AbstractUser extends AbstractSystemObject
 {
-    private String password;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phone;
+    protected String password;
+    protected String firstName;
+    protected String lastName;
+    protected String email;
+    protected String phone;
 
     protected AbstractUser() 
     {

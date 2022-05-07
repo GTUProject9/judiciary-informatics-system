@@ -12,7 +12,8 @@ public class Lawsuit extends AbstractSystemObject
     private Integer suedCitizen;
     private Integer suingLawyer;
     private Integer suedLawyer;
-
+    private String suingDefence;
+    private String suedDefence;
     //Personal Injury Lawsuit, Product Liability Lawsuit, Divorce and Family Law Disputes, Criminal Cases
     private LawsuitTypes lawsuitType;
     private String caseFile;
@@ -50,11 +51,11 @@ public class Lawsuit extends AbstractSystemObject
         this.lawsuitType = lawsuitType;
         this.caseFile = caseFile;
         this.courtRecords = null;
-        this.status = LawsuitStatus.STILL_GOING;
+        this.status = LawsuitStatus.HOLD_ON;
     }
     
     //Ends lawsuit with a decision of the judge.
-    public LawsuitStatus endLawsuit(LawsuitStatus judgeDecision){
+    public LawsuitStatus concludeLawsuit(LawsuitStatus judgeDecision){
         status = judgeDecision;
         return judgeDecision;
     }
@@ -149,6 +150,22 @@ public class Lawsuit extends AbstractSystemObject
 
     public String getLawsuitType(){
         return lawsuitType.getLawSuitType();
+    }
+
+    public String getSuedDefence() {
+        return suedDefence;
+    }
+
+    public void setSuedDefence(String suedDefence) {
+        this.suedDefence = suedDefence;
+    }
+
+    public String getSuingDefence() {
+        return suingDefence;
+    }
+
+    public void setSuingDefence(String suingDefence) {
+        this.suingDefence = suingDefence;
     }
 
     @Override

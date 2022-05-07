@@ -95,9 +95,9 @@ public final class SystemObjectCreator {
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
             boolean stateAttorney = getRandomNumber() % 2 == 0;
-            systemClassObject.registerSystemObject(new Lawyer(
-                id, PASSWORD, firstName, lastName, email, PHONE, stateAttorney
-            ));
+            boolean acceptsLawsuits = getRandomNumber() % 2 == 0;
+
+            systemClassObject.registerSystemObject(new Lawyer(id, PASSWORD, firstName, lastName, email, PHONE, stateAttorney, acceptsLawsuits));
             id++;
         }
     }
