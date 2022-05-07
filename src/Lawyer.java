@@ -1,5 +1,7 @@
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import enums.JobApplicationStatus;
 
@@ -19,57 +21,57 @@ public class Lawyer extends Citizen {
             status = JobApplicationStatus.PENDING;
         }
 
-        public String setStatus(JobApplicationStatus status) {
+        public void setStatus(JobApplicationStatus status) {
             this.status = status;
-            return status.getStatus();
+        }
+
+        public int getOwnerId() {
+            return ownerId;
+        }
+
+        public int getApplicantId() {
+            return applicantId;
+        }
+
+        public String getApplication() {
+            return application;
+        }
+
+        public JobApplicationStatus getStatus() {
+            return status;
         }
 
         @Override
         public String toString() {
-            throw new UnsupportedOperationException();
+            return "JobApplication [ownerId=" + ownerId + ", applicantId=" + applicantId + 
+                                    ", application=" + application + ", status=" + status + "]";
         }
     }
 
-    private boolean stateAttorney;
+    protected boolean stateAttorney;
     //applyed job advert data field
     //clients request data field
     //lawyer cases data field
+    protected boolean acceptsLawsuits;
 
-    private List<JobApplication> jobApplications = new LinkedList<>();
+    protected List<JobApplication> jobApplications = new LinkedList<>();
+    protected Integer employerId = null; 
 
-    private Integer employerId = null; 
+    protected List<Integer> continuingLawsuits = new LinkedList<>();
+    protected List<Integer> concludedLawsuits = new LinkedList<>();
 
     public Lawyer() {}
 
     public Lawyer(int id,String password,String name,String surname, String email,String phone){
         super(id, password, name, surname,  email, phone);
         stateAttorney = false;
+        acceptsLawsuits = false;
     }
 
-    public Lawyer(int id,String password,String name,String surname, String email,String phone, boolean stateAttorney){
-       super(id, password, name, surname,  email, phone);
-       this.stateAttorney = stateAttorney;
-    }
-
-    public void viewJobsRequests(){
-
-    }
-
-    public void editAndViewClients(){
-
-    }
-
-    //viewApprovedCases->viewCases
-    public void viewCases(){
-
-    }
-
-    private void viewApprovedCases(){
-
-    }
-    
-    private void viewOnHoldCases(){
-
+    public Lawyer(int id,String password,String name,String surname, String email,String phone, boolean stateAttorney, boolean acceptsLawsuits){
+        super(id, password, name, surname,  email, phone);
+        this.stateAttorney = stateAttorney;
+        this.acceptsLawsuits = acceptsLawsuits;
     }
 
     /**
@@ -77,11 +79,31 @@ public class Lawyer extends Citizen {
      * Allows the defense to add to the selected case.
      *
      */
-    public void addDefenseToTheCase(){
+    public void addDefenseToTheLawsuit(SystemClass systemClassObject){
         //display cases of lawyer.
         //select one.
         //input text.
         //add test to selected case.
+
+        Integer lawsuitId = continuingLawsuits.get(0);
+        Lawsuit lawsuit = systemClassObject.getLawsuit(lawsuitId);
+        if (lawsuit.getSuingLawyer() == id)
+        {
+            lawsuit.setSuingDefence("suing defence");
+        }
+        else if (lawsuit.getSuedLawyer() == id)
+        {
+            lawsuit.setSuedDefence("sued defence");
+        }
+        else
+        {
+            System.out.println("You are not the owner of this lawsuit.");
+        }
+    }
+
+    public void applyForBeingStateAttorney(SystemClass systemClassObject){
+        //state attorney degilse basvurabilsin
+        systemClassObject.addStateAttorneyApplicant(this);
     }
 
     /**
@@ -89,12 +111,19 @@ public class Lawyer extends Citizen {
      * It displays these and allows the lawyer to apply to one of them.
      * @param Job adverts data structure.
      */
-    public void applyForJobs(){
+    public void applyForJobs(SystemClass systemClassObject){
         // Menuden, systemClassObject referansi alacak
         //Display job advert.
         //Select one
 
         //Create a JobApplication, find owner, add reference to its LawOffice jobApplications also.
+
+        systemClassObject.displayJobAdvertisements();
+        
+        int employerId = systemClassObject.getEmployerId(0);
+        // Scanner scanner = new Scanner(System.in);
+        JobApplication jobApplication = new JobApplication(id, 0, "");
+
     }
     
     public JobApplication createJobApplication(int ownerId, int applicantId, String application){
@@ -105,18 +134,6 @@ public class Lawyer extends Citizen {
 
     }
 
-    public void startToAJob(){
-        // Change status of other job applications to Cancelled.
-    }
-
-    /*
-    * Note !!
-    * job postings must keep a list of applicants for that job.
-    * */
-    public void editJobStatus(boolean stateAttorney){
-        this.stateAttorney = stateAttorney;
-    }
-
     /**
      Citizens can access the archive. That's why the parent function is used.
      * @param archive data struture.
@@ -125,15 +142,50 @@ public class Lawyer extends Citizen {
         
     }
 
-
     public boolean getStateAttorney()
     {
         return stateAttorney;
     }
+    
     public void setStateAttorney(boolean stateAttorney) {
         this.stateAttorney = stateAttorney;
     }
     
+    public boolean isAcceptsLawsuits() {
+        return acceptsLawsuits;
+    }
+
+    public void setAcceptsLawsuits(boolean acceptsLawsuits) {
+        this.acceptsLawsuits = acceptsLawsuits;
+    }
+
+    public void addLawsuit(Integer lawsuitId) {
+        continuingLawsuits.add(lawsuitId);
+    }
+    
+    public void concludeLawsuit(Integer lawsuitId) {
+
+        Iterator<Integer> iterator = continuingLawsuits.iterator();
+        while(iterator.hasNext()){
+            if(iterator.next() == lawsuitId){
+                iterator.remove();
+            }
+        }
+        concludedLawsuits.add(lawsuitId);
+    }
+
+    public List<JobApplication> getJobApplications() {
+        return jobApplications;
+    }
+
+    public Integer getEmployerId() {
+        return employerId;
+    }
+
+    public void setEmployerId(Integer employerId) {
+        this.employerId = employerId;
+    }
+
     @Override
     public void menu(SystemClass systemClassObject) {
         

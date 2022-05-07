@@ -1,5 +1,6 @@
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -17,12 +18,14 @@ public class SystemClass
 
     // sistemObjects olusturulurken cmk avukatlari da bir taraftan buraya eklenecek, boolean degere gore
     private Queue<Lawyer> stateAttorneyReferences;
-    
+
+    private Queue<Lawyer> stateAttorneyApplicants;
 
     private List<PriorityQueue<Lawsuit>> lawsuitsByDate;
 
     // Owner, is ilani olustururken, bir referans da buraya eklenecek
-    private Queue<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
+    private ArrayList<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
+
 
     private int lawyerCounter = 0;
     private int lawsuitCounter = 0;
@@ -38,12 +41,14 @@ public class SystemClass
             systemObjects.add(new BinarySearchTree<>());
 
         stateAttorneyReferences = new LinkedList<>();
-        jobAdvertisementsReferences = new LinkedList<>();
-       
+        jobAdvertisementsReferences = new ArrayList<>();
+        stateAttorneyApplicants = new LinkedList<>();
         
         lawsuitsByDate = new ArrayList<>(JUDGE_NUMBER);
         for (int i = 0; i < JUDGE_NUMBER; i++)
+        {
             lawsuitsByDate.add(new PriorityQueue<>((lawsuit1, lawsuit2) -> lawsuit1.getDate().compareTo(lawsuit2.getDate())));
+        }
     }
     
     // ============ TEMEL SISTEM CLASSI METHODLARI ============
@@ -193,7 +198,6 @@ public class SystemClass
     }
 
 
-
     // ============ GOVERNMENT OFFICAL ============
     public void addLawyer(Lawyer lawyer)
     {
@@ -202,12 +206,15 @@ public class SystemClass
         registerSystemObject(lawyer);
     }
 
-
+    public Lawyer getStateAttorneyApplicant() {
+        return stateAttorneyApplicants.poll();
+    }
+    
+    
     // ============ JUDGE ============
     public Lawsuit concludeLawsuit(int judgeId)
     {
-        Lawsuit lawsuit = lawsuitsByDate.get(judgeId % 10 - 1).poll();
-        return lawsuit;
+        return lawsuitsByDate.get(judgeId % 10 - 1).poll();
     }
     
 
@@ -232,6 +239,79 @@ public class SystemClass
         lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit);
     }
 
+    // ============ CITIZEN ============
+    public void getLawyersAcceptsLawsuits()
+    {
+        int index = SystemObjectTypes.LAWYER.getSystemObjectCode() - 1;
+        Iterator<AbstractSystemObject> iterator = systemObjects.get(index).iterator();
+        int i = 1;
+        while (iterator.hasNext())
+        {
+            Lawyer lawyer = (Lawyer) iterator.next();
+            if (lawyer.isAcceptsLawsuits())
+            {
+                System.out.println(i + ". " + lawyer + "\n");
+                i++;
+            }
+        }
+    }
+
+    public Integer getStateAttorney(int lawsuitId)
+    {   
+        Lawyer lawyer = stateAttorneyReferences.poll();
+        if (lawyer == null)
+            return null;
+        lawyer.addLawsuit(lawsuitId);
+
+        stateAttorneyReferences.offer(lawyer);
+        return lawyer.getId();
+    }
+
+    // ============ LAWYER ============
+
+    public void addStateAttorneyApplicant(Lawyer stateAttorney)
+    {
+        stateAttorneyApplicants.offer(stateAttorney);
+    }
+
+    // get citizen
+    public Citizen getCitizen(int id)
+    {
+        return (Citizen) getSystemObject(id);
+    }
+    
+    // get lawsuit
+    public Lawsuit getLawsuit(int id)
+    {
+        return (Lawsuit) getSystemObject(id);
+    }
+
+    /**
+     * This function displays the job advertisements.
+     */
+    public void displayJobAdvertisements()
+    {
+        System.out.println(jobAdvertisementsReferences);
+    }
+    
+    public int getEmployerId(int index)
+    {
+        return jobAdvertisementsReferences.get(index).getOwnerId();
+    }
+    
+    public void addJobApplication(Lawyer.JobApplication jobApplication)
+    {
+        LawOfficeOwner owner = (LawOfficeOwner) getSystemObject(jobApplication.getOwnerId());
+        owner.getOffice().addJobApplication(jobApplication);
+    }
+    
+
+    // ============ LAW OFFICE OWNER ============
+    public Lawyer getLawyer(int id)
+    {
+        return (Lawyer) getSystemObject(id);
+    }
+    
     // ============ GETTERS ============
     public List<BinarySearchTree<AbstractSystemObject>> getSystemObjects()
     {
@@ -243,7 +323,7 @@ public class SystemClass
         return stateAttorneyReferences;
     }
 
-    public Queue<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
+    public ArrayList<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
         return jobAdvertisementsReferences;
     }
 
