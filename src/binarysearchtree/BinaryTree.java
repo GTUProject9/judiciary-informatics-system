@@ -1,4 +1,5 @@
-package binarysearchtree;
+package lib.hashbst.bst;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -102,75 +103,6 @@ public class BinaryTree<E> implements Serializable {
 			sb.append("\n");
 			preOrderTraverse(node.left, depth + 1, sb);
 			preOrderTraverse(node.right, depth + 1, sb);
-		}
-	}
-	
-	public String oneLinePreorder(){
-		StringBuilder sb = new StringBuilder();
-		preOrderTraverseOneLine(root, sb);
-		return sb.toString();
-	}
-	
-	/**
-	 * Perform a preorder traversal, returning the tree as one line
-	 * @param node The local root
-	 * @param sb The string bufer to save the output
-	 */
-	private void preOrderTraverseOneLine(Node<E> node, StringBuilder sb){
-		if(node == null){
-			//do nothing
-		} else {
-			sb.append(node.toString());
-			sb.append(" ");
-			preOrderTraverseOneLine(node.left, sb);
-			preOrderTraverseOneLine(node.right, sb);
-		}
-	}
-	
-	public String oneLinePostorder(){
-		StringBuilder sb = new StringBuilder();
-		postOrderTraverse(root, sb);
-		return sb.toString();
-	}
-	
-	/**
-	 * Perform a postorder traversal, returning the tree as one line
-	 * @param node The local root
-	 * @param sb The string bufer to save the output
-	 */
-	private void postOrderTraverse(Node<E> node, StringBuilder sb){
-		if(node == null){
-			//do nothing
-		} else {
-			preOrderTraverseOneLine(node.left, sb);
-			preOrderTraverseOneLine(node.right, sb);
-			sb.append(node.toString());
-			sb.append(" ");
-		}
-	}
-	
-	public String oneLineInorder(){
-		StringBuilder sb = new StringBuilder();
-		inOrderTraverse(root, sb);
-		return sb.toString();
-	}
-	
-	/**
-	 * Perform an inorder traversal, returning the tree as one line (with parentheses)
-	 * @param node The local root
-	 * @param sb The string bufer to save the output
-	 */
-	private void inOrderTraverse(Node<E> node, StringBuilder sb){
-		if(node == null){
-			//do nothing
-		} else {
-			sb.append("(");
-			inOrderTraverse(node.left, sb);
-			sb.append(" ");
-			sb.append(node.toString());
-			sb.append(" ");
-			inOrderTraverse(node.right, sb);
-			sb.append(")");
 		}
 	}
 	

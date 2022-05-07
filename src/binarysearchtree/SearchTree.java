@@ -1,4 +1,5 @@
 package binarysearchtree;
+
 /**
  * Searchable tree interface
  * @author Jacob / Koffman & Wolfgang
