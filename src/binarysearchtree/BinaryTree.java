@@ -1,4 +1,4 @@
-package lib.hashbst.bst;
+package binarysearchtree;
 
 import java.io.*;
 import java.util.Scanner;
