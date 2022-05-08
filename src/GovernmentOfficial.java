@@ -2,7 +2,11 @@ import enums.LawsuitStatus;
 
 public class GovernmentOfficial extends Citizen 
 {
-    GovernmentOfficial(){}
+    GovernmentOfficial()
+    {
+        super();
+    }
+
     GovernmentOfficial(int id, String password, String firstName, String lastName, String phone, String email)
     {
         super(id, password, firstName, lastName, phone, email);
