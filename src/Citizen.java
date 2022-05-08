@@ -2,7 +2,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Scanner;
 
 import enums.LawsuitTypes;
 
@@ -78,7 +77,7 @@ public class Citizen extends AbstractUser
         }        
         else if (choice == 2)
         {
-            return selectLawyerAcceptsLawsuits(systemClassObject);
+            return selectLawyerFromLawsuitAcceptingLawyers(systemClassObject);
         }
         else if (choice == 3)
         {
@@ -102,9 +101,9 @@ public class Citizen extends AbstractUser
         return lawyerId;
     }
 
-    private Integer selectLawyerAcceptsLawsuits(SystemClass systemClassObject) 
+    private Integer selectLawyerFromLawsuitAcceptingLawyers(SystemClass systemClassObject)
     {
-        systemClassObject.getLawyersAcceptsLawsuits();
+        systemClassObject.getLawsuitAcceptingLawyer();
 
         // Scanner scanner = new Scanner(System.in);
         Integer lawyerId = -1;

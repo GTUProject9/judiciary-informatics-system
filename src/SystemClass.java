@@ -1,14 +1,11 @@
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.Scanner;
 
 import binarysearchtree.BinarySearchTree;
-import enums.LawsuitStatus;
 import enums.SystemObjectTypes;
 
 public class SystemClass 
@@ -240,7 +237,7 @@ public class SystemClass
     }
 
     // ============ CITIZEN ============
-    public void getLawyersAcceptsLawsuits()
+    public void getLawsuitAcceptingLawyer()
     {
         int index = SystemObjectTypes.LAWYER.getSystemObjectCode() - 1;
         Iterator<AbstractSystemObject> iterator = systemObjects.get(index).iterator();
@@ -248,7 +245,7 @@ public class SystemClass
         while (iterator.hasNext())
         {
             Lawyer lawyer = (Lawyer) iterator.next();
-            if (lawyer.isAcceptsLawsuits())
+            if (lawyer.acceptsLawsuits())
             {
                 System.out.println(i + ". " + lawyer + "\n");
                 i++;

@@ -1,7 +1,6 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 import enums.JobApplicationStatus;
 
@@ -138,7 +137,7 @@ public class Lawyer extends Citizen {
      Citizens can access the archive. That's why the parent function is used.
      * @param archive data struture.
      */
-    public void accesToTheArchive(){
+    public void accessToTheArchive(){
         
     }
 
@@ -151,7 +150,7 @@ public class Lawyer extends Citizen {
         this.stateAttorney = stateAttorney;
     }
     
-    public boolean isAcceptsLawsuits() {
+    public boolean acceptsLawsuits() {
         return acceptsLawsuits;
     }
 
