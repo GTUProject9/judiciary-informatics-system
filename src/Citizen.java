@@ -28,11 +28,11 @@ public class Citizen extends AbstractUser
         personalLawyersIds = new ArrayList<>();
     }
     
-    public void personalLawyerInformations() {
+    public void displayPersonalLawyersInfo() {
         // personalLawyers bilgileri yazdirilacak.
     }
 
-    public void lawsuitInformations() {
+    public void displayLawsuitsInfo() {
         // lawsuits bilgileri yazdirilacak
     }
 
