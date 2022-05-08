@@ -253,7 +253,7 @@ public class SystemClass
         }
     }
 
-    public Integer getStateAttorney(int lawsuitId)
+    public Integer assignStateAttorney(int lawsuitId)
     {   
         Lawyer lawyer = stateAttorneyReferences.poll();
         if (lawyer == null)

@@ -112,7 +112,7 @@ public class Citizen extends AbstractUser
     }
 
     private Integer requestLawyerFromSystem(SystemClass systemClassObject, Integer lawsuitId) {
-        return systemClassObject.getStateAttorney(lawsuitId);
+        return systemClassObject.assignStateAttorney(lawsuitId);
     }
 
     private void addLawsuitToSuedCitizen(SystemClass systemClassObject, Integer SuedCitizenId, Integer lawsuitId) {
