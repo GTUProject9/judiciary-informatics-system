@@ -2,15 +2,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import enums.LawsuitTypes;
 
 
 public class Citizen extends AbstractUser
 {
-    private ArrayList<Integer> suingLawsuits;
-    private ArrayList<Integer> suedLawsuits;
-    private ArrayList<Integer> personalLawyersIds;
+    private List<Integer> suingLawsuits;
+    private List<Integer> suedLawsuits;
+    private List<Integer> personalLawyersIds;
     
     public Citizen() {
         super();
