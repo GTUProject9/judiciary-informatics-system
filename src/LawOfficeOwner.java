@@ -119,7 +119,7 @@ public class LawOfficeOwner extends Lawyer{
 
     }
     
-    private void rejectobApplication(SystemClass systemClassObject)
+    private void rejectJobApplication(SystemClass systemClassObject)
     {
         displayJobApplications();
         
