@@ -85,9 +85,5 @@ public abstract class AbstractUser extends AbstractSystemObject
         return sb.toString();
     }
 
-    protected void menu(SystemClass systemClassObject)
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    protected abstract void menu(SystemClass systemClassObject);
 }
