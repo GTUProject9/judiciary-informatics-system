@@ -209,7 +209,7 @@ public class SystemClass
     
     
     // ============ JUDGE ============
-    public Lawsuit concludeLawsuit(int judgeId)
+    public Lawsuit getHighestPriorityLawsuit(int judgeId)
     {
         return lawsuitsByDate.get(judgeId % 10 - 1).poll();
     }

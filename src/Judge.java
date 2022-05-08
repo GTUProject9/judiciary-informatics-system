@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -58,7 +57,7 @@ public class Judge extends Citizen{
     private void concludeLawsuit(SystemClass systemClassObjectReference) {
         // Casefile'i olmayan dava sonlandirilamaz.
 
-        Lawsuit lawsuit = systemClassObjectReference.concludeLawsuit(id);
+        Lawsuit lawsuit = systemClassObjectReference.getHighestPriorityLawsuit(id);
         lawsuit.concludeLawsuit(LawsuitStatus.SUING_WON);
 
         String caseFile = "Judge case file olusturup bunu lawsuit'e ekler.";
