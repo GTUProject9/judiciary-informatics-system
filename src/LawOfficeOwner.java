@@ -1,154 +1,208 @@
-import java.util.Iterator;
-import java.util.Scanner;
-
 import enums.JobApplicationStatus;
 
-public class LawOfficeOwner extends Lawyer{
-
-    //datafield of lawyers
-    //datafield of advert
-    private LawOffice lawOffice;
+public class LawOfficeOwner extends Lawyer {
+    private final LawOffice lawOffice;
 
     public LawOfficeOwner(int id, String password, String name, String surname, String email, 
-                          String phone,String lawOfficeName) 
-    {
+                          String phone,String lawOfficeName) {
         super(id, password, name, surname,  email, phone);
         lawOffice = new LawOffice(lawOfficeName, id);
     }
 
-    /**
-     *This function returns the advertisement content to the system.
-     *The system saves the advertisement to the system using the officeId and the advertisement message.
-     */
-    public void publishAdvertisementForLawyers(SystemClass systemClassObject) 
-    {
-        // Sistem classindaki jobAdvertisementsReferences'a da olusturulan ilan eklenmeli,
-        // Aksi taktirde is arayan avukarlar tum owner'lari gezmek zorunda kalacak.
-        //input title and description
-        // systemClassObject.getJobAdvertisementsReferences()
+    public static void main(String[] args) {
+        SystemClass systemClassObject = new SystemClass();
+        LawOfficeOwner lawOfficeOwner = new LawOfficeOwner(50, "asdasd", "adfsad", "asdsad", "asdasd", "asdasd", "asdasd");
+        lawOfficeOwner.menu(systemClassObject);
+    }
 
-        // Create a new job advertisement
+    /**
+     * This function returns the advertisement content to the system.
+     * The system saves the advertisement to the system using the officeId and the advertisement message.
+     */
+    public void publishJobAdvertisement(SystemClass systemClassObject) {
+        // Create a new job advertisement.
         String title = "Title";
         String description = "Description";
-        
+
+        // Add the advertisement to the system.
         LawOffice.JobAdvertisement jobAdvertisement = lawOffice.createJobAdvertisement(id, title, description);
         systemClassObject.addJobAdvertisement(jobAdvertisement);
-
     }
 
     public LawOffice getOffice() {
         return lawOffice;
     }
 
-
-    private void displayJobApplications(){
-        //get JobAdvertisement first
-        //then get JobApplication from JobAdvertisement
-
-        Iterator iterator = lawOffice.getJobApplications().iterator();
-        int i = 0;
-        while (iterator.hasNext())
-        {
-            Lawyer.JobApplication jobApplication = (Lawyer.JobApplication)iterator.next();
-            if (jobApplication.getStatus() == JobApplicationStatus.PENDING)
-            {
-                System.out.println(i + ". " + jobApplication);
-            }
-            else
-            {
-                System.out.println("Completed job application.");
-            }
-            i++;
+    public void employeesMenu(SystemClass systemClassObject) {
+        if (!lawOffice.areThereEmployees()) {
+            System.out.println("There are no employees.");
+            return;
         }
-    }
 
-    public void assignJobsToEmployees(SystemClass systemClassObject){
-        //display lawyer.
-        //select a lawyer.
-        //assign a jop to lawyer.
+        System.out.println("Choose an employee to perform an action:");
+        System.out.println("0. Go back");
+        lawOffice.displayEmployees(systemClassObject);
 
-        // Lawyer olan owner, kendisinin devam eden davalari calisanlarina assign edebilir.
-        int assignedLawsuitId = continuingLawsuits.remove(0);
-        Lawsuit lawsuit = systemClassObject.getLawsuit(assignedLawsuitId);
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            return;
+        }
 
-        int employeeId = lawOffice.getEmployee(0);
+        if (choice == 0) {
+            return;
+        }
+
+        int employeeIndex = choice - 1;
+        int employeeId;
+        try {
+            employeeId = lawOffice.getEmployee(employeeIndex);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
         Lawyer employee = systemClassObject.getLawyer(employeeId);
 
-        employee.addLawsuit(assignedLawsuitId);
-        if (lawsuit.getSuingLawyer() == id)
-        {
-            lawsuit.setSuingLawyer(employeeId);
+        System.out.println("Choose an action to perform:");
+        System.out.println("1. Assign a job");
+        System.out.println("2. Fire");
+
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid choice.");
+            return;
         }
-        else
-        {
-            lawsuit.setSuedLawyer(employeeId);
+
+        switch (choice) {
+            case 1:
+                assignJobToEmployee(systemClassObject, employee);
+            case 2:
+                fireEmployee(employee, employeeIndex);
+            default:
+                System.out.println("Invalid selection.");
         }
     }
 
-    private void hireALawyer(SystemClass systemClassObject){
-        //display advert and applicant
-        //select one
-        // change status to approved
-
-        displayJobApplications();
-        
-        // Scanner scanner = new Scanner(System.in);
-        // System.out.println("Enter the index ");
-        int index = 0;
-
-        Lawyer.JobApplication approvedjobApplication = lawOffice.getJobApplication(index);
-        int applicantId = approvedjobApplication.getApplicantId();
-
-        Lawyer lawyer = systemClassObject.getLawyer(applicantId);
-        lawyer.setEmployerId(id);
-        Iterator iterator = lawOffice.getJobApplications().iterator();
-        while (iterator.hasNext())
-        {
-            Lawyer.JobApplication jobApplication = (Lawyer.JobApplication) iterator.next();
-            if (jobApplication.getApplicantId() == applicantId)
-            {
-                jobApplication.setStatus(JobApplicationStatus.ACCEPTED);
-            }
-            else if (jobApplication.getStatus() == JobApplicationStatus.PENDING)
-            {
-                jobApplication.setStatus(JobApplicationStatus.CANCELLED);
-            }
+    public void assignJobToEmployee(SystemClass systemClassObject, Lawyer employee) {
+        if (continuingLawsuits.size() == 0) {
+            System.out.println("There are no jobs to assign.");
+            return;
         }
-        
+
+        int lawsuitId = continuingLawsuits.remove(0);
+        Lawsuit lawsuit = systemClassObject.getLawsuit(lawsuitId);
+
+        employee.addLawsuit(lawsuitId);
+
+        if (lawsuit.getSuingLawyer() == id) {
+            lawsuit.setSuingLawyer(employee.id);
+        } else {
+            lawsuit.setSuedLawyer(employee.id);
+        }
+    }
+
+    private void fireEmployee(Lawyer employee, int employeeIndex) {
+        employee.setEmployerId(null);
+        lawOffice.removeEmployee(employeeIndex);
+    }
+
+    private void jobApplicationsMenu(SystemClass systemClassObject) {
+        if (!lawOffice.areThereJobApplications()) {
+            System.out.println("There are no job applications.");
+            return;
+        }
+
+        System.out.println("Choose a job application to perform an action.");
+        System.out.println("0. Go back");
+        lawOffice.displayJobApplications();
+
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            return;
+        }
+
+        if (choice == 0) {
+            return;
+        }
+
+        int jobApplicationIndex = choice - 1;
+        Lawyer.JobApplication jobApplication;
+        try {
+            jobApplication = lawOffice.getJobApplication(jobApplicationIndex);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
+        System.out.println("Choose an action to perform:");
+        System.out.println("1. Accept");
+        System.out.println("2. Reject");
+
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input.");
+            return;
+        }
+
+        switch (choice) {
+            case 1:
+                acceptJobApplication(systemClassObject, jobApplication);
+            case 2:
+                rejectJobApplication(jobApplication);
+            default:
+                System.out.println("Invalid choice.");
+        }
+    }
+
+    private void acceptJobApplication(SystemClass systemClassObject, Lawyer.JobApplication jobApplication) {
+        int applicantId = jobApplication.getApplicantId();
+        Lawyer lawyer = systemClassObject.getLawyer(applicantId);
+
+        lawyer.setEmployerId(id);
         lawOffice.addEmployee(applicantId);
 
+        jobApplication.setStatus(JobApplicationStatus.ACCEPTED);
     }
     
-    private void rejectJobApplication(SystemClass systemClassObject)
-    {
-        displayJobApplications();
-        
-        // Scanner scanner = new Scanner(System.in);
-        // System.out.println("Enter the index ");
-        int index = 0;
-
-        Lawyer.JobApplication rejectedJobApplication = lawOffice.getJobApplication(index);
-        rejectedJobApplication.setStatus(JobApplicationStatus.REJECTED);
-    }
-    
-    private void fireALawyer(SystemClass systemClassObject)
-    {
-        //display lawyers.
-        //select one.
-        //delete from lawyer datafield and change jop status of lawyer.
-
-        // Display lawyers
-        // lawOffice.displayEmployees(systemClassObject);
-        // Scanner scanner = new Scanner(System.in);
-        // System.out.println("Enter the index ");
-        int index = 0;
-
-        Lawyer lawyer = systemClassObject.getLawyer(lawOffice.getEmployee(index));
-        lawyer.setEmployerId(null);
-        lawOffice.removeEmployee(index);
+    private void rejectJobApplication(Lawyer.JobApplication jobApplication) {
+        jobApplication.setStatus(JobApplicationStatus.REJECTED);
     }
 
     @Override
     public void menu(SystemClass systemClassObject) {
+        while (true) {
+            System.out.println("1. Employees");
+            System.out.println("2. Job applications");
+            System.out.println("3. Exit");
+
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    employeesMenu(systemClassObject);
+                    break;
+                case 2:
+                    jobApplicationsMenu(systemClassObject);
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid selection.");
+            }
+        }
     }
 }
