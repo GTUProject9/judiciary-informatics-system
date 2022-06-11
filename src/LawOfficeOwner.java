@@ -81,13 +81,17 @@ public class LawOfficeOwner extends Lawyer {
         }
     }
 
+
     public void assignJobToEmployee(SystemClass systemClassObject, Lawyer employee) {
         if (continuingLawsuits.size() == 0) {
             System.out.println("There are no jobs to assign.");
             return;
         }
 
-        int lawsuitId = continuingLawsuits.remove(0);
+        Iterator<Integer> continuingLawSuitsIter = continuingLawsuits.iterator();
+        int lawsuitId =  continuingLawSuitsIter.next();
+        continuingLawSuitsIter.remove();
+        //int lawsuitId = continuingLawsuits.remove(0);
         Lawsuit lawsuit = systemClassObject.getLawsuit(lawsuitId);
 
         employee.addLawsuit(lawsuitId);
