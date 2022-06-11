@@ -12,7 +12,7 @@ public class SystemClass
 {
     // System Objects: Lawsuit, citizen, lawyer, lawoffice owner, judge, government official
     private List<BinarySearchTree<AbstractSystemObject>> systemObjects;
-
+    
     // sistemObjects olusturulurken cmk avukatlari da bir taraftan buraya eklenecek, boolean degere gore
     private Queue<Lawyer> stateAttorneyReferences;
 
@@ -22,7 +22,6 @@ public class SystemClass
 
     // Owner, is ilani olustururken, bir referans da buraya eklenecek
     private ArrayList<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
-
 
     private int lawyerCounter = 0;
     private int lawsuitCounter = 0;
