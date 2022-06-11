@@ -6,4 +6,8 @@ public class Utils {
         String line = scanner.nextLine();
         return Integer.parseInt(line);
     }
+    public static String readStringInput() throws NumberFormatException {
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
 }
