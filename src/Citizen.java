@@ -104,7 +104,7 @@ public class Citizen extends AbstractUser
 
     private Integer selectLawyerFromLawsuitAcceptingLawyers(SystemClass systemClassObject)
     {
-        systemClassObject.getLawsuitAcceptingLawyer();
+        systemClassObject.getLawsuitAcceptingLawyers();
 
         // Scanner scanner = new Scanner(System.in);
         Integer lawyerId = -1;

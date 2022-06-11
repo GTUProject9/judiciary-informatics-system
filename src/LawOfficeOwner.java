@@ -9,12 +9,6 @@ public class LawOfficeOwner extends Lawyer {
         lawOffice = new LawOffice(lawOfficeName, id);
     }
 
-    public static void main(String[] args) {
-        SystemClass systemClassObject = new SystemClass();
-        LawOfficeOwner lawOfficeOwner = new LawOfficeOwner(50, "asdasd", "adfsad", "asdsad", "asdasd", "asdasd", "asdasd");
-        lawOfficeOwner.menu(systemClassObject);
-    }
-
     /**
      * This function returns the advertisement content to the system.
      * The system saves the advertisement to the system using the officeId and the advertisement message.

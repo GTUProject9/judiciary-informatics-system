@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,12 +66,16 @@ public final class SystemObjectCreator {
         }
     }
 
+    /**
+     * It creates a bunch of Government Officials
+     * 
+     * @param systemClassObject The system class object that will be used to register the system
+     * objects.
+     */
     public static void createGovernmentOfficials(SystemClass systemClassObject)
     {
         int userCode = SystemObjectTypes.GOVERNMENT_OFFICIAL.getSystemObjectCode();
         int id = createInitialId(userCode);
-        setFirstNamesAndLastNames();
-        
         for (int i = 0; i < NUMBER_OF_GOVERNMENT_OFFICIAL; i++)
         {
             String firstName = firstNames.get(getRandomNumber() % firstNames.size());
@@ -84,11 +89,15 @@ public final class SystemObjectCreator {
         }
     }
 
+    /**
+     * It creates a bunch of lawyers.
+     * 
+     * @param systemClassObject The system class object that we created in the main method.
+     */
     public static void createLawyers(SystemClass systemClassObject)
     {
         int userCode = SystemObjectTypes.LAWYER.getSystemObjectCode();
         int id = createInitialId(userCode);
-        setFirstNamesAndLastNames();
         for (int i = 0; i < NUMBER_OF_LAWYER; i++)
         {
             String firstName = firstNames.get(getRandomNumber()  % firstNames.size());
@@ -102,11 +111,15 @@ public final class SystemObjectCreator {
         }
     }
 
+    /**
+     * It creates a bunch of judges and adds them to the system
+     * 
+     * @param systemClassObject The system class object that is used to register the system objects.
+     */
     public static void createJudges(SystemClass systemClassObject)
     {
         int userCode = SystemObjectTypes.JUDGE.getSystemObjectCode();
         int id = createInitialId(userCode);
-        setFirstNamesAndLastNames();
         for (int i = 0; i < NUMBER_OF_JUDGE; i++)
         {
             String firstName = firstNames.get(getRandomNumber() % firstNames.size());
@@ -142,6 +155,11 @@ public final class SystemObjectCreator {
         }
     }
 
+    /**
+     * It creates a random number of lawsuits, with random dates, and random lawsuit types
+     * 
+     * @param systemClassObject The SystemClass object that is used to register the created objects.
+     */
     public static void createLawsuits(SystemClass systemClassObject)
     {
         int lawsuitCode = SystemObjectTypes.LAWSUIT.getSystemObjectCode();
@@ -161,18 +179,11 @@ public final class SystemObjectCreator {
             }        
         } 
         catch (Exception e) {
-            // TOSO
+            // TODO
         }
     }
         
-    // public Lawsuit(Integer id, Date date, Integer suingCitizen, Integer suedCitizen,
-    //                Integer suingLawyer, LawsuitTypes lawsuitType,
-    //                String caseFile)
-
-    
-    
-    
-        // ------- helpers -------
+    // ------- helpers -------
     /**
      * It takes a user code and returns the first ID that can be assigned to a system object
      * 
@@ -189,15 +200,11 @@ public final class SystemObjectCreator {
      */
     private static void setFirstNamesAndLastNames()
     {
-        if (!isNamesSetted)
-        {
-            firstNames = new ArrayList<>();
-            lastNames = new ArrayList<>();
-            
-            readFileIntoAList(firstNames, "text-first-names.txt");
-            readFileIntoAList(lastNames, "text-last-names.txt");
-            isNamesSetted = true;
-        }
+        firstNames = new ArrayList<>();
+        lastNames = new ArrayList<>();
+        
+        readFileIntoAList(firstNames, "text-first-names.txt");
+        readFileIntoAList(lastNames, "text-last-names.txt");
     }
 
     /**
@@ -231,6 +238,11 @@ public final class SystemObjectCreator {
     }
 
 
+    /**
+     * It generates a random date between 2021-01-01 and 2030-12-31
+     * 
+     * @return A random date between 2021-01-01 and 2030-12-31
+     */
     public static Date randomDate() 
     {
         try {

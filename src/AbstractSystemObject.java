@@ -1,4 +1,3 @@
-
 public abstract class AbstractSystemObject implements Comparable<AbstractSystemObject>
 {
     public static final int NUMBER_OF_SYSTEM_OBJECTS = 6;

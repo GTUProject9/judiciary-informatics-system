@@ -1,9 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.TreeMap;
 
 import binarysearchtree.BinarySearchTree;
 import enums.SystemObjectTypes;
@@ -11,7 +14,7 @@ import enums.SystemObjectTypes;
 public class SystemClass 
 {
     // System Objects: Lawsuit, citizen, lawyer, lawoffice owner, judge, government official
-    private List<BinarySearchTree<AbstractSystemObject>> systemObjects;
+    private List<TreeMap<Integer, AbstractSystemObject>> systemObjects;
 
     // sistemObjects olusturulurken cmk avukatlari da bir taraftan buraya eklenecek, boolean degere gore
     private Queue<Lawyer> stateAttorneyReferences;
@@ -29,13 +32,15 @@ public class SystemClass
 
     private static final int JUDGE_NUMBER = 10;
 
+    /**
+     * SystemClass constructor.
+     */
     public SystemClass() 
     {
-        // Her index'e kendilerine karsilik gelen BST'yi eklemek istedim ama BST classi comparable
-        // generic aldigi icin beceremedim.
-        systemObjects = new ArrayList<>(AbstractSystemObject.NUMBER_OF_SYSTEM_OBJECTS);
-        for (int i = 0; i < AbstractSystemObject.NUMBER_OF_SYSTEM_OBJECTS; i++)
-            systemObjects.add(new BinarySearchTree<>());
+        systemObjects = new ArrayList<>();
+        for (int i = 0; i < SystemObjectTypes.values().length; i++) {
+            systemObjects.add(new TreeMap<>());
+        }
 
         stateAttorneyReferences = new LinkedList<>();
         jobAdvertisementsReferences = new ArrayList<>();
@@ -50,13 +55,12 @@ public class SystemClass
     
     // ============ TEMEL SISTEM CLASSI METHODLARI ============
     /**
-     * It adds the given system object to the appropriate Binary Search Tree
+     * It adds the given system object to the appropriate TreeMap
      * 
      * @param systemObject The object to be registered.
      */
     public void registerSystemObject(AbstractSystemObject systemObject)
     {
-        // SystemObjectsCodes'a gore bst'yi getir ve objeyi ekle.
         SystemObjectTypes systemObjectType = findSystemObjectType(systemObject.getId());
         // Codes starts from 1.
         int index = systemObjectType.getSystemObjectCode() - 1;
@@ -81,12 +85,17 @@ public class SystemClass
         {
             lawsuitCounter++;
         }
-        systemObjects.get(index).add(systemObject);  
+        systemObjects.get(index).put(systemObject.getId(), systemObject);  
     }
 
+    /**
+     * It takes a system object as a parameter, finds the type of the system object, and adds it to the
+     * corresponding MapTree
+     * 
+     * @param systemObject The object to be deleted.
+     */
     public void deleteSystemObject(AbstractSystemObject systemObject)
     {
-        // SystemObjectsCodes'a gore bst'yi getir ve objeyi ekle.
         SystemObjectTypes systemObjectType = findSystemObjectType(systemObject.getId());
         // Codes starts from 1.
         int index = systemObjectType.getSystemObjectCode() - 1;
@@ -107,7 +116,7 @@ public class SystemClass
         {
             lawyerCounter++;
         }
-        systemObjects.get(index).add(systemObject);  
+        systemObjects.get(index).put(systemObject.getId(), systemObject);  
     }
     
     /**
@@ -121,14 +130,7 @@ public class SystemClass
         SystemObjectTypes systemObjectCode = findSystemObjectType(id);
         // Codes starts from 1.
         int index = systemObjectCode.getSystemObjectCode() - 1;
-        // Code'a gore arraylist'ten bst'yi get yap.
-        // Anonymous class yaratip oradan find'a pass edip id compare ederek, aradigimiz objeyi buluruz.
-        return systemObjects.get(index).find(new AbstractSystemObject(id) {
-            @Override
-            public int getId() {
-                return id;
-            }
-        });
+        return systemObjects.get(index).get(id);
     }
 
     /**
@@ -143,36 +145,30 @@ public class SystemClass
 
     
     // ============ HELPERS ============
-    // Id'den hangi type system object oldugunu bul
+    /**
+     * It takes an integer as an argument and returns the corresponding SystemObjectType
+     * 
+     * @param id The id of the object.
+     * @return SystemObjectTypes enum
+     */
     public static SystemObjectTypes findSystemObjectType(int id)
     {
-        // Error check gelebilir
-
         int code = id / (int) Math.pow(10, AbstractSystemObject.ID_LENGTH - 1);
         int index = code - 1;
-        // Kriptik version
-        // return SystemObjectTypes.values()[index];
-
-        // -- Daha az kriptik versiyonu --
-        switch (SystemObjectTypes.values()[index]) {
-            case LAWSUIT:
-                return SystemObjectTypes.LAWSUIT; 
-            case CITIZEN:
-                return SystemObjectTypes.CITIZEN;
-            case LAWYER:
-                return SystemObjectTypes.LAWYER;
-            case LAWOFFICE_OWNER:
-                return SystemObjectTypes.LAWOFFICE_OWNER;
-            case JUDGE:
-                return SystemObjectTypes.JUDGE;
-            case GOVERNMENT_OFFICIAL:
-                return SystemObjectTypes.GOVERNMENT_OFFICIAL;
-            default:
-                throw new IllegalArgumentException("Invalid system object type.");
-        }
+        return SystemObjectTypes.values()[index];
     }
 
-    // Check password from ID
+    /**
+     * "Check if the password of the citizen with the given id is equal to the given password."
+     * 
+     * The function is called "checkPassword" and it takes two parameters: an integer and a string. The
+     * integer is the id of the citizen and the string is the password. The function returns a boolean
+     * value
+     * 
+     * @param id The id of the citizen
+     * @param password The password to check.
+     * @return A boolean value.
+     */
     public boolean checkPassword(int id, String password)
     {
         Citizen citizen = (Citizen) getSystemObject(id);
@@ -196,6 +192,11 @@ public class SystemClass
 
 
     // ============ GOVERNMENT OFFICAL ============
+    /**
+     * > This function adds a lawyer to the system
+     * 
+     * @param lawyer The lawyer object to be added to the system.
+     */
     public void addLawyer(Lawyer lawyer)
     {
         int initialId = SystemObjectCreator.createInitialId(SystemObjectTypes.LAWYER.getSystemObjectCode());
@@ -203,12 +204,25 @@ public class SystemClass
         registerSystemObject(lawyer);
     }
 
+    /**
+     * Return the first element in the queue and remove it from the queue.
+     * 
+     * @return The first element in the queue.
+     */
     public Lawyer getStateAttorneyApplicant() {
         return stateAttorneyApplicants.poll();
     }
     
     
     // ============ JUDGE ============
+    /**
+     * "Get the highest priority lawsuit for a given judge."
+     * 
+     * The function is called getHighestPriorityLawsuit and it takes one parameter, judgeId
+     * 
+     * @param judgeId The ID of the judge who is currently handling the case.
+     * @return The highest priority lawsuit for a given judge.
+     */
     public Lawsuit getHighestPriorityLawsuit(int judgeId)
     {
         return lawsuitsByDate.get(judgeId % 10 - 1).poll();
@@ -237,10 +251,16 @@ public class SystemClass
     }
 
     // ============ CITIZEN ============
-    public void getLawsuitAcceptingLawyer()
+    /**
+     * "Get all the lawyers who accept lawsuits."
+     * 
+     * The function is a bit long, but it's not complicated. It's just a loop that iterates over all
+     * the lawyers and prints the ones who accept lawsuits
+     */
+    public void getLawsuitAcceptingLawyers()
     {
         int index = SystemObjectTypes.LAWYER.getSystemObjectCode() - 1;
-        Iterator<AbstractSystemObject> iterator = systemObjects.get(index).iterator();
+        Iterator<AbstractSystemObject> iterator = systemObjects.get(index).values().iterator();
         int i = 1;
         while (iterator.hasNext())
         {
@@ -253,6 +273,12 @@ public class SystemClass
         }
     }
 
+    /**
+     * > Assigns a lawyer to a lawsuit, if there is one available
+     * 
+     * @param lawsuitId The id of the lawsuit that needs to be assigned to a lawyer.
+     * @return The id of the lawyer assigned to the lawsuit.
+     */
     public Integer assignStateAttorney(int lawsuitId)
     {   
         Lawyer lawyer = stateAttorneyReferences.poll();
@@ -266,18 +292,35 @@ public class SystemClass
 
     // ============ LAWYER ============
 
+    /**
+     * Adds a state attorney to the queue of state attorney applicants.
+     * 
+     * @param stateAttorney The state attorney to add to the queue.
+     */
     public void addStateAttorneyApplicant(Lawyer stateAttorney)
     {
         stateAttorneyApplicants.offer(stateAttorney);
     }
 
     // get citizen
+    /**
+     * This function returns a Citizen object with the given id.
+     * 
+     * @param id The id of the citizen you want to get.
+     * @return A Citizen object.
+     */
     public Citizen getCitizen(int id)
     {
         return (Citizen) getSystemObject(id);
     }
     
     // get lawsuit
+    /**
+     * This function returns a Lawsuit object with the given id.
+     * 
+     * @param id The id of the lawsuit you want to get.
+     * @return A Lawsuit object.
+     */
     public Lawsuit getLawsuit(int id)
     {
         return (Lawsuit) getSystemObject(id);
@@ -291,11 +334,25 @@ public class SystemClass
         System.out.println(jobAdvertisementsReferences);
     }
     
+    /**
+     * This function returns the employer id of the job advertisement at the given index.
+     * 
+     * @param index the index of the job advertisement in the list of job advertisements.
+     * @return The employer id of the job advertisement at the given index.
+     */
     public int getEmployerId(int index)
     {
         return jobAdvertisementsReferences.get(index).getOwnerId();
     }
     
+    /**
+     * "Add a job application to the office of the owner of the job application."
+     * 
+     * The first line of the function is a comment. Comments are ignored by the compiler. They are used
+     * to explain what the code does
+     * 
+     * @param jobApplication The job application to add.
+     */
     public void addJobApplication(Lawyer.JobApplication jobApplication)
     {
         LawOfficeOwner owner = (LawOfficeOwner) getSystemObject(jobApplication.getOwnerId());
@@ -304,26 +361,52 @@ public class SystemClass
     
 
     // ============ LAW OFFICE OWNER ============
+    /**
+     * This function returns a lawyer object with the given id.
+     * 
+     * @param id The id of the lawyer you want to get.
+     * @return A lawyer object
+     */
     public Lawyer getLawyer(int id)
     {
         return (Lawyer) getSystemObject(id);
     }
     
     // ============ GETTERS ============
-    public List<BinarySearchTree<AbstractSystemObject>> getSystemObjects()
+    /**
+     * This function returns a list of TreeMaps of Integers and AbstractSystemObjects.
+     * 
+     * @return A list of TreeMaps of Integers and AbstractSystemObjects.
+     */
+    public List<TreeMap<Integer, AbstractSystemObject>> getSystemObjects()
     {
         return systemObjects;
     }
 
     // Gerekli !!
+    /**
+     * This function returns a queue of lawyers.
+     * 
+     * @return A queue of lawyers.
+     */
     public Queue<Lawyer> getStateAttorneyReferences() {
         return stateAttorneyReferences;
     }
 
+    /**
+     * This function returns the job advertisements references
+     * 
+     * @return The job advertisements references.
+     */
     public ArrayList<LawOffice.JobAdvertisement> getJobAdvertisementsReferences() {
         return jobAdvertisementsReferences;
     }
 
+    /**
+     * > This function returns a list of priority queues of lawsuits, sorted by date
+     * 
+     * @return A list of priority queues of lawsuits.
+     */
     public List<PriorityQueue<Lawsuit>> getLawsuitsByDate() {
         return lawsuitsByDate;
     } 
