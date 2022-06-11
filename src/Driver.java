@@ -23,9 +23,6 @@ public class Driver {
         SystemObjectCreator.createJudges(systemClassObject);
         SystemObjectCreator.createLawsuits(systemClassObject);
 
-        GovernmentOfficial temp = (GovernmentOfficial) systemClassObject.getSystemObject(60001);
-        temp.menu(systemClassObject);
-
         Scanner scanner = new Scanner(System.in);
         while(true)
         {
