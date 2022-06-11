@@ -1,17 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import enums.LawsuitStatus;
+import SortingAlghorithms.QuickSort;
 
 /**
  * Class for Judge User
  */
 public class Judge extends Citizen{
-
-    // Creating a list of cases that the judge is assigned to.
+    // Data Fields
+    /** List of lawsuits those are assigned to judge */
     private List<Integer> assignedLawsuits;
-
+    /** List of lawsuits those are concluded by judge */
     private List<Integer> concludedLawsuits;
 
     // Constructors
@@ -30,6 +30,7 @@ public class Judge extends Citizen{
     // Methods
     /**
      * Displays assigned lawsuits to judge
+     * @param systemClassObjectReference System object that holds objects by id
      */
     private void showAssignedLawsuits(SystemClass systemClassObjectReference) {
         for (int i = 0; i < assignedLawsuits.size(); i++) {
@@ -41,6 +42,7 @@ public class Judge extends Citizen{
 
     /**
      * Displays concluded lawsuits to judge
+     * @param systemClassObjectReference System object that holds objects by id
      */
     private void showConcludedLawsuits(SystemClass systemClassObjectReference) {
         for (int i = 0; i < concludedLawsuits.size(); i++) {
@@ -51,25 +53,127 @@ public class Judge extends Citizen{
     }
 
     /**
-     * Concludes given lawsuit
-     * @param lawsuit lawsuit
+     * Concludes lawsuit
+     * @param systemClassObjectReference System object that holds objects by id
      */
     private void concludeLawsuit(SystemClass systemClassObjectReference) {
-        // Casefile'i olmayan dava sonlandirilamaz.
 
         Lawsuit lawsuit = systemClassObjectReference.getHighestPriorityLawsuit(id);
-        lawsuit.concludeLawsuit(LawsuitStatus.SUING_WON);
+        while (true) {
+            System.out.println("Date: "+lawsuit.getDate());
+            System.out.println("Lawsuit Type: "+lawsuit.getLawsuitType());
+            System.out.println("Status: "+lawsuit.getStatus());
+            System.out.println("Defendant: "+lawsuit.getSuingCitizen());
+            System.out.println("Defendant's Lawyer: "+lawsuit.getSuingLawyer());
+            System.out.println("Prosecutor: "+lawsuit.getSuedCitizen());
+            System.out.println("Prosecutor's Lawyer: "+lawsuit.getSuedLawyer());
+            System.out.println("\n");
+            System.out.println("1. Show Defense of Defendant");
+            System.out.println("2. Show Defense of Prosecutor");
+            System.out.println("3. Show Court Records");
+            System.out.println("4. Conclude Trial");
+            System.out.println("5. Exit");
+            System.out.println("Choice:");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
 
-        String caseFile = "Judge case file olusturup bunu lawsuit'e ekler.";
-        lawsuit.addCaseFile(caseFile);
-        ListIterator<Integer> listIterator = assignedLawsuits.listIterator();
-        while (listIterator.hasNext()) {
-            if (listIterator.next().equals(lawsuit.getId())) {
-                listIterator.remove();
+            switch (choice) {
+                case 1:
+                    System.out.println("Defense of Defendant: "+lawsuit.getSuingDefence());
+                    break;
+                case 2:
+                    System.out.println("Defense of Prosecutor: "+lawsuit.getSuedDefence());
+                    break;
+                case 3:
+                    System.out.println("Court Records: "+lawsuit.getCourtRecords());
+                    break;
+                case 4:
+                    changeStatus(lawsuit);
+                    if (lawsuit.checkStatus() == LawsuitStatus.SUED_WON || lawsuit.checkStatus() == LawsuitStatus.SUING_WON) {
+                        assignedLawsuits.removeIf(integer -> integer.equals(lawsuit.getId()));
+                        concludedLawsuits.add(lawsuit.getId());
+                        QuickSort.sort(assignedLawsuits);
+                        QuickSort.sort(concludedLawsuits);
+                    }
+                    break;
+                case 5:
+                    return;
+                default:
+                    System.out.println("Invalid selection.");
             }
         }
+    }
 
-        concludedLawsuits.add(lawsuit.getId());
+    /**
+     * Changes status of given lawsuit
+     * @param lawsuit lawsuit
+     */
+    private void changeStatus(Lawsuit lawsuit) {
+        while (true) {
+            System.out.println("1. "+LawsuitStatus.HOLD.getStatus());
+            System.out.println("2. "+LawsuitStatus.STILL_GOING.getStatus());
+            System.out.println("3. "+LawsuitStatus.SUING_WON.getStatus());
+            System.out.println("4. "+LawsuitStatus.SUED_WON.getStatus());
+            System.out.println("Choice:");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
+            String caseFile;
+            switch (choice) {
+                case 1 -> {
+                    lawsuit.setStatus(LawsuitStatus.HOLD);
+                    return;
+                }
+                case 2 -> {
+                    lawsuit.setStatus(LawsuitStatus.STILL_GOING);
+                    return;
+                }
+                case 3 -> {
+                    do {
+                        System.out.println("Enter Case File:");
+
+                        caseFile = Utils.readStringInput();
+
+                        if (caseFile == null || caseFile.isBlank())
+                            System.out.println("Invalid Case File.");
+
+                    }while (caseFile == null || caseFile.isBlank());
+
+                    lawsuit.addCaseFile(caseFile);
+
+                    lawsuit.setStatus(LawsuitStatus.SUING_WON);
+
+                    return;
+                }
+                case 4 -> {
+                    do {
+                        System.out.println("Enter Case File:");
+
+                        caseFile = Utils.readStringInput();
+
+                        if (caseFile == null || caseFile.isBlank())
+                            System.out.println("Invalid Case File.");
+
+                    }while (caseFile == null || caseFile.isBlank());
+
+                    lawsuit.addCaseFile(caseFile);
+
+                    lawsuit.setStatus(LawsuitStatus.SUED_WON);
+
+                    return;
+                }
+                default -> System.out.println("Invalid selection.");
+            }
+        }
     }
 
     /**
@@ -78,14 +182,44 @@ public class Judge extends Citizen{
      */
     public void assignLawsuit(Integer lawsuit) {
         assignedLawsuits.add(lawsuit);
+        QuickSort.sort(assignedLawsuits);
     }
 
+    /**
+     * Menu for Judge User
+     * @param systemClassObject System object that holds objects by id
+     */
     @Override
     public void menu(SystemClass systemClassObject) {
-        assignLawsuit(10001);
-        assignLawsuit(10002);
-        assignLawsuit(10003);
-        assignLawsuit(10004);
-        concludeLawsuit(systemClassObject);
+        while (true) {
+            System.out.println("1. Show Assigned Lawsuits");
+            System.out.println("2. Show Concluded Lawsuits");
+            System.out.println("3. Concluded a Lawsuit");
+            System.out.println("4. Exit");
+            System.out.println("Choice:");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    showAssignedLawsuits(systemClassObject);
+                    break;
+                case 2:
+                    showConcludedLawsuits(systemClassObject);
+                    break;
+                case 3:
+                    concludeLawsuit(systemClassObject);
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid selection.");
+            }
+        }
     }
 }
