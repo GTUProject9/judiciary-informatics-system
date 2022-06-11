@@ -1,4 +1,3 @@
-
 /**
  * Super class for all users.
  * Includes id, password, firstName, lastName, email, phone.
@@ -31,7 +30,7 @@ public abstract class AbstractUser extends AbstractSystemObject
         this.phone = phone;
     }
 
-    protected String getPassword() {
+    public String getPassword() {
         return password;
     }
     
