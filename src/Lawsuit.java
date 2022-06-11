@@ -51,7 +51,7 @@ public class Lawsuit extends AbstractSystemObject
         this.lawsuitType = lawsuitType;
         this.caseFile = caseFile;
         this.courtRecords = null;
-        this.status = LawsuitStatus.HOLD_ON;
+        this.status = LawsuitStatus.HOLD;
     }
     
     //Ends lawsuit with a decision of the judge.
@@ -142,6 +142,10 @@ public class Lawsuit extends AbstractSystemObject
 
     public String getStatus(){
         return status.getStatus();
+    }
+
+    public LawsuitStatus checkStatus(){
+        return status;
     }
 
     public void setLawsuitType(LawsuitTypes type){
