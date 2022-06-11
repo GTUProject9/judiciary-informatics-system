@@ -290,8 +290,7 @@ public class SystemClass
         return lawyer.getId();
     }
 
-    // ============ LAWYER ============
-
+        // ============ LAWYER ============
     /**
      * Adds a state attorney to the queue of state attorney applicants.
      * 
@@ -358,7 +357,55 @@ public class SystemClass
         LawOfficeOwner owner = (LawOfficeOwner) getSystemObject(jobApplication.getOwnerId());
         owner.getOffice().addJobApplication(jobApplication);
     }
-    
+
+
+    public void printLawsuit(Lawsuit lawsuitItem){
+
+        System.out.println("\n\n***********************************");
+        System.out.println("Id\t" + lawsuitItem.id);
+        System.out.println("Status\t" + lawsuitItem.getStatus());
+        System.out.println("Suing Citizen\t" + lawsuitItem.getSuingCitizen());
+        System.out.println("Sued Citizen\t" + lawsuitItem.getSuedCitizen());
+        System.out.println("Suing Lawyer\t" + lawsuitItem.getSuingLawyer());
+        System.out.println("Sued Lawyer\t" + lawsuitItem.getSuedLawyer());
+        System.out.println("Suing Defence\t" + lawsuitItem.getSuingDefence());
+        System.out.println("Sued Defence\t" + lawsuitItem.getSuedDefence());
+        System.out.println("Case File\t" + lawsuitItem.getCaseFile());
+        System.out.println("Law Suit Type\t" + lawsuitItem.getLawsuitType());
+        System.out.println("Judge\t" + lawsuitItem.getJudge());
+        System.out.println("Counrt Records\t" + lawsuitItem.getCourtRecords());
+
+    }
+
+    /**
+     * accessToTheArchive
+     *
+     */
+    public void accessToTheArchive() {
+        TreeMap<Integer, AbstractSystemObject> lawsuits = systemObjects.get(0);
+        for (AbstractSystemObject item : lawsuits.values()) {
+            Lawsuit lawsuitItem = (Lawsuit) item;
+            printLawsuit(lawsuitItem);
+        }
+    }
+
+    public void addDefenseToTheLawsuit(TreeSet<Integer> continuingLawsuits){
+        TreeMap<Integer, AbstractSystemObject> lawsuits = systemObjects.get(0);
+        System.out.println("Please Insert Case Id For Adding Defense");
+
+        for (AbstractSystemObject item : lawsuits.values()) {
+            if(continuingLawsuits.contains(item)) {
+                printLawsuit((Lawsuit) lawsuits.get(item));
+            }
+        }
+        Scanner scanner = new Scanner(System.in);
+        int choice = scanner.nextInt();
+        Lawsuit lawsuitForAddingDefence = (Lawsuit) lawsuits.get(choice);
+        System.out.println("Enter Your Defence");
+        String defence = scanner.nextLine();
+        //bu savunma üsteki davaya nasıl birleştirilecek ?
+    }
+
 
     // ============ LAW OFFICE OWNER ============
     /**
