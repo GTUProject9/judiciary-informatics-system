@@ -121,11 +121,11 @@ public class Citizen extends AbstractUser
         suedCitizen.addSuedLawsuit(lawsuitId);
     }
 
-    private void addSuingLawsuit(Integer lawsuitId) {
+    public void addSuingLawsuit(Integer lawsuitId) {
         suingLawsuits.add(lawsuitId);
     }
 
-    private void addSuedLawsuit(Integer lawsuitId) {
+    public void addSuedLawsuit(Integer lawsuitId) {
         suedLawsuits.add(lawsuitId);
     }
 

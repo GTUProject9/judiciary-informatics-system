@@ -142,8 +142,9 @@ public class Lawsuit extends AbstractSystemObject
     public String getStatus(){
         return status.getStatus();
     }
-
-    public LawsuitStatus checkStatus(){
+    
+    public LawsuitStatus checkStatus()
+    {
         return status;
     }
 

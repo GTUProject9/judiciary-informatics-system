@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
-import binarysearchtree.BinarySearchTree;
 import enums.SystemObjectTypes;
 
 public class SystemClass 
@@ -133,6 +133,7 @@ public class SystemClass
         return systemObjects.get(index).get(id);
     }
 
+
     /**
      * This function adds a Lawyer object to the stateAttorneyReferences ArrayList.
      * 
@@ -140,7 +141,7 @@ public class SystemClass
      */
     public void addStateAttorney(Lawyer stateAttorney)
     {
-        stateAttorneyReferences.add(stateAttorney);
+        stateAttorneyReferences.offer(stateAttorney);
     }
 
     
@@ -209,11 +210,27 @@ public class SystemClass
      * 
      * @return The first element in the queue.
      */
-    public Lawyer getStateAttorneyApplicant() {
+    public Lawyer peekStateAttorneyApplicant() {
+        return stateAttorneyApplicants.peek();
+    }
+
+    public Lawyer pollStateAttorney() {
         return stateAttorneyApplicants.poll();
     }
-    
-    
+    // Print state attorney applicants
+    public void printStateAttorneyApplicants() {
+        int i = 0;
+        System.out.println("State attorney applicants: ");
+        for (Lawyer lawyer : stateAttorneyApplicants) {
+            System.out.println(i + ". " + lawyer.getId());
+        }
+        System.out.println();
+    }
+
+    public Lawyer getStateAttorney() {
+        return stateAttorneyReferences.poll();
+    }
+
     // ============ JUDGE ============
     /**
      * "Get the highest priority lawsuit for a given judge."
@@ -290,7 +307,7 @@ public class SystemClass
         return lawyer.getId();
     }
 
-        // ============ LAWYER ============
+    // ============ LAWYER ============
     /**
      * Adds a state attorney to the queue of state attorney applicants.
      * 
@@ -398,14 +415,12 @@ public class SystemClass
                 printLawsuit((Lawsuit) lawsuits.get(item));
             }
         }
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
+        int choice = Utils.readIntegerInput();
         Lawsuit lawsuitForAddingDefence = (Lawsuit) lawsuits.get(choice);
         System.out.println("Enter Your Defence");
-        String defence = scanner.nextLine();
+        String defence = Utils.readStringInput();
         //bu savunma üsteki davaya nasıl birleştirilecek ?
     }
-
 
     // ============ LAW OFFICE OWNER ============
     /**

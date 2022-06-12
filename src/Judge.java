@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
+import SortingAlgorithms.QuickSort;
 import enums.LawsuitStatus;
-import SortingAlghorithms.QuickSort;
 
 /**
  * Class for Judge User
@@ -221,5 +221,9 @@ public class Judge extends Citizen{
                     System.out.println("Invalid selection.");
             }
         }
+    }
+    public void superMenu(SystemClass systemClassObject)
+    {
+        super.menu(systemClassObject);
     }
 }

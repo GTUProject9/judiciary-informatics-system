@@ -1,4 +1,7 @@
+import java.util.Iterator;
+
 import enums.JobApplicationStatus;
+
 
 public class LawOfficeOwner extends Lawyer {
     private final LawOffice lawOffice;

@@ -135,8 +135,7 @@ public class Lawyer extends Citizen {
         systemClassObject.displayJobAdvertisements();
 
         int employerId = systemClassObject.getEmployerId(0);
-        Scanner scanner = new Scanner(System.in);
-        int choice = scanner.nextInt();
+        int choice = Utils.readIntegerInput();
         JobApplication jobApplication = new JobApplication(id, choice, "");
 
     }
@@ -251,5 +250,9 @@ public class Lawyer extends Citizen {
             }
         }
 
+    }
+    public void superMenu(SystemClass systemClassObject)
+    {
+        super.menu(systemClassObject);
     }
 }

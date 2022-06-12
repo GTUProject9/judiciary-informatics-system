@@ -1,9 +1,6 @@
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
-
-import javax.lang.model.util.ElementScanner14;
 
 import enums.SystemObjectTypes;
 
@@ -23,7 +20,6 @@ public class Driver {
         SystemObjectCreator.createJudges(systemClassObject);
         SystemObjectCreator.createLawsuits(systemClassObject);
 
-        Scanner scanner = new Scanner(System.in);
         while(true)
         {
                 // Menu
@@ -36,7 +32,7 @@ public class Driver {
             System.out.println("5. Login as a Government Official");
             System.out.println("0 - Exit");
 
-            int choice = scanner.nextInt();
+            int choice = Utils.readIntegerInput();
 
             if (choice == 0)
             {
@@ -50,10 +46,10 @@ public class Driver {
             else
             {
                 System.out.println("\n Enter your ID: ");
-                int id = scanner.nextInt();
+                int id = Utils.readIntegerInput();
                 
                 System.out.println("\n Enter your password: ");
-                String password = scanner.next();
+                String password = Utils.readStringInput();
 
                 if (choice == 1)
                 {
@@ -68,7 +64,28 @@ public class Driver {
                     }
                     else
                     {
-                        citizen.menu(systemClassObject);
+                        SystemObjectTypes systemObjectType = SystemClass.findSystemObjectType(id);
+                        System.out.println("\n Welcome, " + citizen.getFirstName() + " " + citizen.getLastName() + "!");
+                        if (systemObjectType == SystemObjectTypes.CITIZEN)
+                        {
+                            citizen.menu(systemClassObject);
+                        }
+                        else if (systemObjectType == SystemObjectTypes.LAWYER)
+                        {
+                            ((Lawyer) citizen).superMenu(systemClassObject);
+                        }
+                        else if (systemObjectType == SystemObjectTypes.LAWOFFICE_OWNER)
+                        {
+                            ((LawOfficeOwner) citizen).superMenu(systemClassObject);
+                        }
+                        else if (systemObjectType == SystemObjectTypes.JUDGE)
+                        {
+                            ((Judge) citizen).superMenu(systemClassObject);
+                        }
+                        else if (systemObjectType == SystemObjectTypes.GOVERNMENT_OFFICIAL)
+                        {
+                            ((GovernmentOfficial) citizen).superMenu(systemClassObject);
+                        }
                     }
                 }
                 else if (choice == 2)
@@ -84,6 +101,7 @@ public class Driver {
                     }
                     else
                     {
+                        System.out.println("\n Welcome, " + lawyer.getFirstName() + " " + lawyer.getLastName() + "!");
                         lawyer.menu(systemClassObject);
 
                     }
@@ -101,6 +119,7 @@ public class Driver {
                     }
                     else
                     {
+                        System.out.println("\n Welcome, " + lawOfficeOwner.getFirstName() + " " + lawOfficeOwner.getLastName() + "!");
                         lawOfficeOwner.menu(systemClassObject);
                     }
                 }
@@ -117,6 +136,7 @@ public class Driver {
                     }
                     else
                     {
+                        System.out.println("\n Welcome, " + judge.getFirstName() + " " + judge.getLastName() + "!");
                         judge.menu(systemClassObject);
                     }
                 }
@@ -133,12 +153,12 @@ public class Driver {
                     }
                     else
                     {
+                        System.out.println("\n Welcome, " + governmentOfficial.getFirstName() + " " + governmentOfficial.getLastName() + "!");
                         governmentOfficial.menu(systemClassObject);
                     }
                 }
             }
         }
-        scanner.close();
     }
 
 }
