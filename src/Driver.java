@@ -143,7 +143,8 @@ public class Driver {
                     }
                     else
                     {
-                        System.out.println("\n Welcome, " + lawOfficeOwner.getFirstName() + " " + lawOfficeOwner.getLastName() + "!");
+                        System.out.println("\n Welcome, " + lawOfficeOwner.getFirstName() + " " + 
+                                            lawOfficeOwner.getLastName() + "!");
                         lawOfficeOwner.menu(systemClassObject);
                     }
                 }
@@ -191,7 +192,8 @@ public class Driver {
                     }
                     else
                     {
-                        System.out.println("\n Welcome, " + governmentOfficial.getFirstName() + " " + governmentOfficial.getLastName() + "!");
+                        System.out.println("\n Welcome, " + governmentOfficial.getFirstName() + " " + 
+                                            governmentOfficial.getLastName() + "!");
                         governmentOfficial.menu(systemClassObject);
                     }
                 }

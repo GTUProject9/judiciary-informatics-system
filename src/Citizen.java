@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import enums.LawsuitStatus;
 import enums.LawsuitTypes;
+import enums.SystemObjectTypes;
 
 public class Citizen extends AbstractUser
 {
@@ -66,7 +67,7 @@ public class Citizen extends AbstractUser
         systemClassRef.addLawsuit(lawsuit);
 
         Integer suingLawyer = selectLawyer(systemClassRef, lawsuit.getId());
-        
+
         lawsuit.setSuingLawyer(suingLawyer);
         systemClassRef.assignLawyerToLawsuit(suingLawyer, lawsuit.getId());
 
@@ -124,50 +125,62 @@ public class Citizen extends AbstractUser
         }
     }
 
-    private static void displayLawyersThatAcceptsLawsuits(SystemClass systemClassRef) {
-        systemClassRef.getLawsuitAcceptingLawyers();
+    private static void displayLawsuitAcceptingLawyers(SystemClass systemClassRef) {
+        systemClassRef.displayLawsuitAcceptingLawyers();
     }
 
     private static Integer selectLawyer(SystemClass systemClassRef, Integer lawsuitId) {
         
         System.out.println("1. Select lawyer that accepts lawsuits" + "\n" +
                            "2. Request lawyer from state" + "\n" +
-                           "Enter your choice: ");
+                           "0. Go Back" + "\n" +
+                           "Choice: ");
         while(true)
         {
-            Integer choice;
+            int choice;
             try {
                 choice = Utils.readIntegerInput();
             } catch (Exception e) {
                 System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
+            Integer lawyerId = null;
             if(choice == 1)
             {
-                displayLawyersThatAcceptsLawsuits(systemClassRef);
-                System.out.print("Select lawyer: ");
-                return Utils.readIntegerInput();
+                displayLawsuitAcceptingLawyers(systemClassRef);
+                System.out.print("Select: ");
+                int index = Utils.readIntegerInput() - 1;
+                lawyerId = getLawyer(index, systemClassRef);
             }
             else if(choice == 2)
             {
-                Integer lawyerId = systemClassRef.assignStateAttorney(lawsuitId);
-
+                lawyerId = systemClassRef.assignStateAttorney(lawsuitId);
                 if(lawyerId == null)
                 {
                     System.out.println("No lawyers available in state. Try again later.");
                 }
-                else
-                {
-                    return lawyerId;
-                }
             }
             else
             {
-                System.out.println("Invalid choice!");
+                System.out.println(Utils.INVALID_CHOICE);
+            }
+            if (lawyerId != null) {
+                System.out.println("Selected Lawyer\n" + systemClassRef.getLawyer(lawyerId));
+                return lawyerId;
             }
         }
     }
-
+    private static Integer getLawyer(int index, SystemClass systemClassRef) {
+        Integer lawyerId;
+        try {
+            lawyerId = systemClassRef.getLawsuitAcceptingLawyerByIndex(index);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(Utils.INVALID_CHOICE);
+            return null;
+        }
+        return lawyerId;
+    }
+    
     private static void addLawsuitToSuedCitizen(SystemClass systemClassRef, 
                                                 Integer suedCitizenId, Integer lawsuitId) {
         Citizen suedCitizen = (Citizen) systemClassRef.getSystemObject(suedCitizenId);
@@ -183,10 +196,13 @@ public class Citizen extends AbstractUser
     }
 
     private void addLawyerAsSuedCitizen(SystemClass systemClassRef) {
+
+        int i = 1;
         for (Integer lawsuitId : suedLawsuits) {
-            System.out.println("1.\n" + systemClassRef.getLawsuit(lawsuitId));
+            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
+            i++;
         }
-        System.out.println("Enter the ID of the lawsuit: ");
+        System.out.println("Select: ");
         Integer lawsuitId = Utils.readIntegerInput();
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
         Integer suedLawyer = selectLawyer(systemClassRef, lawsuitId);
@@ -218,7 +234,6 @@ public class Citizen extends AbstractUser
                 System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
-
             switch (choice) {
                 case 1:
                     createLawsuit(systemClassRef);
@@ -233,7 +248,7 @@ public class Citizen extends AbstractUser
                     displayCompletedLawsuits(systemClassRef);
                     break;
                 case 5:
-                    displayLawyersThatAcceptsLawsuits(systemClassRef);
+                    displayLawsuitAcceptingLawyers(systemClassRef);
                     break;
                 case 6:
                     addLawyerAsSuedCitizen(systemClassRef);

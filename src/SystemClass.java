@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
+import java.util.Set;
 
 import enums.SystemObjectTypes;
 
@@ -272,7 +273,7 @@ public class SystemClass
      * The function is a bit long, but it's not complicated. It's just a loop that iterates over all
      * the lawyers and prints the ones who accept lawsuits
      */
-    public void getLawsuitAcceptingLawyers()
+    public void displayLawsuitAcceptingLawyers()
     {
         int index = SystemObjectTypes.LAWYER.getSystemObjectCode() - 1;
         int i = 1;
@@ -311,10 +312,51 @@ public class SystemClass
         return lawyer.getId();
     }
 
+    /**
+     * Assign a lawyer to a lawsuit.
+     * 
+     * @param lawyerId The id of the lawyer
+     * @param lawsuitId The id of the lawsuit to be assigned to the lawyer.
+     */
     public void assignLawyerToLawsuit(int lawyerId, int lawsuitId) {
         Lawyer lawyer = getLawyer(lawyerId);
         lawyer.addLawsuit(lawsuitId);
+    }
+
+    /**
+     * It returns the id of the nth lawyer that accepts lawsuits
+     * 
+     * @param index the index of the lawyer in the list of lawyers who accept lawsuits
+     * @return The id of the lawyer that accepts lawsuits.
+     */
+    public Integer getLawsuitAcceptingLawyerByIndex(int index) {
+        for (var object : systemObjects.get(SystemObjectTypes.LAWYER.getSystemObjectCode() - 1).values())
+        {
+            if (((Lawyer) object).acceptsLawsuits())
+            {
+                if (index == 0)
+                    return object.getId();
+                index--;
+            }
+        }
+        return null;
     } 
+
+    /**
+     * It returns the system object at the specified index of the specified type
+     * 
+     * @param index The index of the object you want to get.
+     * @param type SystemObjectTypes.class
+     * @return The object at the index.
+     */
+    public AbstractSystemObject getSystemObjectByIndex(int index, SystemObjectTypes type) {
+        for (var object : systemObjects.get(type.getSystemObjectCode() - 1).values()) {
+            if (index == 0)
+                return object;
+            index--;
+        }
+        return null;
+    }
 
     // ============ LAWYER ============
     /**
