@@ -8,29 +8,26 @@ public class LawOfficeOwner extends Lawyer {
 
     private final LawOffice lawOffice;
 
-    public LawOfficeOwner(int id, String password, String name, String surname, String email, 
+    public LawOfficeOwner(int id, String password, String name, String surname, String email,
                           String phone,String lawOfficeName) {
         super(id, password, name, surname,  email, phone);
         lawOffice = new LawOffice(lawOfficeName, id);
     }
 
     /**
-     * This function returns the advertisement content to the system.
-     * The system saves the advertisement to the system using the officeId and the advertisement message.
+     * Creates job advertisement and adds it to the system based on user input.
+     * @param systemClassRef the system class reference
      */
     private void publishJobAdvertisement(SystemClass systemClassRef) {
-
         System.out.print("\nEnter the title of the job advertisement: ");
         String title = Utils.readStringInput();
         System.out.print("Enter the description of the job advertisement: ");
         String description = Utils.readStringInput();
 
-        // Add the advertisement to the system.
+        // Add the job advertisement to the system.
         LawOffice.JobAdvertisement jobAdvertisement = lawOffice.createJobAdvertisement(id, title, description);
         lawOffice.addJobAdvertisement(jobAdvertisement);
         systemClassRef.addJobAdvertisement(jobAdvertisement);
-
-        System.out.println("Job advertisement published.");
     }
 
     /**
@@ -43,10 +40,8 @@ public class LawOfficeOwner extends Lawyer {
     }
 
     /**
-     * It displays a list of employees, and then allows the user to choose an employee to perform an
-     * action on
-     * 
-     * @param systemClassRef a reference to the SystemClass object
+     * Lists all the employees and performs an action based on user input.
+     * @param systemClassRef the system class reference
      */
     private void employeesMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereEmployees()) {
@@ -54,9 +49,10 @@ public class LawOfficeOwner extends Lawyer {
             return;
         }
 
-        System.out.println("Choose an employee to perform an action:");
+        System.out.println("\nChoose an employee to perform an action:");
         System.out.println("0. Go back");
         lawOffice.displayEmployees(systemClassRef);
+        System.out.print("Choice: ");
 
         int choice;
         try {
@@ -81,14 +77,15 @@ public class LawOfficeOwner extends Lawyer {
 
         Lawyer employee = systemClassRef.getLawyer(employeeId);
 
-        System.out.println("Choose an action to perform:");
+        System.out.println("\nChoose an action to perform:");
         System.out.println("1. Assign a job");
         System.out.println("2. Fire");
+        System.out.print("Choice: ");
 
         try {
             choice = Utils.readIntegerInput();
         } catch (NumberFormatException e) {
-            System.out.println(Utils.INVALID_CHOICE);
+            System.out.println(Utils.INVALID_INPUT);
             return;
         }
 
@@ -100,17 +97,15 @@ public class LawOfficeOwner extends Lawyer {
                 fireEmployee(employee, employeeIndex);
                 break;
             default:
-                System.out.println("Invalid selection.");
+                System.out.println(Utils.INVALID_CHOICE);
                 break;
         }
     }
 
     /**
-     * This function assigns a lawsuit to a lawyer which is
-     * an employee of the law office.
-     * 
-     * @param systemClassRef a reference to the system class
-     * @param employee Lawyer object
+     * Assigns a job to the given employee based on user input.
+     * @param systemClassRef the system class reference
+     * @param employee the employee to assign a job
      */
     private void assignJobToEmployee(SystemClass systemClassRef, Lawyer employee) {
         if (continuingLawsuits.size() == 0) {
@@ -118,11 +113,14 @@ public class LawOfficeOwner extends Lawyer {
             return;
         }
 
+        // Get a lawsuit from the continuingLawsuits set.
         Iterator<Integer> continuingLawSuitsIter = continuingLawsuits.iterator();
-        int lawsuitId =  continuingLawSuitsIter.next();
+        int lawsuitId = continuingLawSuitsIter.next();
         continuingLawSuitsIter.remove();
+
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
 
+        // Assign the lawsuit to the employee.
         employee.addLawsuit(lawsuitId);
 
         if (lawsuit.getSuingLawyer() == id) {
@@ -133,10 +131,8 @@ public class LawOfficeOwner extends Lawyer {
     }
 
     /**
-     * This function removes an employee from the law office
-     * 
-     * @param employee The employee to be fired.
-     * @param employeeIndex the index of the employee in the law office's employee list
+     * Fires the given employee.
+     * @param employeeIndex the index of the employee to fire
      */
     private void fireEmployee(Lawyer employee, int employeeIndex) {
         employee.setEmployerId(null);
@@ -144,10 +140,8 @@ public class LawOfficeOwner extends Lawyer {
     }
 
     /**
-     * It displays a menu of job applications, and then allows the user to choose one to accept or
-     * reject
-     * 
-     * @param systemClassRef a reference to the system class
+     * Lists all the job applications and performs an action based on user input.
+     * @param systemClassRef the system class reference
      */
     private void jobApplicationsMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereJobApplications()) {
@@ -155,9 +149,10 @@ public class LawOfficeOwner extends Lawyer {
             return;
         }
 
-        System.out.println("Choose a job application to perform an action.");
+        System.out.println("\nChoose a job application to perform an action.");
         System.out.println("0. Go back");
         lawOffice.displayJobApplications();
+        System.out.print("Choice: ");
 
         int choice;
         try {
@@ -180,9 +175,10 @@ public class LawOfficeOwner extends Lawyer {
             return;
         }
 
-        System.out.println("Choose an action to perform:");
+        System.out.println("\nChoose an action to perform:");
         System.out.println("1. Accept");
         System.out.println("2. Reject");
+        System.out.print("Choice: ");
 
         try {
             choice = Utils.readIntegerInput();
@@ -194,9 +190,11 @@ public class LawOfficeOwner extends Lawyer {
         switch (choice) {
             case 1:
                 acceptJobApplication(systemClassRef, jobApplication);
+                lawOffice.removeJobApplication(jobApplicationIndex);
                 break;
             case 2:
                 rejectJobApplication(jobApplication);
+                lawOffice.removeJobApplication(jobApplicationIndex);
                 break;
             default:
                 System.out.println(Utils.INVALID_CHOICE);
@@ -205,10 +203,9 @@ public class LawOfficeOwner extends Lawyer {
     }
 
     /**
-     * The function accepts a job application from a lawyer and adds the lawyer to the law office
-     * 
-     * @param systemClassRef a reference to the system class
-     * @param jobApplication The job application that the employer is accepting.
+     * Accepts the given job application.
+     * @param systemClassRef the system class reference
+     * @param jobApplication the job application
      */
     private void acceptJobApplication(SystemClass systemClassRef, Lawyer.JobApplication jobApplication) {
         int applicantId = jobApplication.getApplicantId();
@@ -219,11 +216,10 @@ public class LawOfficeOwner extends Lawyer {
 
         jobApplication.setStatus(JobApplicationStatus.ACCEPTED);
     }
-    
+
     /**
-     * This function sets the status of a job application to rejected.
-     * 
-     * @param jobApplication The job application to be rejected.
+     * Rejects the given job application.
+     * @param jobApplication the job application
      */
     private void rejectJobApplication(Lawyer.JobApplication jobApplication) {
         jobApplication.setStatus(JobApplicationStatus.REJECTED);
@@ -239,10 +235,11 @@ public class LawOfficeOwner extends Lawyer {
         System.out.println("\n--- Law Office Owner Menu ---");
         while (true) {
             System.out.println("\n1. Employees");
-            System.out.println("2. Job Applications");
-            System.out.println("3. Publish Job Advertisement");
+            System.out.println("2. Job applications");
+            System.out.println("3. Publish job advertisement");
             System.out.println("0. Exit");
             System.out.print("Choice: ");
+
             int choice;
             try {
                 choice = Utils.readIntegerInput();
@@ -264,12 +261,12 @@ public class LawOfficeOwner extends Lawyer {
                 case 0:
                     return;
                 default:
-                    System.out.println("Invalid selection.");
+                    System.out.println(Utils.INVALID_CHOICE);
                     break;
             }
         }
     }
-    
+
     /**
      * Lawyer menu for the law office owner since it he/she is lawyer as well.
      * 
