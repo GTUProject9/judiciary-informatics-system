@@ -122,6 +122,14 @@ public class LawOffice
         }
     }
 
+    public Lawyer.JobApplication removeJobApplication(int index)  throws IndexOutOfBoundsException {
+        if (index >= 0 && index < jobApplications.size()) {
+            return jobApplications.remove(index);
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
     public Iterator<Lawyer.JobApplication> getJobApplicationIterator() {
         return jobApplications.iterator();
     }

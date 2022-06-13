@@ -180,9 +180,11 @@ public class LawOfficeOwner extends Lawyer {
         switch (choice) {
             case 1:
                 acceptJobApplication(systemClassRef, jobApplication);
+                lawOffice.removeJobApplication(jobApplicationIndex);
                 break;
             case 2:
                 rejectJobApplication(jobApplication);
+                lawOffice.removeJobApplication(jobApplicationIndex);
                 break;
             default:
                 System.out.println("Invalid choice.");
