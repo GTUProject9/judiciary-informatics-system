@@ -2,17 +2,16 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
- * It's a utility class that contains methods for reading input from the console
+ * Static utility class
  */
 public final class Utils {
     private Utils(){}
 
     public static final String ROOT_DIR = getRootDirectoryPath();
 
+    private static final Scanner scanner = new Scanner(System.in);
     public static final String INVALID_INPUT = "Invalid input!";
     public static final String INVALID_CHOICE = "Invalid choice!";
-
-    private static final Scanner scanner = new Scanner(System.in);
 
     public static int readIntegerInput() throws NumberFormatException {
         String line = scanner.nextLine();
