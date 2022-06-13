@@ -5,7 +5,6 @@ import enums.SystemObjectTypes;
  * It starts the system and then it asks the user to login
  */
 public class Driver {
-
     /**
      * It starts the system and then it asks the user to login.
      */
@@ -96,7 +95,13 @@ public class Driver {
                 }
                 else if (choice == 2)
                 {
-                    Lawyer lawyer = (Lawyer) systemClassObject.getSystemObject(id);
+                    Lawyer lawyer;
+                    try {
+                        lawyer = (Lawyer) systemClassObject.getSystemObject(id);
+                    } catch (Exception e) {
+                        System.out.println("\n Invalid ID.\n");
+                        continue;
+                    }
                     if (lawyer == null)
                     {
                         System.out.println("\n Invalid ID.\n");
@@ -121,7 +126,13 @@ public class Driver {
                 }
                 else if (choice == 3)
                 {
-                    LawOfficeOwner lawOfficeOwner = (LawOfficeOwner) systemClassObject.getSystemObject(id);
+                    LawOfficeOwner lawOfficeOwner;
+                    try {
+                        lawOfficeOwner = (LawOfficeOwner) systemClassObject.getSystemObject(id);
+                    } catch (Exception e) {
+                        System.out.println("\n Invalid ID.\n");
+                        continue;
+                    }
                     if (lawOfficeOwner == null)
                     {
                         System.out.println("\n Invalid ID.\n");
@@ -138,7 +149,13 @@ public class Driver {
                 }
                 else if (choice == 4)
                 {
-                    Judge judge = (Judge) systemClassObject.getSystemObject(id);
+                    Judge judge;
+                    try {
+                        judge = (Judge) systemClassObject.getSystemObject(id);
+                    } catch (Exception e) {
+                        System.out.println("\n Invalid ID.\n");
+                        continue;
+                    }
                     if (judge == null)
                     {
                         System.out.println("\n Invalid ID.\n");
@@ -155,7 +172,15 @@ public class Driver {
                 }
                 else if (choice == 5)
                 {
-                    GovernmentOfficial governmentOfficial = (GovernmentOfficial) systemClassObject.getSystemObject(id);
+                    GovernmentOfficial governmentOfficial; 
+                    try {
+                        governmentOfficial = (GovernmentOfficial) systemClassObject.getSystemObject(id);
+                        
+                    } catch (Exception e) {
+                        System.out.println("\n Invalid ID.\n");
+                        continue;
+                    }
+
                     if (governmentOfficial == null)
                     {
                         System.out.println("\n Invalid ID.\n");

@@ -59,6 +59,7 @@ public class Judge extends Citizen{
     private void concludeLawsuit(SystemClass systemClassRefReference) {
 
         Lawsuit lawsuit = systemClassRefReference.getHighestPriorityLawsuit(id);
+        System.out.println(systemClassRefReference.getLawsuit(lawsuit.getId()));
         while (true) {
             System.out.println("Date: "+lawsuit.getDate());
             System.out.println("Lawsuit Type: "+lawsuit.getLawsuitType());

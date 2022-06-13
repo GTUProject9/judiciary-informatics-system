@@ -10,12 +10,14 @@ public class Citizen extends AbstractUser
     private Set<Integer> suingLawsuits;
     private Set<Integer> suedLawsuits;
     
+    // Default constructor.
     public Citizen() {
         super();
         suingLawsuits = new ConcurrentSkipListSet<>();
         suedLawsuits = new ConcurrentSkipListSet<>();
     }
 
+    // Parameterized constructor.
     public Citizen(int id, String password, String name, String surname, String email, String phone) {
         super(id, password, name, surname, email, phone);
 
@@ -25,7 +27,7 @@ public class Citizen extends AbstractUser
 
     private void createLawsuit(SystemClass systemClassRef) {
 
-        System.out.print("Enter the ID of the person you are claiming: ");
+        System.out.print("\nEnter the ID of the person you are claiming: ");
         Integer suedCitizen;
         try {
             suedCitizen = Utils.readIntegerInput();
@@ -33,12 +35,12 @@ public class Citizen extends AbstractUser
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-        System.out.print("Enter the type of the lawsuit.\n" +
+        System.out.print("\nEnter the type of the lawsuit.\n" +
                          "1. Personal Injury Lawsuit\n" +
                          "2. Product Liability Lawsuit\n" +
                          "3. Divorce and Family Law Disputes\n" +
                          "4. Criminal Cases\n" +               
-                         "Enter the number of the type: ");
+                         "Type: ");
 
         Integer type;
         try {
@@ -64,6 +66,7 @@ public class Citizen extends AbstractUser
         systemClassRef.addLawsuit(lawsuit);
 
         Integer suingLawyer = selectLawyer(systemClassRef, lawsuit.getId());
+        
         lawsuit.setSuingLawyer(suingLawyer);
         systemClassRef.assignLawyerToLawsuit(suingLawyer, lawsuit.getId());
 
@@ -142,7 +145,7 @@ public class Citizen extends AbstractUser
             if(choice == 1)
             {
                 displayLawyersThatAcceptsLawsuits(systemClassRef);
-                System.out.print("Enter the ID of the lawyer: ");
+                System.out.print("Select lawyer: ");
                 return Utils.readIntegerInput();
             }
             else if(choice == 2)
@@ -151,7 +154,7 @@ public class Citizen extends AbstractUser
 
                 if(lawyerId == null)
                 {
-                    System.out.println("No lawyers available. Try again later.");
+                    System.out.println("No lawyers available in state. Try again later.");
                 }
                 else
                 {
