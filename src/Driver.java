@@ -21,9 +21,9 @@ public class Driver {
         SystemObjectCreator.createJudges(systemClassObject);
         SystemObjectCreator.createLawsuits(systemClassObject);
 
-        System.out.println("\n ---------- Judiciary Informatics System ---------- ");
         while(true)
         {
+            System.out.println("\n ---------- Judiciary Informatics System ---------- ");
             System.out.println("\n1. Login as a Citizen");
             System.out.println("2. Login as a Lawyer");
             System.out.println("3. Login as a Law Office Owner");
