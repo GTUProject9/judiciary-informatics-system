@@ -122,6 +122,8 @@ public class SystemClass
     public AbstractSystemObject getSystemObject(int id)
     {
         SystemObjectTypes systemObjectCode = findSystemObjectType(id);
+        if (systemObjectCode == null)
+            return null;
         // Codes starts from 1.
         int index = systemObjectCode.getSystemObjectCode() - 1;
         return systemObjects.get(index).get(id);
@@ -150,6 +152,8 @@ public class SystemClass
     {
         int code = id / (int) Math.pow(10, AbstractSystemObject.ID_LENGTH - 1);
         int index = code - 1;
+        if (index>SystemObjectTypes.values().length-1 || index<0)
+            return null;
         return SystemObjectTypes.values()[index];
     }
 
