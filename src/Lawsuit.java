@@ -140,12 +140,7 @@ public class Lawsuit extends AbstractSystemObject
     }
 
     public LawsuitStatus getStatus(){
-        return getStatus();
-    }
-    
-    public LawsuitStatus checkStatus()
-    {
-        return status;
+        return this.status;
     }
 
     public void setLawsuitType(LawsuitTypes type){

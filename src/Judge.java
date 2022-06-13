@@ -33,6 +33,10 @@ public class Judge extends Citizen{
      * @param systemClassRefReference System object that holds objects by id
      */
     private void showAssignedLawsuits(SystemClass systemClassRefReference) {
+        if (assignedLawsuits.isEmpty()) {
+            System.out.println("There is no assigned lawsuits.");
+            return;
+        }
         for (int i = 0; i < assignedLawsuits.size(); i++) {
             System.out.println("\n" + (i + 1) + ". " + 
                                systemClassRefReference.getSystemObject(assignedLawsuits.get(i)));
@@ -45,6 +49,10 @@ public class Judge extends Citizen{
      * @param systemClassRefReference System object that holds objects by id
      */
     private void showConcludedLawsuits(SystemClass systemClassRefReference) {
+        if (concludedLawsuits.isEmpty()) {
+            System.out.println("There is no concluded lawsuits.");
+            return;
+        }
         for (int i = 0; i < concludedLawsuits.size(); i++) {
             System.out.println("\n" + (i + 1) + ". " + 
                                systemClassRefReference.getSystemObject(concludedLawsuits.get(i)));
@@ -59,15 +67,43 @@ public class Judge extends Citizen{
     private void concludeLawsuit(SystemClass systemClassRefReference) {
 
         Lawsuit lawsuit = systemClassRefReference.getHighestPriorityLawsuit(id);
-        System.out.println(systemClassRefReference.getLawsuit(lawsuit.getId()));
+      
+        if (lawsuit == null) {
+            System.out.println("There is no assigned lawsuits.");
+            return;
+        }
+
         while (true) {
             System.out.println("Date: "+lawsuit.getDate());
             System.out.println("Lawsuit Type: "+lawsuit.getLawsuitType());
-            System.out.println("Status: "+lawsuit.getStatus());
-            System.out.println("Defendant: "+lawsuit.getSuingCitizen());
-            System.out.println("Defendant's Lawyer: "+lawsuit.getSuingLawyer());
-            System.out.println("Prosecutor: "+lawsuit.getSuedCitizen());
-            System.out.println("Prosecutor's Lawyer: "+lawsuit.getSuedLawyer());
+            System.out.println("Status: "+lawsuit.getStatus().getStatus());
+            Citizen defendant = null,prosecutor = null;
+            Lawyer defendantLayer = null,prosecutorLayer = null;
+            if (lawsuit.getSuingCitizen() != null)
+                defendant = (Citizen) systemClassRefReference.getSystemObject(lawsuit.getSuingCitizen());
+
+            if (defendant != null)
+                System.out.println("Defendant: "+ defendant.firstName + " " + defendant.lastName);
+            else
+                System.out.println("Defendant: None");
+            if (lawsuit.getSuingLawyer() != null)
+                 defendantLayer = (Lawyer) systemClassRefReference.getSystemObject(lawsuit.getSuingLawyer());
+            if (defendantLayer != null)
+                System.out.println("Defendant's Lawyer: "+ defendantLayer.firstName + " " + defendantLayer.lastName);
+            else
+                System.out.println("Defendant's Lawyer: None");
+            if (lawsuit.getSuedCitizen() != null)
+                prosecutor = (Citizen) systemClassRefReference.getSystemObject(lawsuit.getSuedCitizen());
+            if (prosecutor != null)
+                System.out.println("Prosecutor: "+ prosecutor.firstName + " " + prosecutor.lastName);
+            else
+                System.out.println("Prosecutor: None");
+            if (lawsuit.getSuedLawyer() != null)
+                prosecutorLayer = (Lawyer) systemClassRefReference.getSystemObject(lawsuit.getSuedLawyer());
+            if (prosecutorLayer != null)
+                System.out.println("Prosecutor's Lawyer: "+ prosecutorLayer.firstName + " " + prosecutorLayer.lastName);
+            else
+                System.out.println("Prosecutor's Lawyer: None");
             System.out.println("\n");
             System.out.println("1. Show Defense of Defendant");
             System.out.println("2. Show Defense of Prosecutor");
@@ -94,12 +130,14 @@ public class Judge extends Citizen{
                     System.out.println("Court Records: "+lawsuit.getCourtRecords());
                     break;
                 case 4:
-                    changeStatus(lawsuit);
-                    if (lawsuit.checkStatus() == LawsuitStatus.SUED_WON || lawsuit.checkStatus() == LawsuitStatus.SUING_WON) {
-                        assignedLawsuits.removeIf(integer -> integer.equals(lawsuit.getId()));
-                        concludedLawsuits.add(lawsuit.getId());
-                        QuickSort.sort(assignedLawsuits);
+                    changeStatus(systemClassRefReference,lawsuit);
+                    lawsuit = (Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id);
+                    int id = lawsuit.getId();
+                    if (lawsuit.getStatus() == LawsuitStatus.SUED_WON || lawsuit.getStatus() == LawsuitStatus.SUING_WON) {
+                        concludedLawsuits.add(id);
                         QuickSort.sort(concludedLawsuits);
+                        assignedLawsuits.removeIf(integer -> integer.equals(id));
+                        QuickSort.sort(assignedLawsuits);
                     }
                     break;
                 case 5:
@@ -114,7 +152,7 @@ public class Judge extends Citizen{
      * Changes status of given lawsuit
      * @param lawsuit lawsuit
      */
-    private void changeStatus(Lawsuit lawsuit) {
+    private void changeStatus(SystemClass systemClassRefReference,Lawsuit lawsuit) {
         while (true) {
             System.out.println("1. "+LawsuitStatus.HOLD.getStatus());
             System.out.println("2. "+LawsuitStatus.STILL_GOING.getStatus());
@@ -131,11 +169,11 @@ public class Judge extends Citizen{
             String caseFile;
             switch (choice) {
                 case 1 -> {
-                    lawsuit.setStatus(LawsuitStatus.HOLD);
+                    ((Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id)).setStatus(LawsuitStatus.HOLD);
                     return;
                 }
                 case 2 -> {
-                    lawsuit.setStatus(LawsuitStatus.STILL_GOING);
+                    ((Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id)).setStatus(LawsuitStatus.STILL_GOING);
                     return;
                 }
                 case 3 -> {
@@ -151,7 +189,7 @@ public class Judge extends Citizen{
 
                     lawsuit.addCaseFile(caseFile);
 
-                    lawsuit.setStatus(LawsuitStatus.SUING_WON);
+                    ((Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id)).setStatus(LawsuitStatus.SUING_WON);
 
                     return;
                 }
@@ -168,7 +206,7 @@ public class Judge extends Citizen{
 
                     lawsuit.addCaseFile(caseFile);
 
-                    lawsuit.setStatus(LawsuitStatus.SUED_WON);
+                    ((Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id)).setStatus(LawsuitStatus.SUED_WON);
 
                     return;
                 }
