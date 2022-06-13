@@ -67,7 +67,7 @@ public class Judge extends Citizen{
     private void concludeLawsuit(SystemClass systemClassRefReference) {
 
         Lawsuit lawsuit = systemClassRefReference.getHighestPriorityLawsuit(id);
-
+      
         if (lawsuit == null) {
             System.out.println("There is no assigned lawsuits.");
             return;
