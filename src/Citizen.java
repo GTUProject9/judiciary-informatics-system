@@ -61,6 +61,7 @@ public class Citizen extends AbstractUser
 
         System.out.println("Enter the case file: ");
         String caseFile = Utils.readStringInput();
+        
         Date date = SystemObjectCreator.randomDate();
 
         Lawsuit lawsuit = new Lawsuit(-1, date, id, suedCitizen, null, lawsuitType, caseFile);
@@ -75,18 +76,25 @@ public class Citizen extends AbstractUser
         addLawsuitToSuedCitizen(systemClassRef, suedCitizen, lawsuit.id);
     }
 
+    /*
+     * Returns the lawsuit type based on the given index.
+     * @param index The index of the lawsuit type.
+     */
     private LawsuitTypes getLawsuitType(int index)
     {
-        if (index >= 0 && index < LawsuitTypes.values().length)
-        {
+        if (index >= 0 && index < LawsuitTypes.values().length) {
             return LawsuitTypes.values()[index];
         }
-        else
-        {
+        else {
             throw new IndexOutOfBoundsException();
         }
     }
 
+    /**
+     * This function displays the suing lawsuits of a lawyer
+     * 
+     * @param systemClassRef a reference to the system class
+     */
     private void displaySuingLawsuits(SystemClass systemClassRef) {
         int i = 1;
         for (Integer lawsuitId : suingLawsuits) {
@@ -96,6 +104,11 @@ public class Citizen extends AbstractUser
         }
     }
 
+    /**
+     * This function displays the lawsuits that the user has been sued in
+     * 
+     * @param systemClassRef a reference to the system class
+     */
     private void displaySuedLawsuits(SystemClass systemClassRef) {
         int i = 1;
         for (Integer lawsuitId : suedLawsuits) {
@@ -105,6 +118,11 @@ public class Citizen extends AbstractUser
         }
     }
 
+    /**
+     * It displays the completed lawsuits of a lawyer
+     * 
+     * @param systemClassRef a reference to the system class
+     */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
         int i = 1;
         for (Integer lawsuitId : suingLawsuits) {
