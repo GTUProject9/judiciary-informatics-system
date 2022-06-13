@@ -4,6 +4,7 @@ import enums.JobApplicationStatus;
 
 
 public class LawOfficeOwner extends Lawyer {
+
     private final LawOffice lawOffice;
 
     public LawOfficeOwner(int id, String password, String name, String surname, String email, 
@@ -16,21 +17,23 @@ public class LawOfficeOwner extends Lawyer {
      * This function returns the advertisement content to the system.
      * The system saves the advertisement to the system using the officeId and the advertisement message.
      */
-    public void publishJobAdvertisement(SystemClass systemClassObject) {
-        // Create a new job advertisement.
-        String title = "Title";
-        String description = "Description";
+    private void publishJobAdvertisement(SystemClass systemClassRef) {
+        System.out.print("Enter the title of the job advertisement: ");
+        String title = Utils.readStringInput();
+        System.out.print("Enter the description of the job advertisement: ");
+        String description = Utils.readStringInput();
 
         // Add the advertisement to the system.
         LawOffice.JobAdvertisement jobAdvertisement = lawOffice.createJobAdvertisement(id, title, description);
-        systemClassObject.addJobAdvertisement(jobAdvertisement);
+        lawOffice.addJobAdvertisement(jobAdvertisement);
+        systemClassRef.addJobAdvertisement(jobAdvertisement);
     }
 
-    public LawOffice getOffice() {
+    protected LawOffice getOffice() {
         return lawOffice;
     }
 
-    public void employeesMenu(SystemClass systemClassObject) {
+    private void employeesMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereEmployees()) {
             System.out.println("There are no employees.");
             return;
@@ -38,7 +41,7 @@ public class LawOfficeOwner extends Lawyer {
 
         System.out.println("Choose an employee to perform an action:");
         System.out.println("0. Go back");
-        lawOffice.displayEmployees(systemClassObject);
+        lawOffice.displayEmployees(systemClassRef);
 
         int choice;
         try {
@@ -61,7 +64,7 @@ public class LawOfficeOwner extends Lawyer {
             return;
         }
 
-        Lawyer employee = systemClassObject.getLawyer(employeeId);
+        Lawyer employee = systemClassRef.getLawyer(employeeId);
 
         System.out.println("Choose an action to perform:");
         System.out.println("1. Assign a job");
@@ -76,16 +79,18 @@ public class LawOfficeOwner extends Lawyer {
 
         switch (choice) {
             case 1:
-                assignJobToEmployee(systemClassObject, employee);
+                assignJobToEmployee(systemClassRef, employee);
+                break;
             case 2:
                 fireEmployee(employee, employeeIndex);
+                break;
             default:
                 System.out.println("Invalid selection.");
+                break;
         }
     }
 
-
-    public void assignJobToEmployee(SystemClass systemClassObject, Lawyer employee) {
+    private void assignJobToEmployee(SystemClass systemClassRef, Lawyer employee) {
         if (continuingLawsuits.size() == 0) {
             System.out.println("There are no jobs to assign.");
             return;
@@ -95,7 +100,7 @@ public class LawOfficeOwner extends Lawyer {
         int lawsuitId =  continuingLawSuitsIter.next();
         continuingLawSuitsIter.remove();
         //int lawsuitId = continuingLawsuits.remove(0);
-        Lawsuit lawsuit = systemClassObject.getLawsuit(lawsuitId);
+        Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
 
         employee.addLawsuit(lawsuitId);
 
@@ -111,7 +116,7 @@ public class LawOfficeOwner extends Lawyer {
         lawOffice.removeEmployee(employeeIndex);
     }
 
-    private void jobApplicationsMenu(SystemClass systemClassObject) {
+    private void jobApplicationsMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereJobApplications()) {
             System.out.println("There are no job applications.");
             return;
@@ -155,17 +160,20 @@ public class LawOfficeOwner extends Lawyer {
 
         switch (choice) {
             case 1:
-                acceptJobApplication(systemClassObject, jobApplication);
+                acceptJobApplication(systemClassRef, jobApplication);
+                break;
             case 2:
                 rejectJobApplication(jobApplication);
+                break;
             default:
                 System.out.println("Invalid choice.");
+                break;
         }
     }
 
-    private void acceptJobApplication(SystemClass systemClassObject, Lawyer.JobApplication jobApplication) {
+    private void acceptJobApplication(SystemClass systemClassRef, Lawyer.JobApplication jobApplication) {
         int applicantId = jobApplication.getApplicantId();
-        Lawyer lawyer = systemClassObject.getLawyer(applicantId);
+        Lawyer lawyer = systemClassRef.getLawyer(applicantId);
 
         lawyer.setEmployerId(id);
         lawOffice.addEmployee(applicantId);
@@ -178,11 +186,12 @@ public class LawOfficeOwner extends Lawyer {
     }
 
     @Override
-    public void menu(SystemClass systemClassObject) {
+    public void menu(SystemClass systemClassRef) {
         while (true) {
             System.out.println("1. Employees");
             System.out.println("2. Job applications");
-            System.out.println("3. Exit");
+            System.out.println("3. Publish job advertisement");
+            System.out.println("0. Exit");
 
             int choice;
             try {
@@ -194,16 +203,24 @@ public class LawOfficeOwner extends Lawyer {
 
             switch (choice) {
                 case 1:
-                    employeesMenu(systemClassObject);
+                    employeesMenu(systemClassRef);
                     break;
                 case 2:
-                    jobApplicationsMenu(systemClassObject);
+                    jobApplicationsMenu(systemClassRef);
                     break;
                 case 3:
+                    publishJobAdvertisement(systemClassRef);
+                    break;
+                case 0:
                     return;
                 default:
                     System.out.println("Invalid selection.");
+                    break;
             }
         }
+    }
+    public void lawyerMenu(SystemClass systemClassRef)
+    {
+        super.menu(systemClassRef);
     }
 }

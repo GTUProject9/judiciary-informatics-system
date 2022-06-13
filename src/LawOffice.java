@@ -21,7 +21,7 @@ public class LawOffice
 
         @Override
         public String toString() {
-            throw new UnsupportedOperationException();
+            return "JobAdvertisement \nownerId=" + ownerId + ", \ntitle=" + title + ", \ndescription=" + description;
         }
     }
 
@@ -130,10 +130,10 @@ public class LawOffice
         return jobApplications.size() > 0;
     }
 
-    public void displayEmployees(SystemClass systemClassObject)
+    public void displayEmployees(SystemClass systemClassRef)
     {
         for (int i = 0; i < employeeIds.size(); i++) {
-            System.out.println((i + 1) + ". " + systemClassObject.getLawyer(employeeIds.get(i)));
+            System.out.println((i + 1) + ". " + systemClassRef.getLawyer(employeeIds.get(i)));
         }
     }
 

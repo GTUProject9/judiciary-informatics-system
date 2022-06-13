@@ -23,7 +23,6 @@ public final class SystemObjectCreator {
     private static final int NUMBER_OF_JUDGE = 10;
     private static final int NUMBER_OF_GOVERNMENT_OFFICIAL = 10;
     private static final int NUMBER_OF_LAWSUITS = 50;
-    // private static final int NUMBER_OF_USERS = 1000;
 
     private static final String PASSWORD = "1234";
     private static final String PHONE = "+90-262-123-4567";
@@ -31,27 +30,23 @@ public final class SystemObjectCreator {
     private static final String LAWOFFICE_NAME = "Dummy Law Office";
     private static final String caseFile = "Dummy Case File";
 
-    // First and last names
+    private static final String firstNamesFile = "text-first-names.txt";
+    private static final String lastNamesFile = "text-last-names.txt";
+
     private static ArrayList<String> firstNames;
     private static ArrayList<String> lastNames;
-
-    // Birden fazla defa dosyayi okumasini engeller.
-    private static boolean isNamesSetted;
-
-
-    // ------- Other static creators can be down here -------
 
     /**
      * It creates a random number citizens, and registers them in the system
      * 
-     * @param systemClassObject The SystemClass object that will be used to register the new Citizen
+     * @param systemClassRef The SystemClass object that will be used to register the new Citizen
      * objects.
      */
-    public static void createCitizens(SystemClass systemClassObject)
+    public static void createCitizens(SystemClass systemClassRef)
     {
         int userCode = SystemObjectTypes.CITIZEN.getSystemObjectCode();
         int id = createInitialId(userCode);
-        setFirstNamesAndLastNames();
+        readFirstNamesAndLastNames();
         
         for (int i = 0; i < NUMBER_OF_CITIZENS; i++)
         {
@@ -59,7 +54,7 @@ public final class SystemObjectCreator {
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
 
-            systemClassObject.registerSystemObject(new Citizen(
+            systemClassRef.registerSystemObject(new Citizen(
                 id, PASSWORD, firstName, lastName, email, PHONE
             ));
             id++;
@@ -69,10 +64,10 @@ public final class SystemObjectCreator {
     /**
      * It creates a bunch of Government Officials
      * 
-     * @param systemClassObject The system class object that will be used to register the system
+     * @param systemClassRef The system class object that will be used to register the system
      * objects.
      */
-    public static void createGovernmentOfficials(SystemClass systemClassObject)
+    public static void createGovernmentOfficials(SystemClass systemClassRef)
     {
         int userCode = SystemObjectTypes.GOVERNMENT_OFFICIAL.getSystemObjectCode();
         int id = createInitialId(userCode);
@@ -82,7 +77,7 @@ public final class SystemObjectCreator {
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
 
-            systemClassObject.registerSystemObject(new GovernmentOfficial(
+            systemClassRef.registerSystemObject(new GovernmentOfficial(
                 id, PASSWORD, firstName, lastName, email, PHONE
             ));
             id++;
@@ -92,9 +87,9 @@ public final class SystemObjectCreator {
     /**
      * It creates a bunch of lawyers.
      * 
-     * @param systemClassObject The system class object that we created in the main method.
+     * @param systemClassRef The system class object that we created in the main method.
      */
-    public static void createLawyers(SystemClass systemClassObject)
+    public static void createLawyers(SystemClass systemClassRef)
     {
         int userCode = SystemObjectTypes.LAWYER.getSystemObjectCode();
         int id = createInitialId(userCode);
@@ -106,7 +101,8 @@ public final class SystemObjectCreator {
             boolean stateAttorney = getRandomNumber() % 2 == 0;
             boolean acceptsLawsuits = getRandomNumber() % 2 == 0;
 
-            systemClassObject.registerSystemObject(new Lawyer(id, PASSWORD, firstName, lastName, email, PHONE, stateAttorney, acceptsLawsuits));
+            systemClassRef.registerSystemObject(new Lawyer(id, PASSWORD, firstName, lastName, 
+                                                              email, PHONE, stateAttorney, acceptsLawsuits));
             id++;
         }
     }
@@ -114,9 +110,9 @@ public final class SystemObjectCreator {
     /**
      * It creates a bunch of judges and adds them to the system
      * 
-     * @param systemClassObject The system class object that is used to register the system objects.
+     * @param systemClassRef The system class object that is used to register the system objects.
      */
-    public static void createJudges(SystemClass systemClassObject)
+    public static void createJudges(SystemClass systemClassRef)
     {
         int userCode = SystemObjectTypes.JUDGE.getSystemObjectCode();
         int id = createInitialId(userCode);
@@ -126,7 +122,7 @@ public final class SystemObjectCreator {
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
 
-            systemClassObject.registerSystemObject(new Judge(
+            systemClassRef.registerSystemObject(new Judge(
                 id, PASSWORD, firstName, lastName, email, PHONE
             ));
             id++;
@@ -136,20 +132,19 @@ public final class SystemObjectCreator {
     /**
      * It creates a bunch of LawOfficeOwner objects and registers them with the system.
      * 
-     * @param systemClassObject The system class object that is used to register the system objects.
+     * @param systemClassRef The system class object that is used to register the system objects.
      */
-    public static void createLawOfficeOwners(SystemClass systemClassObject)
+    public static void createLawOfficeOwners(SystemClass systemClassRef)
     {
         int userCode = SystemObjectTypes.LAWOFFICE_OWNER.getSystemObjectCode();
         int id = createInitialId(userCode);
-        setFirstNamesAndLastNames();
         for (int i = 0; i < NUMBER_OF_LAWOFFICE_OWNER; i++)
         {
             String firstName = firstNames.get(getRandomNumber() % firstNames.size());
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
-
-            systemClassObject.registerSystemObject(new LawOfficeOwner(
+            
+            systemClassRef.registerSystemObject(new LawOfficeOwner(
                 id, PASSWORD, firstName, lastName, email, PHONE, LAWOFFICE_NAME));
             id++;
         }
@@ -158,32 +153,23 @@ public final class SystemObjectCreator {
     /**
      * It creates a random number of lawsuits, with random dates, and random lawsuit types
      * 
-     * @param systemClassObject The SystemClass object that is used to register the created objects.
+     * @param systemClassRef The SystemClass object that is used to register the created objects.
      */
-    public static void createLawsuits(SystemClass systemClassObject)
+    public static void createLawsuits(SystemClass systemClassRef)
     {
         int lawsuitCode = SystemObjectTypes.LAWSUIT.getSystemObjectCode();
         int id = createInitialId(lawsuitCode);
-
-        try 
+        for (int i = 0; i < NUMBER_OF_LAWSUITS; i++)
         {
-
-            for (int i = 0; i < NUMBER_OF_LAWSUITS; i++)
-            {
-                Date date = randomDate();
-                // Create random LawsuitTypes
-                LawsuitTypes lawsuitType = LawsuitTypes.values()[getRandomNumber() % LawsuitTypes.values().length];
-
-                systemClassObject.registerSystemObject(new Lawsuit(id, date, -1, -1, -1, lawsuitType, caseFile)); 
-                id++;
-            }        
-        } 
-        catch (Exception e) {
-            // TODO
-        }
+            Date date = randomDate();
+            // Create random LawsuitTypes
+            LawsuitTypes lawsuitType = LawsuitTypes.values()[getRandomNumber() % LawsuitTypes.values().length];
+            systemClassRef.registerSystemObject(new Lawsuit(id, date, -1, -1, -1, lawsuitType, caseFile)); 
+            id++;
+        }        
     }
         
-    // ------- helpers -------
+    // ------- HELPERS -------
     /**
      * It takes a user code and returns the first ID that can be assigned to a system object
      * 
@@ -198,13 +184,13 @@ public final class SystemObjectCreator {
     /**
      * Reads the first and last names from the text files into the ArrayLists
      */
-    private static void setFirstNamesAndLastNames()
+    private static void readFirstNamesAndLastNames()
     {
         firstNames = new ArrayList<>();
         lastNames = new ArrayList<>();
         
-        readFileIntoAList(firstNames, "text-first-names.txt");
-        readFileIntoAList(lastNames, "text-last-names.txt");
+        readFileIntoAList(firstNames, firstNamesFile);
+        readFileIntoAList(lastNames, lastNamesFile);
     }
 
     /**
@@ -237,7 +223,6 @@ public final class SystemObjectCreator {
         return (int) (Math.random() * (1000 + 1));
     }
 
-
     /**
      * It generates a random date between 2021-01-01 and 2030-12-31
      * 
@@ -259,9 +244,9 @@ public final class SystemObjectCreator {
             return new Date(randomMillisSinceEpoch);
          
         } catch (Exception e) {
-            //TODO: handle exception
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
-
         return null;
     }
 }

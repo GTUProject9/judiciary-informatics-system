@@ -139,8 +139,8 @@ public class Lawsuit extends AbstractSystemObject
         this.status = status;
     }
 
-    public String getStatus(){
-        return status.getStatus();
+    public LawsuitStatus getStatus(){
+        return getStatus();
     }
     
     public LawsuitStatus checkStatus()
@@ -174,9 +174,8 @@ public class Lawsuit extends AbstractSystemObject
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("\n" + super.toString() + "\n");
-        sb.append(date.toString() + "\n");
-        return sb.toString();
+        return super.toString() + " " + date + " " + judge + " " + suingCitizen + " " + suedCitizen + " " + suingLawyer + " " + 
+                     suedLawyer + " " + suingDefence + " " + suedDefence + " " + lawsuitType + " " + caseFile + " " + courtRecords + " " + status;
+
     }
 }

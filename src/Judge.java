@@ -30,35 +30,35 @@ public class Judge extends Citizen{
     // Methods
     /**
      * Displays assigned lawsuits to judge
-     * @param systemClassObjectReference System object that holds objects by id
+     * @param systemClassRefReference System object that holds objects by id
      */
-    private void showAssignedLawsuits(SystemClass systemClassObjectReference) {
+    private void showAssignedLawsuits(SystemClass systemClassRefReference) {
         for (int i = 0; i < assignedLawsuits.size(); i++) {
             System.out.println("\n" + (i + 1) + ". " + 
-                               systemClassObjectReference.getSystemObject(assignedLawsuits.get(i)));
+                               systemClassRefReference.getSystemObject(assignedLawsuits.get(i)));
         }
         System.out.println(assignedLawsuits);
     }
 
     /**
      * Displays concluded lawsuits to judge
-     * @param systemClassObjectReference System object that holds objects by id
+     * @param systemClassRefReference System object that holds objects by id
      */
-    private void showConcludedLawsuits(SystemClass systemClassObjectReference) {
+    private void showConcludedLawsuits(SystemClass systemClassRefReference) {
         for (int i = 0; i < concludedLawsuits.size(); i++) {
             System.out.println("\n" + (i + 1) + ". " + 
-                               systemClassObjectReference.getSystemObject(concludedLawsuits.get(i)));
+                               systemClassRefReference.getSystemObject(concludedLawsuits.get(i)));
         }
         System.out.println(concludedLawsuits);
     }
 
     /**
      * Concludes lawsuit
-     * @param systemClassObjectReference System object that holds objects by id
+     * @param systemClassRefReference System object that holds objects by id
      */
-    private void concludeLawsuit(SystemClass systemClassObjectReference) {
+    private void concludeLawsuit(SystemClass systemClassRefReference) {
 
-        Lawsuit lawsuit = systemClassObjectReference.getHighestPriorityLawsuit(id);
+        Lawsuit lawsuit = systemClassRefReference.getHighestPriorityLawsuit(id);
         while (true) {
             System.out.println("Date: "+lawsuit.getDate());
             System.out.println("Lawsuit Type: "+lawsuit.getLawsuitType());
@@ -187,10 +187,10 @@ public class Judge extends Citizen{
 
     /**
      * Menu for Judge User
-     * @param systemClassObject System object that holds objects by id
+     * @param systemClassRef System object that holds objects by id
      */
     @Override
-    public void menu(SystemClass systemClassObject) {
+    public void menu(SystemClass systemClassRef) {
         while (true) {
             System.out.println("1. Show Assigned Lawsuits");
             System.out.println("2. Show Concluded Lawsuits");
@@ -207,13 +207,13 @@ public class Judge extends Citizen{
 
             switch (choice) {
                 case 1:
-                    showAssignedLawsuits(systemClassObject);
+                    showAssignedLawsuits(systemClassRef);
                     break;
                 case 2:
-                    showConcludedLawsuits(systemClassObject);
+                    showConcludedLawsuits(systemClassRef);
                     break;
                 case 3:
-                    concludeLawsuit(systemClassObject);
+                    concludeLawsuit(systemClassRef);
                     break;
                 case 4:
                     return;
@@ -222,8 +222,8 @@ public class Judge extends Citizen{
             }
         }
     }
-    public void superMenu(SystemClass systemClassObject)
+    public void superMenu(SystemClass systemClassRef)
     {
-        super.menu(systemClassObject);
+        super.menu(systemClassRef);
     }
 }

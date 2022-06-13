@@ -3,7 +3,7 @@ import java.util.*;
 import enums.JobApplicationStatus;
 
 public class Lawyer extends Citizen {
-
+    
     public static class JobApplication
     {
         private int ownerId;
@@ -40,22 +40,17 @@ public class Lawyer extends Citizen {
 
         @Override
         public String toString() {
-            return "JobApplication [ownerId=" + ownerId + ", applicantId=" + applicantId +
-                                    ", application=" + application + ", status=" + status + "]";
+            return "JobApplication \nownerId=" + ownerId + ", \napplicantId=" + applicantId +
+                                    ", \napplication=" + application + ", \nstatus=" + status;
         }
     }
-
+    
     protected boolean stateAttorney;
-    //applyed job advert data field
-    //clients request data field
-    //lawyer cases data field
     protected boolean acceptsLawsuits;
-
     protected List<JobApplication> jobApplications = new LinkedList<>();
-    protected Integer employerId = null;
-
-    protected TreeSet<Integer> continuingLawsuits =new TreeSet();
-    protected  TreeSet<Integer> concludedLawsuits =new TreeSet();
+    protected Integer employerId;
+    protected TreeSet<Integer> continuingLawsuits =new TreeSet<>();
+    protected TreeSet<Integer> concludedLawsuits =new TreeSet<>();
 
     public Lawyer() {}
 
@@ -72,95 +67,142 @@ public class Lawyer extends Citizen {
     }
 
     /**
-     * This function displays the lawyer's active cases.
-     * Allows the defense to add to the selected case.
-     *
-     */
-    public void addDefenseToTheLawsuit(SystemClass systemClassObject){
-        //display cases of lawyer.
-        //select one.
-        //input text.
-        //add test to selected case.
-
-        //display cases
-
-
-        //System.out.println("Select Index For Adding Defense To The Lawsuits");
-        systemClassObject.addDefenseToTheLawsuit(continuingLawsuits);
-        //accessToTheArchive(systemClassObject);
-
-/*
-        Iterator iterate_value = continuingLawsuits.iterator();
-        Integer lawsuitId = (Integer) iterate_value.next();
-
-        //Integer lawsuitId = continuingLawsuits.get(0);
-        Lawsuit lawsuit = systemClassObject.getLawsuit(lawsuitId);
-        if (lawsuit.getSuingLawyer() == id)
-        {
-            lawsuit.setSuingDefence("suing defence");
-        }
-        else if (lawsuit.getSuedLawyer() == id)
-        {
-            lawsuit.setSuedDefence("sued defence");
-        }
-        else
-        {
-            System.out.println("You are not the owner of this lawsuit.");
-        }
-
-        */
-    }
-
-    public void applyForBeingStateAttorney(SystemClass systemClassObject){
-        //state attorney degilse basvurabilsin
-        if(!stateAttorney){
-            systemClassObject.addStateAttorneyApplicant(this);
-        }
-    }
-
-    /**
      * This function takes the data structure where job postings are kept.
      * It displays these and allows the lawyer to apply to one of them.
      * @param /*Job adverts data structure.
      */
-    public void applyForJobs(SystemClass systemClassObject){
-        // Menuden, systemClassObject referansi alacak
-        //Display job advert.
-        //Select one
-
+    public void applyForJobs(SystemClass systemClassRef){
         //Create a JobApplication, find owner, add reference to its LawOffice jobApplications also.
 
+        systemClassRef.displayJobAdvertisements();
+        System.out.println("Enter employer id to apply for job");
+        int ownerId = Utils.readIntegerInput();
+        
 
+        // Get application from user
+        System.out.println("Enter application");
+        String application = Utils.readStringInput();
 
-        systemClassObject.displayJobAdvertisements();
+        JobApplication jobApplication = createJobApplication(ownerId, id, application);
 
-        int employerId = systemClassObject.getEmployerId(0);
-        int choice = Utils.readIntegerInput();
-        JobApplication jobApplication = new JobApplication(id, choice, "");
-
-    }
-
-    public JobApplication createJobApplication(int ownerId, int applicantId, String application){
-        return new JobApplication(ownerId, applicantId, application);
-    }
-
-    public void viewJobApplications(){
-        //iş başcuruları nerede tutuluyor ?
+        systemClassRef.addJobApplication(jobApplication);
     }
 
     /**
-     Lawyer can access the archive. That's why the parent function is used.
-     * @param /*archive data struture.
+     * This function creates a new job application
+     * 
+     * @param ownerId The id of the user who owns the job
+     * @param applicantId The id of the user who is applying for the job
+     * @param application The application text
+     * @return A new JobApplication object is being returned.
      */
-    public void accessToTheArchive(SystemClass systemClassObject){
-        systemClassObject.accessToTheArchive();
+    private static JobApplication createJobApplication(int ownerId, int applicantId, String application){
+        return new JobApplication(ownerId, applicantId, application);
     }
 
-    public boolean getStateAttorney()
+    /**
+     * This function displays the lawyer's active cases.
+     * Allows the defense to add to the selected case.
+     *
+     */
+    public void addDefenseToTheLawsuit(SystemClass systemClassRef){
+        displayContinuingLawsuits(systemClassRef);
+        System.out.println("Please enter the lawsuit ID you want to add defense to: ");
+        int lawsuitId = Utils.readIntegerInput();
+
+        System.out.println("Please enter the defense: ");
+        String defense = Utils.readStringInput();
+
+
+        Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
+        if (lawsuit.getSuingLawyer() == id) {
+            lawsuit.setSuingDefence(defense);
+        }
+        else {
+            lawsuit.setSuedDefence(defense);
+        }
+    }
+
+    /**
+     * If it is not already a state attorney, apply for being state attorney
+     * 
+     * @param systemClassRef The object of the SystemClass class.
+     */
+    public void applyForBeingStateAttorney(SystemClass systemClassRef){
+        // If it is not already a state attorney, apply for being one.
+        if(!stateAttorney){
+            systemClassRef.addStateAttorneyApplicant(this);
+            System.out.println("You have applied for being a state attorney.");
+        }
+    }
+
+
+    /**
+     * This function prints out the job applications in the jobApplications array list
+     */
+    public void viewJobApplications(){
+        int i = 1;
+        System.out.println("Job applications:");
+        for(JobApplication jobApplication : jobApplications){
+            System.out.println(i + ".\n" + jobApplication);
+            i++;
+        }
+    }
+    
+    
+    /**
+     * This function is used to access the archive.
+     * 
+     * @param systemClassRef The object of the class that you want to access the archive from.
+     */
+    public void accessToTheArchive(SystemClass systemClassRef){
+        systemClassRef.archiveMenu();
+    }
+
+    /**
+     * This function returns the stateAttorney boolean variable
+     * 
+     * @return The stateAttorney variable is being returned.
+     */
+    public boolean isStateAttorney()
     {
         return stateAttorney;
     }
 
+    /**
+     * It displays the continuing lawsuits of a lawyer
+     * 
+     * @param systemClassRef The object of the SystemClass class.
+     */
+    private void displayContinuingLawsuits(SystemClass systemClassRef) {
+        System.out.println("Continuing Lawsuits");
+        int i = 1;
+        for(Integer lawsuitId : continuingLawsuits){
+            System.out.println(lawsuitId + " " + i);
+            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
+            i++;
+        }
+    }   
+
+    /**
+     * It prints out the concluded lawsuits
+     * 
+     * @param systemClassRef is an object of the class SystemClass.
+     */
+    private void displayConcludedLawsuits(SystemClass systemClassRef) {
+        System.out.println("Concluded Lawsuits");
+        int i = 1;
+        for(Integer lawsuitId : concludedLawsuits){
+            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
+            i++;
+        }
+    }
+
+    /**
+     * This function sets the stateAttorney variable to the value of the stateAttorney parameter
+     * 
+     * @param stateAttorney boolean
+     */
     public void setStateAttorney(boolean stateAttorney) {
         this.stateAttorney = stateAttorney;
     }
@@ -177,21 +219,6 @@ public class Lawyer extends Citizen {
         continuingLawsuits.add(lawsuitId);
     }
 
-    public void concludeLawsuit(Integer lawsuitId) {
-
-        Iterator<Integer> iterator = continuingLawsuits.iterator();
-        while(iterator.hasNext()){
-            if(iterator.next() .equals( lawsuitId)){
-                iterator.remove();
-            }
-        }
-        concludedLawsuits.add(lawsuitId);
-    }
-
-    public List<JobApplication> getJobApplications() {
-        return jobApplications;
-    }
-
     public Integer getEmployerId() {
         return employerId;
     }
@@ -200,9 +227,13 @@ public class Lawyer extends Citizen {
         this.employerId = employerId;
     }
 
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 
     @Override
-    public void menu(SystemClass systemClassObject) {
+    public void menu(SystemClass systemClassRef) {
 
         System.out.println("Lawyer Menu");
         boolean flag = true;
@@ -211,48 +242,72 @@ public class Lawyer extends Citizen {
             System.out.println("1. Apply for jobs");
             System.out.println("2. Add Defense To The Law Suit");
             System.out.println("3. Apply For Being State Attorney");
-            System.out.println("4. Create Jop  Application");
-            System.out.println("5. View Jop Application");
-            System.out.println("6. Access To The Archive");
-            System.out.println("7. Get Jop Applications");
+            System.out.println("4. View Job Applications");
+            System.out.println("5. Access To The Archive");
+            System.out.println("6. View continuing lawsuits");
+            System.out.println("7. View concluded lawsuits");
+            System.out.println("8. Change accepting lawsuits");
             System.out.println("0. For Exit");
-            Scanner myObj = new Scanner(System.in);
-            int choice = myObj.nextInt();
+            int choice = Utils.readIntegerInput();
 
             switch (choice){
                 case 1:
-                    applyForJobs(systemClassObject);
+                    applyForJobs(systemClassRef);
                     break;
                 case 2:
-                    addDefenseToTheLawsuit(systemClassObject);
+                    addDefenseToTheLawsuit(systemClassRef);
                     break;
                 case 3:
-                    applyForBeingStateAttorney(systemClassObject);
+                    applyForBeingStateAttorney(systemClassRef);
                     break;
                 case 4:
-                    //createJobApplication();
+                    viewJobApplications();
                     break;
                 case 5:
-                    //viewJobApplications();
+                    accessToTheArchive(systemClassRef);
                     break;
                 case 6:
-                    accessToTheArchive(systemClassObject);
+                    displayContinuingLawsuits(systemClassRef);
                     break;
                 case 7:
-                    getJobApplications();
+                    displayConcludedLawsuits(systemClassRef);
+                    break;
+                case 8:
+                    acceptsLawsuitsMenu();
                     break;
                 case 0:
                     flag=false;
                     break;
                 default:
-                    System.out.println("Not Supported Operation");
+                    System.out.println("Invalid choice");
+                    break;
 
             }
         }
 
     }
-    public void superMenu(SystemClass systemClassObject)
+    
+    private void acceptsLawsuitsMenu() {
+        System.out.println("You are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
+        System.out.println("1. Accept lawsuits");
+        System.out.println("2. Does not accept lawsuits");
+        int choice = Utils.readIntegerInput();
+        switch (choice) {
+            case 1:
+                acceptsLawsuits = true;
+                break;
+            case 2:
+                acceptsLawsuits = false;
+                break;
+            default:
+                System.out.println("Invalid choice");
+                acceptsLawsuitsMenu();
+                break;
+        }
+    }
+
+    public void superMenu(SystemClass systemClassRef)
     {
-        super.menu(systemClassObject);
+        super.menu(systemClassRef);
     }
 }

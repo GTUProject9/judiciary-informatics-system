@@ -64,25 +64,25 @@ public class Driver {
                     }
                     else
                     {
-                        SystemObjectTypes systemObjectType = SystemClass.findSystemObjectType(id);
+                        SystemObjectTypes systemClassObjectType = SystemClass.findSystemObjectType(id);
                         System.out.println("\n Welcome, " + citizen.getFirstName() + " " + citizen.getLastName() + "!");
-                        if (systemObjectType == SystemObjectTypes.CITIZEN)
+                        if (systemClassObjectType == SystemObjectTypes.CITIZEN)
                         {
                             citizen.menu(systemClassObject);
                         }
-                        else if (systemObjectType == SystemObjectTypes.LAWYER)
+                        else if (systemClassObjectType == SystemObjectTypes.LAWYER)
                         {
                             ((Lawyer) citizen).superMenu(systemClassObject);
                         }
-                        else if (systemObjectType == SystemObjectTypes.LAWOFFICE_OWNER)
+                        else if (systemClassObjectType == SystemObjectTypes.LAWOFFICE_OWNER)
                         {
                             ((LawOfficeOwner) citizen).superMenu(systemClassObject);
                         }
-                        else if (systemObjectType == SystemObjectTypes.JUDGE)
+                        else if (systemClassObjectType == SystemObjectTypes.JUDGE)
                         {
                             ((Judge) citizen).superMenu(systemClassObject);
                         }
-                        else if (systemObjectType == SystemObjectTypes.GOVERNMENT_OFFICIAL)
+                        else if (systemClassObjectType == SystemObjectTypes.GOVERNMENT_OFFICIAL)
                         {
                             ((GovernmentOfficial) citizen).superMenu(systemClassObject);
                         }
@@ -102,8 +102,15 @@ public class Driver {
                     else
                     {
                         System.out.println("\n Welcome, " + lawyer.getFirstName() + " " + lawyer.getLastName() + "!");
-                        lawyer.menu(systemClassObject);
-
+                        SystemObjectTypes systemClassObjectType = SystemClass.findSystemObjectType(id);
+                        if (systemClassObjectType == SystemObjectTypes.LAWYER)
+                        {
+                            lawyer.menu(systemClassObject);
+                        }
+                        else if (systemClassObjectType == SystemObjectTypes.LAWOFFICE_OWNER)
+                        {
+                            ((LawOfficeOwner) lawyer).lawyerMenu(systemClassObject);
+                        }
                     }
                 }
                 else if (choice == 3)

@@ -1,15 +1,18 @@
 /**
  * Super class for all users.
- * Includes id, password, firstName, lastName, email, phone.
+ * Includes password, firstName, lastName, email, phone
+ * and extend AbstractSystemObject class which keeps the ID.
  */
 public abstract class AbstractUser extends AbstractSystemObject
 {
+    // Data fields
     protected String password;
     protected String firstName;
     protected String lastName;
     protected String email;
     protected String phone;
 
+    // Constructor
     protected AbstractUser() 
     {
         super();
@@ -20,6 +23,7 @@ public abstract class AbstractUser extends AbstractSystemObject
         phone = "";
     }
     
+    // Constructor with parameters
     protected AbstractUser(int id, String password, String firstName, String lastName, String email, String phone) 
     {
         super(id);
@@ -29,6 +33,8 @@ public abstract class AbstractUser extends AbstractSystemObject
         this.email = email;
         this.phone = phone;
     }
+
+    // Getter and setters
 
     public String getPassword() {
         return password;
@@ -73,16 +79,19 @@ public abstract class AbstractUser extends AbstractSystemObject
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
         sb.append(super.toString() + "\n");
-        sb.append("password: ").append(password).append("\n");
-        sb.append("firstName: ").append(firstName).append("\n");
-        sb.append("lastName: ").append(lastName).append("\n");
-        sb.append("email: ").append(email).append("\n");
-        sb.append("phone: ").append(phone).append("\n");
-
+        sb.append("First Name: ").append(firstName).append("\n");
+        sb.append("Last Name: ").append(lastName).append("\n");
+        sb.append("E-mail: ").append(email).append("\n");
+        sb.append("Phone: ").append(phone).append("\n");
         return sb.toString();
     }
 
-    protected abstract void menu(SystemClass systemClassObject);
+    // Every user has a menu
+    /**
+     * This function is used to display the menu for the user to select from.
+     * 
+     * @param systemObjectRef The object of the class that extends SystemClass.
+     */
+    protected abstract void menu(SystemClass systemObjectRef);
 }

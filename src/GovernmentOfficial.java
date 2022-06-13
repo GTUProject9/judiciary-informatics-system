@@ -3,8 +3,6 @@ import enums.LawsuitTypes;
 
 import java.util.Date;
 
-import javax.lang.model.util.ElementScanner14;
-
 public class GovernmentOfficial extends Citizen 
 {
     GovernmentOfficial()
@@ -20,9 +18,9 @@ public class GovernmentOfficial extends Citizen
     /**
      * It reads the input from the user and creates a new lawyer object with the given data
      * 
-     * @param systemClassObject The reference to the system class object.
+     * @param systemClassRef The reference to the system class object.
      */
-    public void addLawyer(SystemClass systemClassObject)
+    public void addLawyer(SystemClass systemClassRef)
     {
         String firstName, lastName, email, phone, password;
         boolean stateAttorney, acceptsLawsuits;
@@ -50,12 +48,12 @@ public class GovernmentOfficial extends Citizen
 
         Lawyer lawyer = new Lawyer(-1, password, firstName, lastName, phone, email, stateAttorney, acceptsLawsuits);
         
-        systemClassObject.addLawyer(lawyer);
+        systemClassRef.addLawyer(lawyer);
         
         System.out.println("The lawyer has ID: " + lawyer.getId() + "added successfully.");
     }
 
-    public void assignLawsuitToJudge(SystemClass systemClassObject)
+    public void assignLawsuitToJudge(SystemClass systemClassRef)
     {
         // Get judge id
         System.out.print("Enter the ID of the judge: ");
@@ -66,44 +64,44 @@ public class GovernmentOfficial extends Citizen
         int lawsuitId = Utils.readIntegerInput();
 
         try {
-            Judge judge = (Judge) systemClassObject.getSystemObject(judgeId);
+            Judge judge = (Judge) systemClassRef.getSystemObject(judgeId);
             judge.assignLawsuit(lawsuitId);
 
-            Lawsuit lawsuit = (Lawsuit) systemClassObject.getSystemObject(lawsuitId);
+            Lawsuit lawsuit = (Lawsuit) systemClassRef.getSystemObject(lawsuitId);
             lawsuit.setJudge(judgeId);
             lawsuit.setStatus(LawsuitStatus.STILL_GOING);
-            systemClassObject.addLawsuitByDate(lawsuit);
+            systemClassRef.addLawsuitByDate(lawsuit);
         } catch (Exception e) {
             System.out.println("The judge or the lawsuit does not exist.");
         }
     }
 
-    private void assignLawsuitToJudge(SystemClass systemClassObject, int lawsuitId)
+    private void assignLawsuitToJudge(SystemClass systemClassRef, int lawsuitId)
     {
         // Get judge id
         System.out.print("Enter the ID of the judge: ");
         int judgeId = Utils.readIntegerInput();
 
         try {
-            Judge judge = (Judge) systemClassObject.getSystemObject(judgeId);
+            Judge judge = (Judge) systemClassRef.getSystemObject(judgeId);
             judge.assignLawsuit(lawsuitId);
 
-            Lawsuit lawsuit = (Lawsuit) systemClassObject.getSystemObject(lawsuitId);
+            Lawsuit lawsuit = (Lawsuit) systemClassRef.getSystemObject(lawsuitId);
             lawsuit.setJudge(judgeId);
             lawsuit.setStatus(LawsuitStatus.STILL_GOING);
-            systemClassObject.addLawsuitByDate(lawsuit);
+            systemClassRef.addLawsuitByDate(lawsuit);
         } catch (Exception e) {
             System.out.println("The judge or the lawsuit does not exist.");
         }
     }
 
     
-    public void addStateAttorney(SystemClass systemClassObject)
+    public void addStateAttorney(SystemClass systemClassRef)
     {
-        systemClassObject.printStateAttorneyApplicants();
+        systemClassRef.printStateAttorneyApplicants();
         while(true)
         {
-            Lawyer lawyer = systemClassObject.peekStateAttorneyApplicant();
+            Lawyer lawyer = systemClassRef.peekStateAttorneyApplicant();
             if (lawyer == null)
             {
                 System.out.println("There is no state attorney applicant.");
@@ -119,12 +117,12 @@ public class GovernmentOfficial extends Citizen
                 {
                     System.out.println("herererere");
                     lawyer.setStateAttorney(true);
-                    systemClassObject.pollStateAttorney();
-                    systemClassObject.addStateAttorney(lawyer);
+                    systemClassRef.pollStateAttorney();
+                    systemClassRef.addStateAttorney(lawyer);
                 }
                 else if (answer.equals("n") || answer.equals("no") || answer.equals("N") || answer.equals("No"))
                 {
-                    systemClassObject.pollStateAttorney();
+                    systemClassRef.pollStateAttorney();
                 }
                 else
                 {
@@ -134,7 +132,7 @@ public class GovernmentOfficial extends Citizen
         }
     }
 
-    public void publishLawsuit(SystemClass systemClassObject)
+    public void publishLawsuit(SystemClass systemClassRef)
     {
         Date date = SystemObjectCreator.randomDate();
         
@@ -156,33 +154,33 @@ public class GovernmentOfficial extends Citizen
 
         String caseFile = "Dummy case file";
 
-        Lawyer suingLawyer = systemClassObject.getStateAttorney();
-        Lawyer suedLawyer = systemClassObject.getStateAttorney();
+        Lawyer suingLawyer = systemClassRef.getStateAttorney();
+        Lawyer suedLawyer = systemClassRef.getStateAttorney();
 
         Lawsuit lawsuit = new Lawsuit(-1, date, null, suingId, suedId, suingLawyer.getId(), suedLawyer.getId(), lawsuitType, LawsuitStatus.HOLD, caseFile, null);
-        systemClassObject.addLawsuit(lawsuit);
+        systemClassRef.addLawsuit(lawsuit);
 
         suingLawyer.addLawsuit(lawsuit.getId());
         suedLawyer.addLawsuit(lawsuit.getId());
 
-        Citizen suingCitizen = (Citizen) systemClassObject.getCitizen(suingId);
-        Citizen suedCitizen = (Citizen) systemClassObject.getCitizen(suedId);
+        Citizen suingCitizen = (Citizen) systemClassRef.getCitizen(suingId);
+        Citizen suedCitizen = (Citizen) systemClassRef.getCitizen(suedId);
 
         suingCitizen.addSuingLawsuit(lawsuit.getId());
         suedCitizen.addSuedLawsuit(lawsuit.getId());
 
-        assignLawsuitToJudge(systemClassObject, lawsuit.getId());
+        assignLawsuitToJudge(systemClassRef, lawsuit.getId());
     }
 
     @Override
-    public void menu(SystemClass systemClassObject) {
+    public void menu(SystemClass systemClassRef) {
         while(true)
         {
             System.out.println("1. Add lawyer");
             System.out.println("2. Assign lawsuit to judge");
             System.out.println("3. Add state attorney");
             System.out.println("4. Publish lawsuit");
-            System.out.println("5. Return to main menu");
+            System.out.println("0. To return main menu");
             int choice;
             try
             {
@@ -196,18 +194,18 @@ public class GovernmentOfficial extends Citizen
             switch(choice)
             {
                 case 1:
-                    addLawyer(systemClassObject);
+                    addLawyer(systemClassRef);
                     break;
                 case 2:
-                    assignLawsuitToJudge(systemClassObject);
+                    assignLawsuitToJudge(systemClassRef);
                     break;
                 case 3:
-                    addStateAttorney(systemClassObject);
+                    addStateAttorney(systemClassRef);
                     break;
                 case 4:
-                    publishLawsuit(systemClassObject);
+                    publishLawsuit(systemClassRef);
                     break;
-                case 5:
+                case 0:
                     return;
                 default:
                     System.out.println("Invalid selection.");
@@ -216,8 +214,8 @@ public class GovernmentOfficial extends Citizen
     }
 
     // super menu
-    public void superMenu(SystemClass systemClassObject)
+    public void superMenu(SystemClass systemClassRef)
     {
-        super.menu(systemClassObject);
+        super.menu(systemClassRef);
     }
 }
