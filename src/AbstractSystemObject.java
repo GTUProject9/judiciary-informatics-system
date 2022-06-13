@@ -61,6 +61,6 @@ public abstract class AbstractSystemObject implements Comparable<AbstractSystemO
      */
     @Override
     public String toString() {
-        return "id: " + id;
+        return "ID: " + id;
     }
 }
