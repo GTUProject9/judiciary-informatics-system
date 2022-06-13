@@ -25,23 +25,40 @@ public class Citizen extends AbstractUser
 
     private void createLawsuit(SystemClass systemClassRef) {
 
-        Date date = SystemObjectCreator.randomDate();
-
         System.out.print("Enter the ID of the person you are claiming: ");
-        Integer suedCitizen = Utils.readIntegerInput();
-
+        Integer suedCitizen;
+        try {
+            suedCitizen = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
         System.out.print("Enter the type of the lawsuit.\n" +
-                "1. Personal Injury Lawsuit\n" +
-                "2. Product Liability Lawsuit\n" +
-                "3. Divorce and Family Law Disputes\n" +
-                "4. Criminal Cases\n" +               
-                "Enter the number of the type: ");
+                         "1. Personal Injury Lawsuit\n" +
+                         "2. Product Liability Lawsuit\n" +
+                         "3. Divorce and Family Law Disputes\n" +
+                         "4. Criminal Cases\n" +               
+                         "Enter the number of the type: ");
 
-        Integer type = Utils.readIntegerInput();
-        LawsuitTypes lawsuitType = LawsuitTypes.values()[type - 1];
+        Integer type;
+        try {
+            type = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+
+        LawsuitTypes lawsuitType;
+        try {
+            lawsuitType = getLawsuitType(type - 1);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
 
         System.out.println("Enter the case file: ");
         String caseFile = Utils.readStringInput();
+        Date date = SystemObjectCreator.randomDate();
 
         Lawsuit lawsuit = new Lawsuit(-1, date, id, suedCitizen, null, lawsuitType, caseFile);
         systemClassRef.addLawsuit(lawsuit);
@@ -51,8 +68,19 @@ public class Citizen extends AbstractUser
         systemClassRef.assignLawyerToLawsuit(suingLawyer, lawsuit.getId());
 
         addSuingLawsuit(lawsuit.id);
-
         addLawsuitToSuedCitizen(systemClassRef, suedCitizen, lawsuit.id);
+    }
+
+    private LawsuitTypes getLawsuitType(int index)
+    {
+        if (index >= 0 && index < LawsuitTypes.values().length)
+        {
+            return LawsuitTypes.values()[index];
+        }
+        else
+        {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
     private void displaySuingLawsuits(SystemClass systemClassRef) {
@@ -104,7 +132,13 @@ public class Citizen extends AbstractUser
                            "Enter your choice: ");
         while(true)
         {
-            Integer choice = Utils.readIntegerInput();
+            Integer choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (Exception e) {
+                System.out.println(Utils.INVALID_INPUT);
+                continue;
+            }
             if(choice == 1)
             {
                 displayLawyersThatAcceptsLawsuits(systemClassRef);
@@ -131,10 +165,8 @@ public class Citizen extends AbstractUser
         }
     }
 
-
     private static void addLawsuitToSuedCitizen(SystemClass systemClassRef, 
                                                 Integer suedCitizenId, Integer lawsuitId) {
-        // get citizen
         Citizen suedCitizen = (Citizen) systemClassRef.getSystemObject(suedCitizenId);
         suedCitizen.addSuedLawsuit(lawsuitId);
     }
@@ -166,17 +198,24 @@ public class Citizen extends AbstractUser
 
     @Override
     public void menu(SystemClass systemClassRef) {
-        System.out.println("Citizen Menu");
+        System.out.println("\n--- Citizen Menu ---");
         while (true) {
-            System.out.println("1. Create Lawsuit");
-            System.out.println("2. View lawsuits that I am suing");
-            System.out.println("3. View lawsuits that I have been sued");
-            System.out.println("4. View completed lawsuits");
-            System.out.println("5. Display lawyers that accepts lawsuits");
-            System.out.println("6. Add lawyer as sued citizen");
-            System.out.println("0. To return main menu");
+            System.out.println("\n1. Create Lawsuit");
+            System.out.println("2. View The Lawsuits That You Are Suing");
+            System.out.println("3. View The Lawsuits That You Are The Sued");
+            System.out.println("4. View Completed Lawsuits");
+            System.out.println("5. Display Lawyers That Accepts Lawsuits");
+            System.out.println("6. Add Lawyer As Sued Citizen");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println(Utils.INVALID_INPUT);
+                continue;
+            }
 
-            int choice = Utils.readIntegerInput();
             switch (choice) {
                 case 1:
                     createLawsuit(systemClassRef);

@@ -1,18 +1,20 @@
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import enums.SystemObjectTypes;
 
+/**
+ * It starts the system and then it asks the user to login
+ */
 public class Driver {
 
     /**
-     * It creates the objects and then it asks the user to login.
+     * It starts the system and then it asks the user to login.
      */
     public static void main(String[] args) throws Exception 
     {
+        // Start the system
         SystemClass systemClassObject = new SystemClass();
-        // Create other objects
+        
+        // Create random system objects
         SystemObjectCreator.createCitizens(systemClassObject);
         SystemObjectCreator.createLawyers(systemClassObject);
         SystemObjectCreator.createLawOfficeOwners(systemClassObject);
@@ -20,19 +22,23 @@ public class Driver {
         SystemObjectCreator.createJudges(systemClassObject);
         SystemObjectCreator.createLawsuits(systemClassObject);
 
+        System.out.println("\n ---------- Judiciary Informatics System ---------- ");
         while(true)
         {
-                // Menu
-            System.out.println("\n ---------- Judiciary Informatics System ---------- \n\n");
-            System.out.println("--- Users ---");
-            System.out.println("1. Login as a Citizen");
+            System.out.println("\n1. Login as a Citizen");
             System.out.println("2. Login as a Lawyer");
             System.out.println("3. Login as a Law Office Owner");
             System.out.println("4. Login as a Judge");
             System.out.println("5. Login as a Government Official");
             System.out.println("0 - Exit");
-
-            int choice = Utils.readIntegerInput();
+            System.out.print("Choice: ");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println(Utils.INVALID_INPUT);
+                continue;
+            }
 
             if (choice == 0)
             {
@@ -41,7 +47,7 @@ public class Driver {
             }
             if (choice < 0 || choice > 5)
             {
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println(Utils.INVALID_CHOICE);
             }
             else
             {
@@ -72,19 +78,19 @@ public class Driver {
                         }
                         else if (systemClassObjectType == SystemObjectTypes.LAWYER)
                         {
-                            ((Lawyer) citizen).superMenu(systemClassObject);
+                            ((Lawyer) citizen).citizenMenu(systemClassObject);
                         }
                         else if (systemClassObjectType == SystemObjectTypes.LAWOFFICE_OWNER)
                         {
-                            ((LawOfficeOwner) citizen).superMenu(systemClassObject);
+                            ((LawOfficeOwner) citizen).citizenMenu(systemClassObject);
                         }
                         else if (systemClassObjectType == SystemObjectTypes.JUDGE)
                         {
-                            ((Judge) citizen).superMenu(systemClassObject);
+                            ((Judge) citizen).citizenMenu(systemClassObject);
                         }
                         else if (systemClassObjectType == SystemObjectTypes.GOVERNMENT_OFFICIAL)
                         {
-                            ((GovernmentOfficial) citizen).superMenu(systemClassObject);
+                            ((GovernmentOfficial) citizen).citizenMenu(systemClassObject);
                         }
                     }
                 }
@@ -167,5 +173,4 @@ public class Driver {
             }
         }
     }
-
 }

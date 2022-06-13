@@ -232,14 +232,35 @@ public class Lawyer extends Citizen {
         return super.toString();
     }
 
+    private void acceptsLawsuitsMenu() {
+        System.out.println("You are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
+        System.out.println("1. Accept lawsuits");
+        System.out.println("2. Does not accept lawsuits");
+        System.out.println("0. Back");
+        int choice = Utils.readIntegerInput();
+        switch (choice) {
+            case 1:
+                acceptsLawsuits = true;
+                break;
+            case 2:
+                acceptsLawsuits = false;
+                break;
+            case 0:
+                return;
+            default:
+                System.out.println("Invalid choice");
+                acceptsLawsuitsMenu();
+                break;
+        }
+    }
+
     @Override
     public void menu(SystemClass systemClassRef) {
 
-        System.out.println("Lawyer Menu");
-        boolean flag = true;
-        while(flag){
+        System.out.println("\n--- Lawyer Menu ---");
+        while(true){
 
-            System.out.println("1. Apply for jobs");
+            System.out.println("\n1. Apply for jobs");
             System.out.println("2. Add Defense To The Law Suit");
             System.out.println("3. Apply For Being State Attorney");
             System.out.println("4. View Job Applications");
@@ -247,8 +268,15 @@ public class Lawyer extends Citizen {
             System.out.println("6. View continuing lawsuits");
             System.out.println("7. View concluded lawsuits");
             System.out.println("8. Change accepting lawsuits");
-            System.out.println("0. For Exit");
-            int choice = Utils.readIntegerInput();
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
+            int choice;
+            try {
+                choice = Utils.readIntegerInput();
+            } catch (NumberFormatException e) {
+                System.out.println(Utils.INVALID_INPUT);
+                continue;
+            }
 
             switch (choice){
                 case 1:
@@ -276,8 +304,7 @@ public class Lawyer extends Citizen {
                     acceptsLawsuitsMenu();
                     break;
                 case 0:
-                    flag=false;
-                    break;
+                    return;
                 default:
                     System.out.println("Invalid choice");
                     break;
@@ -287,26 +314,7 @@ public class Lawyer extends Citizen {
 
     }
     
-    private void acceptsLawsuitsMenu() {
-        System.out.println("You are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
-        System.out.println("1. Accept lawsuits");
-        System.out.println("2. Does not accept lawsuits");
-        int choice = Utils.readIntegerInput();
-        switch (choice) {
-            case 1:
-                acceptsLawsuits = true;
-                break;
-            case 2:
-                acceptsLawsuits = false;
-                break;
-            default:
-                System.out.println("Invalid choice");
-                acceptsLawsuitsMenu();
-                break;
-        }
-    }
-
-    public void superMenu(SystemClass systemClassRef)
+    public void citizenMenu(SystemClass systemClassRef)
     {
         super.menu(systemClassRef);
     }

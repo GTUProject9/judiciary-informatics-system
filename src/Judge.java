@@ -78,7 +78,7 @@ public class Judge extends Citizen{
             try {
                 choice = Utils.readIntegerInput();
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input.");
+                System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
 
@@ -124,7 +124,7 @@ public class Judge extends Citizen{
             try {
                 choice = Utils.readIntegerInput();
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input.");
+                System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
             String caseFile;
@@ -191,17 +191,18 @@ public class Judge extends Citizen{
      */
     @Override
     public void menu(SystemClass systemClassRef) {
+        System.out.println("\n--- Judge Menu ---");
         while (true) {
-            System.out.println("1. Show Assigned Lawsuits");
+            System.out.println("\n1. Show Assigned Lawsuits");
             System.out.println("2. Show Concluded Lawsuits");
             System.out.println("3. Concluded a Lawsuit");
-            System.out.println("4. Exit");
-            System.out.println("Choice:");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
             int choice;
             try {
                 choice = Utils.readIntegerInput();
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input.");
+                System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
 
@@ -215,14 +216,14 @@ public class Judge extends Citizen{
                 case 3:
                     concludeLawsuit(systemClassRef);
                     break;
-                case 4:
+                case 0:
                     return;
                 default:
                     System.out.println("Invalid selection.");
             }
         }
     }
-    public void superMenu(SystemClass systemClassRef)
+    public void citizenMenu(SystemClass systemClassRef)
     {
         super.menu(systemClassRef);
     }

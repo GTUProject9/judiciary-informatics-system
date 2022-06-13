@@ -3,6 +3,10 @@ import java.util.Scanner;
 public class Utils {
     
     private Utils(){}
+
+    public static final String INVALID_INPUT = "Invalid input!";
+    public static final String INVALID_CHOICE = "Invalid choice!";
+
     
     private static Scanner scanner = new Scanner(System.in);
 

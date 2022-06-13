@@ -18,7 +18,8 @@ public class LawOfficeOwner extends Lawyer {
      * The system saves the advertisement to the system using the officeId and the advertisement message.
      */
     private void publishJobAdvertisement(SystemClass systemClassRef) {
-        System.out.print("Enter the title of the job advertisement: ");
+
+        System.out.print("\nEnter the title of the job advertisement: ");
         String title = Utils.readStringInput();
         System.out.print("Enter the description of the job advertisement: ");
         String description = Utils.readStringInput();
@@ -27,6 +28,8 @@ public class LawOfficeOwner extends Lawyer {
         LawOffice.JobAdvertisement jobAdvertisement = lawOffice.createJobAdvertisement(id, title, description);
         lawOffice.addJobAdvertisement(jobAdvertisement);
         systemClassRef.addJobAdvertisement(jobAdvertisement);
+
+        System.out.println("Job advertisement published.");
     }
 
     protected LawOffice getOffice() {
@@ -47,7 +50,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             choice = Utils.readIntegerInput();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input.");
+            System.out.println(Utils.INVALID_INPUT);
             return;
         }
 
@@ -60,7 +63,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             employeeId = lawOffice.getEmployee(employeeIndex);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Invalid choice.");
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
 
@@ -73,7 +76,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             choice = Utils.readIntegerInput();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid choice.");
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
 
@@ -99,7 +102,6 @@ public class LawOfficeOwner extends Lawyer {
         Iterator<Integer> continuingLawSuitsIter = continuingLawsuits.iterator();
         int lawsuitId =  continuingLawSuitsIter.next();
         continuingLawSuitsIter.remove();
-        //int lawsuitId = continuingLawsuits.remove(0);
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
 
         employee.addLawsuit(lawsuitId);
@@ -130,7 +132,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             choice = Utils.readIntegerInput();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input.");
+            System.out.println(Utils.INVALID_INPUT);
             return;
         }
 
@@ -143,7 +145,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             jobApplication = lawOffice.getJobApplication(jobApplicationIndex);
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Invalid choice.");
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
 
@@ -154,7 +156,7 @@ public class LawOfficeOwner extends Lawyer {
         try {
             choice = Utils.readIntegerInput();
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input.");
+            System.out.println(Utils.INVALID_INPUT);
             return;
         }
 
@@ -166,7 +168,7 @@ public class LawOfficeOwner extends Lawyer {
                 rejectJobApplication(jobApplication);
                 break;
             default:
-                System.out.println("Invalid choice.");
+                System.out.println(Utils.INVALID_CHOICE);
                 break;
         }
     }
@@ -187,17 +189,18 @@ public class LawOfficeOwner extends Lawyer {
 
     @Override
     public void menu(SystemClass systemClassRef) {
+        System.out.println("\n--- Law Office Owner Menu ---");
         while (true) {
-            System.out.println("1. Employees");
-            System.out.println("2. Job applications");
-            System.out.println("3. Publish job advertisement");
+            System.out.println("\n1. Employees");
+            System.out.println("2. Job Applications");
+            System.out.println("3. Publish Job Advertisement");
             System.out.println("0. Exit");
-
+            System.out.print("Choice: ");
             int choice;
             try {
                 choice = Utils.readIntegerInput();
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input.");
+                System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
 

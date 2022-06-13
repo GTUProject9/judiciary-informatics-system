@@ -174,20 +174,19 @@ public class GovernmentOfficial extends Citizen
 
     @Override
     public void menu(SystemClass systemClassRef) {
+        System.out.println("\n--- Government Offical Menu ---");
         while(true)
         {
-            System.out.println("1. Add lawyer");
+            System.out.println("\n1. Add lawyer");
             System.out.println("2. Assign lawsuit to judge");
             System.out.println("3. Add state attorney");
             System.out.println("4. Publish lawsuit");
-            System.out.println("0. To return main menu");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
             int choice;
-            try
-            {
+            try {
                 choice = Utils.readIntegerInput();
-            }
-            catch(NumberFormatException e)
-            {
+            } catch (NumberFormatException e) {
                 System.out.println("Invalid input.");
                 continue;
             }
@@ -214,7 +213,7 @@ public class GovernmentOfficial extends Citizen
     }
 
     // super menu
-    public void superMenu(SystemClass systemClassRef)
+    public void citizenMenu(SystemClass systemClassRef)
     {
         super.menu(systemClassRef);
     }
