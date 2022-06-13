@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Utils {
+    
+    private Utils(){}
+    
     private static Scanner scanner = new Scanner(System.in);
 
     public static int readIntegerInput() throws NumberFormatException {
@@ -11,7 +14,7 @@ public class Utils {
         return scanner.nextLine();
     }
 
-    // Read boolean input
+    // Read boolean expression.
     public static boolean readBooleanInput() {
         String line = scanner.nextLine();
         return Boolean.parseBoolean(line);
