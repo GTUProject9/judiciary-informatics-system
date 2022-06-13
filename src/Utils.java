@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
-public class Utils {
+/**
+ * It's a utility class that contains methods for reading input from the console
+ */
+public final class Utils {
     
     private Utils(){}
 

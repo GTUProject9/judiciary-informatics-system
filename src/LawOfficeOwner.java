@@ -1,3 +1,4 @@
+
 import java.util.Iterator;
 
 import enums.JobApplicationStatus;
@@ -32,10 +33,21 @@ public class LawOfficeOwner extends Lawyer {
         System.out.println("Job advertisement published.");
     }
 
+    /**
+     * This function returns the law office of the lawyer
+     * 
+     * @return The lawOffice object.
+     */
     protected LawOffice getOffice() {
         return lawOffice;
     }
 
+    /**
+     * It displays a list of employees, and then allows the user to choose an employee to perform an
+     * action on
+     * 
+     * @param systemClassRef a reference to the SystemClass object
+     */
     private void employeesMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereEmployees()) {
             System.out.println("There are no employees.");
@@ -93,6 +105,13 @@ public class LawOfficeOwner extends Lawyer {
         }
     }
 
+    /**
+     * This function assigns a lawsuit to a lawyer which is
+     * an employee of the law office.
+     * 
+     * @param systemClassRef a reference to the system class
+     * @param employee Lawyer object
+     */
     private void assignJobToEmployee(SystemClass systemClassRef, Lawyer employee) {
         if (continuingLawsuits.size() == 0) {
             System.out.println("There are no jobs to assign.");
@@ -113,11 +132,23 @@ public class LawOfficeOwner extends Lawyer {
         }
     }
 
+    /**
+     * This function removes an employee from the law office
+     * 
+     * @param employee The employee to be fired.
+     * @param employeeIndex the index of the employee in the law office's employee list
+     */
     private void fireEmployee(Lawyer employee, int employeeIndex) {
         employee.setEmployerId(null);
         lawOffice.removeEmployee(employeeIndex);
     }
 
+    /**
+     * It displays a menu of job applications, and then allows the user to choose one to accept or
+     * reject
+     * 
+     * @param systemClassRef a reference to the system class
+     */
     private void jobApplicationsMenu(SystemClass systemClassRef) {
         if (!lawOffice.areThereJobApplications()) {
             System.out.println("There are no job applications.");
@@ -173,6 +204,12 @@ public class LawOfficeOwner extends Lawyer {
         }
     }
 
+    /**
+     * The function accepts a job application from a lawyer and adds the lawyer to the law office
+     * 
+     * @param systemClassRef a reference to the system class
+     * @param jobApplication The job application that the employer is accepting.
+     */
     private void acceptJobApplication(SystemClass systemClassRef, Lawyer.JobApplication jobApplication) {
         int applicantId = jobApplication.getApplicantId();
         Lawyer lawyer = systemClassRef.getLawyer(applicantId);
@@ -183,10 +220,20 @@ public class LawOfficeOwner extends Lawyer {
         jobApplication.setStatus(JobApplicationStatus.ACCEPTED);
     }
     
+    /**
+     * This function sets the status of a job application to rejected.
+     * 
+     * @param jobApplication The job application to be rejected.
+     */
     private void rejectJobApplication(Lawyer.JobApplication jobApplication) {
         jobApplication.setStatus(JobApplicationStatus.REJECTED);
     }
 
+    /**
+     * The function is a menu for the law office owner
+     * 
+     * @param systemClassRef This is a reference to the system class.
+     */
     @Override
     public void menu(SystemClass systemClassRef) {
         System.out.println("\n--- Law Office Owner Menu ---");
@@ -222,6 +269,12 @@ public class LawOfficeOwner extends Lawyer {
             }
         }
     }
+    
+    /**
+     * Lawyer menu for the law office owner since it he/she is lawyer as well.
+     * 
+     * @param systemClassRef This is a reference to the system class.
+     */
     public void lawyerMenu(SystemClass systemClassRef)
     {
         super.menu(systemClassRef);
