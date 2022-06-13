@@ -1,3 +1,4 @@
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 /**
@@ -25,6 +26,10 @@ public final class Utils {
     public static boolean readBooleanInput() {
         String line = scanner.nextLine();
         return Boolean.parseBoolean(line);
+    }
+
+    public static String getPath(String... pathRelativeToRootDir) {
+        return Paths.get(ROOT_DIR, pathRelativeToRootDir).toString();
     }
 
     private static String getRootDirectoryPath() {

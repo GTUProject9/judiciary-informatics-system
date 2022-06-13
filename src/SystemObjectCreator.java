@@ -30,8 +30,8 @@ public final class SystemObjectCreator {
     private static final String LAWOFFICE_NAME = "Dummy Law Office";
     private static final String caseFile = "Dummy Case File";
 
-    private static final String firstNamesFile = "text-first-names.txt";
-    private static final String lastNamesFile = "text-last-names.txt";
+    private static final String firstNamesFile = Utils.getPath("TestData", "text-first-names.txt");
+    private static final String lastNamesFile = Utils.getPath("TestData", "text-last-names.txt");
 
     private static ArrayList<String> firstNames;
     private static ArrayList<String> lastNames;
