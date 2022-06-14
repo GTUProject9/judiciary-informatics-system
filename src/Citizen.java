@@ -169,6 +169,7 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displaySuedLawsuits(SystemClass systemClassRef) {
+        
         if (suedLawsuits.isEmpty()) {
             System.out.println("You have no lawsuits that have been sued.");
             return;
@@ -187,11 +188,6 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
-        if (suingLawsuits.isEmpty() && suedLawsuits.isEmpty()) {
-            System.out.println("\nNo lawsuits completed.");
-            return;
-        }
-        
         int i = 0;
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
@@ -208,6 +204,9 @@ public class Citizen extends AbstractUser
                     System.out.println((i + 1) + ". " + lawsuit);
                 i++;
             }
+        }
+        if (i == 0) {
+            System.out.println("You have no completed lawsuits.");
         }
         
     }
