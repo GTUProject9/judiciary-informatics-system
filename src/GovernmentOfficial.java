@@ -18,19 +18,20 @@ public class GovernmentOfficial extends Citizen
      */
     public void addLawyerMenu(SystemClass systemClassRef)
     {
-        System.out.print("Enter the first name of the lawyer: ");
+        System.out.println( "\nEnter the following information about the lawyer:" );
+        System.out.print("First name: ");
         String firstName = Utils.readStringInput();
 
-        System.out.print("Enter the last name of the lawyer: ");
+        System.out.print("Last name: ");
         String lastName = Utils.readStringInput();
 
-        System.out.print("Enter the email of the lawyer: ");
+        System.out.print("E-mail: ");
         String email = Utils.readStringInput();
 
-        System.out.print("Enter the phone number of the lawyer: ");
+        System.out.print("Phone: ");
         String phone = Utils.readStringInput();
 
-        System.out.print("Enter the password of the lawyer: ");
+        System.out.print("Password: ");
         String password = Utils.readStringInput();
 
         System.out.print("Enter '1' if the lawyer is a state attorney, '0' otherwise: ");
