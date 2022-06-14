@@ -1,3 +1,4 @@
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -32,12 +33,10 @@ public final class Utils {
     }
 
     private static String getRootDirectoryPath() {
-        final String workingDirectoryPath = System.getProperty("user.dir");
-        final String rootDirectoryName = "law-management-system";
-
-        int rdNameIndex = workingDirectoryPath.lastIndexOf(rootDirectoryName);
-        int rdNameLastCharIndex = rdNameIndex + rootDirectoryName.length();
-
-        return workingDirectoryPath.substring(0, rdNameLastCharIndex);
+        Path workingDirectoryPath = Paths.get(System.getProperty("user.dir"));
+        if (workingDirectoryPath.endsWith("bin")) {
+            return Paths.get(workingDirectoryPath.toString(), "..", "..").toString();
+        }
+        return workingDirectoryPath.toString();
     }
 }
