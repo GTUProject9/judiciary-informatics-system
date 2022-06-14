@@ -90,7 +90,7 @@ public class Lawyer extends Citizen {
         String application = Utils.readStringInput();
         JobApplication jobApplication = createJobApplication(ownerId, id, application);
         systemClassRef.addJobApplication(jobApplication);
-
+        jobApplications.add(jobApplication);
         System.out.println("\nJob application completed.");
     }
 
