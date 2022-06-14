@@ -188,7 +188,7 @@ public class Citizen extends AbstractUser
      */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
         if (suingLawsuits.isEmpty() && suedLawsuits.isEmpty()) {
-            System.out.println("No lawsuits completed.");
+            System.out.println("\nNo lawsuits completed.");
             return;
         }
         
