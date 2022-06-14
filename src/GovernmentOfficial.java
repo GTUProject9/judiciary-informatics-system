@@ -65,11 +65,19 @@ public class GovernmentOfficial extends Citizen
             return;
 
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-        if (lawsuit == null)
-        {
+        if (lawsuit == null) {
             System.out.println("The lawsuit with ID " + lawsuitId + " does not exist.");
             return;
         }
+        if (lawsuit.getStatus() != LawsuitStatus.HOLD) {
+            System.out.println("The lawsuit with ID " + lawsuitId + " is not pending.");
+            return;
+        }
+        // It will be activated later.
+        // if (lawsuit.getSuingDefence() == null || lawsuit.getSuedDefence() == null) {
+        //     System.out.println("The lawsuit with ID " + lawsuitId + " is not a defenced by lawyers yet.");
+        //     return;
+        // }
 
         systemClassRef.displayJudges();
         System.out.print("Enter the ID of the judge (0 to exit): ");

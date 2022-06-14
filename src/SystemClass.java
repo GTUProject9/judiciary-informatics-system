@@ -60,6 +60,11 @@ public class SystemClass
     public void registerSystemObject(AbstractSystemObject systemObject)
     {
         SystemObjectTypes systemObjectType = findSystemObjectType(systemObject.getId());
+        if (systemObjectType == null)
+        {
+            System.out.println("Error: SystemObjectType is null.");
+            return;
+        }
         // Codes starts from 1.
         int index = systemObjectType.getSystemObjectCode() - 1;
 
@@ -68,7 +73,7 @@ public class SystemClass
             Lawsuit lawsuit = (Lawsuit) systemObject;
             if (lawsuit.getJudge() != -1)
             {
-                lawsuitsByDate.get(lawsuit.getJudge() % JUDGE_NUMBER - 1).add(lawsuit.getId());
+                lawsuitsByDate.get((lawsuit.getJudge() - 1) % JUDGE_NUMBER).add(lawsuit.getId());
             }
         }
         if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).isStateAttorney())
@@ -86,37 +91,6 @@ public class SystemClass
         systemObjects.get(index).put(systemObject.getId(), systemObject);  
     }
 
-    /**
-     * It takes a system object as a parameter, finds the type of the system object, and adds it to the
-     * corresponding MapTree
-     * 
-     * @param systemObject The object to be deleted.
-     */
-    public void deleteSystemObject(AbstractSystemObject systemObject)
-    {
-        SystemObjectTypes systemObjectType = findSystemObjectType(systemObject.getId());
-        // Codes starts from 1.
-        int index = systemObjectType.getSystemObjectCode() - 1;
-
-        if (systemObjectType == SystemObjectTypes.LAWSUIT)
-        {
-            Lawsuit lawsuit = (Lawsuit) systemObject;
-            if (lawsuit.getJudge() != -1)
-            {
-                lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).remove(lawsuit);
-            }
-        }
-        if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).isStateAttorney())
-        {
-            stateAttorneys.add(systemObject.getId());
-        }
-        if (systemObjectType == SystemObjectTypes.LAWYER)
-        {
-            lawyerCounter++;
-        }
-        systemObjects.get(index).put(systemObject.getId(), systemObject);  
-    }
-    
     /**
      * Find the correct Binary Search Tree, then get the system object.
      * 
@@ -299,7 +273,7 @@ public class SystemClass
      */
     public Lawsuit getHighestPriorityLawsuit(int judgeId)
     {
-        return getLawsuit(lawsuitsByDate.get(judgeId % JUDGE_NUMBER - 1).poll());
+        return getLawsuit(lawsuitsByDate.get((judgeId - 1) % JUDGE_NUMBER).poll());
     }
     
 
@@ -321,7 +295,8 @@ public class SystemClass
      */
     public void addLawsuitByDate(Lawsuit lawsuit)
     {
-        lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit.getId());
+        System.out.println("judge = " + lawsuit.getJudge());
+        lawsuitsByDate.get((lawsuit.getJudge() - 1) % JUDGE_NUMBER).add(lawsuit.getId());
     }
 
     // ============ CITIZEN ============
@@ -701,7 +676,7 @@ public class SystemClass
             System.out.println(Utils.INVALID_CHOICE);
             return;
         }
-        
+
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
