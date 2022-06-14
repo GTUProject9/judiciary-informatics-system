@@ -4,10 +4,10 @@ clear:
 	clear
 
 compile:
-	@javac -d bin Driver.java
+	@cd src ; javac -d bin Driver.java
 
 run:
-	@cd bin ; java Driver
+	@cd src ; cd bin ; java Driver
 
 clean:
 	rm -r bin
