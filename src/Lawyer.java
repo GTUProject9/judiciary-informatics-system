@@ -18,26 +18,57 @@ public class Lawyer extends Citizen {
             status = JobApplicationStatus.PENDING;
         }
 
+        /**
+         * This function sets the status of the job application
+         * 
+         * @param status The status of the job application.
+         */
         public void setStatus(JobApplicationStatus status) {
             this.status = status;
         }
 
+        /**
+         * This function returns the ownerId of the current object
+         * 
+         * @return The ownerId is being returned.
+         */
         public int getOwnerId() {
             return ownerId;
         }
 
+        /**
+         * This function returns the applicantId
+         * 
+         * @return The applicantId is being returned.
+         */
         public int getApplicantId() {
             return applicantId;
         }
 
+        /**
+         * This function returns the application name
+         * 
+         * @return The application name.
+         */
         public String getApplication() {
             return application;
         }
 
+        /**
+         * This function returns the status of the job application
+         * 
+         * @return The status of the job application.
+         */
         public JobApplicationStatus getStatus() {
             return status;
         }
 
+        /**
+         * The function returns a string that contains the ownerId, applicantId, application, and
+         * status of the job application
+         * 
+         * @return The toString() method is being returned.
+         */
         @Override
         public String toString() {
             return "JobApplication \nownerId=" + ownerId + ", \napplicantId=" + applicantId +
@@ -241,36 +272,77 @@ public class Lawyer extends Citizen {
         this.stateAttorney = stateAttorney;
     }
 
+    /**
+     * This function returns a boolean value that indicates whether or not the lawyer accepts lawsuits
+     * 
+     * @return The boolean value of acceptsLawsuits.
+     */
     public boolean acceptsLawsuits() {
         return acceptsLawsuits;
     }
 
+    /**
+     * This function sets the value of the boolean variable acceptsLawsuits to the value of the boolean
+     * variable passed in as a parameter
+     * 
+     * @param acceptsLawsuits true if the lawyer accepts lawsuits, false otherwise
+     */
     public void setAcceptsLawsuits(boolean acceptsLawsuits) {
         this.acceptsLawsuits = acceptsLawsuits;
     }
 
+    /**
+     * This function adds a lawsuit to the list of continuing lawsuits
+     * 
+     * @param lawsuitId The id of the lawsuit
+     */
     public void addLawsuit(Integer lawsuitId) {
         continuingLawsuits.add(lawsuitId);
     }
 
+    /**
+     * This function returns the employerId
+     * 
+     * @return The employerId is being returned.
+     */
     public Integer getEmployerId() {
         return employerId;
     }
 
+    /**
+     * This function sets the employerId of the object to the employerId passed in as a parameter
+     * 
+     * @param employerId The employer id of the employer who is logged in.
+     */
     public void setEmployerId(Integer employerId) {
         this.employerId = employerId;
     }
 
+    /**
+     * It removes the lawsuit from the continuingLawsuits list and adds it to the concludedLawsuits
+     * list.
+     * 
+     * @param lawsuitId The id of the lawsuit to conclude.
+     */
     public void concludeLawsuit(Integer lawsuitId) {
         continuingLawsuits.remove(lawsuitId);
         concludedLawsuits.add(lawsuitId);
     }
 
+    /**
+     * It returns the string representation of the object.
+     * 
+     * @return The superclass's toString() method.
+     */
     @Override
     public String toString() {
         return super.toString();
     }
 
+    /**
+     * It prints a menu, reads an integer input, and then sets a boolean variable to true or false
+     * depending on the input
+     */
     private void acceptsLawsuitsMenu() {
         System.out.println("You are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
         System.out.println("1. Accept lawsuits");
