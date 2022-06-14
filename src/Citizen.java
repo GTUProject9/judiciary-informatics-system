@@ -206,7 +206,7 @@ public class Citizen extends AbstractUser
             }
         }
         if (i == 0) {
-            System.out.println("You have no completed lawsuits.");
+            System.out.println("\nYou have no completed lawsuits.");
         }
         
     }
