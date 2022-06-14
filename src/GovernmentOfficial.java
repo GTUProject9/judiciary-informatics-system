@@ -43,7 +43,7 @@ public class GovernmentOfficial extends Citizen
 
         Lawyer lawyer = new Lawyer(-1, password, firstName, lastName, phone, email, stateAttorney, acceptsLawsuits);
         systemClassRef.addLawyer(lawyer);
-        System.out.println("The lawyer has ID: " + lawyer.getId() + "added successfully.");
+        System.out.println("The lawyer has been added successfully with ID: " + lawyer.getId());
     }
 
     /**
