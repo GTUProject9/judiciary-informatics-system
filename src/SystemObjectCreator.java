@@ -164,7 +164,7 @@ public final class SystemObjectCreator {
             Date date = randomDate();
             // Create random LawsuitTypes
             LawsuitTypes lawsuitType = LawsuitTypes.values()[getRandomNumber() % LawsuitTypes.values().length];
-            systemClassRef.registerSystemObject(new Lawsuit(id, date, -1, -1, -1, lawsuitType, caseFile)); 
+            systemClassRef.registerSystemObject(new Lawsuit(id, date, lawsuitType, caseFile)); 
             id++;
         }        
     }

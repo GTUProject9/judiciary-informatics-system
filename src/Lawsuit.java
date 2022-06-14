@@ -19,28 +19,24 @@ public class Lawsuit extends AbstractSystemObject
     private String courtRecords;
     private LawsuitStatus status;
 
-    public Lawsuit(){}
-
-    public Lawsuit(Integer id, Date date, Integer judge, Integer suingCitizen, Integer suedCitizen,
-                   Integer suingLawyer, Integer suedLawyer, LawsuitTypes lawsuitType, LawsuitStatus status,
-                   String caseFile, String courtRecords) {
+    public Lawsuit(Integer id, Date date, LawsuitTypes lawsuitType, String caseFile) {
         super(id);
         this.date = date;
-        this.judge = judge;
-        this.suingCitizen = suingCitizen;
-        this.suedCitizen = suedCitizen;
-        this.suingLawyer = suingLawyer;
-        this.suedLawyer = suedLawyer;
+        this.judge = null;
+        this.suingCitizen = null;
+        this.suedCitizen = null;
+        this.suingLawyer = null;
+        this.suedLawyer = null;
         this.lawsuitType = lawsuitType;
         this.caseFile = caseFile;
-        this.courtRecords = courtRecords;
-        this.status = status;
+        this.courtRecords = null;
+        this.status = LawsuitStatus.HOLD;
     }
-    
-    public Lawsuit(Integer id, Date date, Integer suingCitizen, Integer suedCitizen,
+
+    public Lawsuit(Date date, Integer suingCitizen, Integer suedCitizen,
                    Integer suingLawyer, LawsuitTypes lawsuitType,
                    String caseFile) {
-        super(id);
+        super();
         this.date = date;
         this.judge = null;
         this.suingCitizen = suingCitizen;
@@ -53,6 +49,22 @@ public class Lawsuit extends AbstractSystemObject
         this.status = LawsuitStatus.HOLD;
     }
     
+    public Lawsuit(Date date, Integer suingCitizen, Integer suedCitizen,
+                   Integer suingLawyer, Integer suedLawyer, LawsuitTypes lawsuitType,
+                   String caseFile) {
+        super();
+        this.date = date;
+        this.judge = null;
+        this.suingCitizen = suingCitizen;
+        this.suedCitizen = suedCitizen;
+        this.suingLawyer = suingLawyer;
+        this.suedLawyer = suedLawyer;
+        this.lawsuitType = lawsuitType;
+        this.caseFile = caseFile;
+        this.courtRecords = null;
+        this.status = LawsuitStatus.HOLD;
+    }
+
     //Ends lawsuit with a decision of the judge.
     public LawsuitStatus concludeLawsuit(LawsuitStatus judgeDecision){
         status = judgeDecision;
@@ -147,8 +159,8 @@ public class Lawsuit extends AbstractSystemObject
         this.lawsuitType = type;
     }
 
-    public String getLawsuitType(){
-        return lawsuitType.getLawSuitType();
+    public LawsuitTypes getLawsuitType(){
+        return lawsuitType;
     }
 
     public String getSuedDefence() {

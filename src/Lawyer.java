@@ -52,8 +52,6 @@ public class Lawyer extends Citizen {
     protected TreeSet<Integer> continuingLawsuits =new TreeSet<>();
     protected TreeSet<Integer> concludedLawsuits =new TreeSet<>();
 
-    public Lawyer() {}
-
     public Lawyer(int id,String password,String name,String surname, String email,String phone){
         super(id, password, name, surname,  email, phone);
         stateAttorney = false;

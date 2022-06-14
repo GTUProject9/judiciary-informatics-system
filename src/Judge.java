@@ -14,18 +14,12 @@ public class Judge extends Citizen{
     /** List of lawsuits those are concluded by judge */
     private List<Integer> concludedLawsuits;
 
-    // Constructors
-    public Judge() {
-        super();
-        assignedLawsuits = new ArrayList<>();
-        concludedLawsuits = new ArrayList<>();
-    }
-
+    // A constructor.
     public  Judge(int id,String password,String name,String surname, String email,String phone){
         super(id, password, name, surname,  email, phone);
         assignedLawsuits = new ArrayList<>();
         concludedLawsuits = new ArrayList<>();
-     }
+    }
 
     // Methods
     /**

@@ -4,19 +4,11 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import enums.LawsuitStatus;
 import enums.LawsuitTypes;
-import enums.SystemObjectTypes;
 
 public class Citizen extends AbstractUser
 {
     private Set<Integer> suingLawsuits;
     private Set<Integer> suedLawsuits;
-    
-    // Default constructor.
-    public Citizen() {
-        super();
-        suingLawsuits = new ConcurrentSkipListSet<>();
-        suedLawsuits = new ConcurrentSkipListSet<>();
-    }
 
     // Parameterized constructor.
     public Citizen(int id, String password, String name, String surname, String email, String phone) {
@@ -26,34 +18,53 @@ public class Citizen extends AbstractUser
         suedLawsuits = new ConcurrentSkipListSet<>();
     }
 
-    private void createLawsuit(SystemClass systemClassRef) {
-
+    /**
+     * Creates a lawsuit and assigns it to the sued citizen, then
+     * assign suing lawyer to the lawsuit.
+     * 
+     * @param systemClassRef The system class reference
+     */
+    private void createLawsuitMenu(SystemClass systemClassRef) {
         System.out.print("\nEnter the ID of the person you are claiming: ");
-        Integer suedCitizen;
+        int suedCitizen = -1;
         try {
             suedCitizen = Utils.readIntegerInput();
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-        System.out.print("\nEnter the type of the lawsuit.\n" +
-                         "1. Personal Injury Lawsuit\n" +
-                         "2. Product Liability Lawsuit\n" +
-                         "3. Divorce and Family Law Disputes\n" +
-                         "4. Criminal Cases\n" +               
-                         "Type: ");
 
-        Integer type;
+        if (systemClassRef.getCitizen(suedCitizen) == null) {
+            System.out.println("The ID you entered is not valid.");
+            return;
+        }
+        if (systemClassRef.getCitizen(suedCitizen).getId() == id) {
+            System.out.println("You cannot sue yourself.");
+            return;
+        }
+
+        System.out.println("\nEnter the type of the lawsuit.");
+        System.out.println("1. Personal Injury Lawsuit");
+        System.out.println("2. Product Liability Lawsuit");
+        System.out.println("3. Divorce and Family Law Disputes");
+        System.out.println("4. Criminal Cases");
+        System.out.println("0. Exit");
+        System.out.print("Choice: ");
+
+        int choice;
         try {
-            type = Utils.readIntegerInput();
+            choice = Utils.readIntegerInput();
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        if (choice == 0) {
             return;
         }
 
         LawsuitTypes lawsuitType;
         try {
-            lawsuitType = getLawsuitType(type - 1);
+            lawsuitType = LawsuitTypes.values()[choice - 1];
         } catch (IndexOutOfBoundsException e) {
             System.out.println(Utils.INVALID_CHOICE);
             return;
@@ -61,33 +72,71 @@ public class Citizen extends AbstractUser
 
         System.out.println("Enter the case file: ");
         String caseFile = Utils.readStringInput();
-        
         Date date = SystemObjectCreator.randomDate();
-
-        Lawsuit lawsuit = new Lawsuit(-1, date, id, suedCitizen, null, lawsuitType, caseFile);
+        
+        int lawyerId = selectLawyer(systemClassRef);
+        if (lawyerId == -1) {
+            return;
+        }
+        
+        System.out.println("\nSelected Lawyer: ");
+        System.out.println(systemClassRef.getLawyer(lawyerId));
+        
+        Lawsuit lawsuit = new Lawsuit(date, id, suedCitizen, lawyerId, lawsuitType, caseFile);
         systemClassRef.addLawsuit(lawsuit);
 
-        Integer suingLawyer = selectLawyer(systemClassRef, lawsuit.getId());
-
-        lawsuit.setSuingLawyer(suingLawyer);
-        systemClassRef.assignLawyerToLawsuit(suingLawyer, lawsuit.getId());
-
+        lawsuit.setSuingLawyer(lawyerId);
+        systemClassRef.assignLawyerToLawsuit(lawyerId, lawsuit.getId());
+        
         addSuingLawsuit(lawsuit.id);
         addLawsuitToSuedCitizen(systemClassRef, suedCitizen, lawsuit.id);
+
+        System.out.println("Lawsuit created successfully.");
     }
 
-    /*
-     * Returns the lawsuit type based on the given index.
-     * @param index The index of the lawsuit type.
+    /**
+     * It displays a menu, reads the user's choice, and returns the lawyer's id
+     * 
+     * @param systemClassRef a reference to the system class
+     * @return The lawyerId is being returned.
      */
-    private LawsuitTypes getLawsuitType(int index)
-    {
-        if (index >= 0 && index < LawsuitTypes.values().length) {
-            return LawsuitTypes.values()[index];
+    private static int selectLawyer(SystemClass systemClassRef) {
+        System.out.println("1. Select lawyer that accepts lawsuits");
+        System.out.println("2. Request lawyer from state");
+        System.out.println("0. Exit");
+        System.out.print("Choice: ");
+        int choice = Utils.readIntegerInput();
+
+        if (choice == 0) {
+            System.out.println("Canceled.");
+            return -1;
         }
-        else {
-            throw new IndexOutOfBoundsException();
+        int lawyerId = -1;
+        if (choice == 1) {
+            systemClassRef.displayLawsuitAcceptingLawyers();
+            System.out.print("Select: ");
+            int index;
+            try {
+                index = Utils.readIntegerInput();
+            } catch (Exception e) {
+                System.out.println(Utils.INVALID_INPUT);
+                return -1;
+            }
+            lawyerId = systemClassRef.getLawsuitAcceptingLawyerByIndex(index - 1);
+            if (lawyerId == -1)
+            {
+                System.out.println(Utils.INVALID_CHOICE);
+                return -1;
+            } 
         }
+        if (choice == 2) {
+            lawyerId = systemClassRef.pollStateAttorney();
+            if (lawyerId == -1) {
+                System.out.println("No lawyer available in state.");
+                return -1;
+            }
+        }
+        return lawyerId;
     }
 
     /**
@@ -97,9 +146,9 @@ public class Citizen extends AbstractUser
      */
     private void displaySuingLawsuits(SystemClass systemClassRef) {
         int i = 1;
-        for (Integer lawsuitId : suingLawsuits) {
+        for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-            System.out.println(i + ".\n" + lawsuit);
+            System.out.println("\n" + i + ". Lawsuit\n" + lawsuit);
             i++;
         }
     }
@@ -111,9 +160,9 @@ public class Citizen extends AbstractUser
      */
     private void displaySuedLawsuits(SystemClass systemClassRef) {
         int i = 1;
-        for (Integer lawsuitId : suedLawsuits) {
+        for (var lawsuitId : suedLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-            System.out.println(i + ". " + lawsuit);
+            System.out.println("\n" + i + ". Lawsuit\n" + lawsuit);
             i++;
         }
     }
@@ -125,7 +174,7 @@ public class Citizen extends AbstractUser
      */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
         int i = 1;
-        for (Integer lawsuitId : suingLawsuits) {
+        for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             if (lawsuit.getStatus() == LawsuitStatus.SUING_WON || 
                 lawsuit.getStatus() == LawsuitStatus.SUED_WON) {
@@ -133,7 +182,7 @@ public class Citizen extends AbstractUser
                 i++;
             }
         }
-        for (Integer lawsuitId : suedLawsuits) {
+        for (var lawsuitId : suedLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             if (lawsuit.getStatus() == LawsuitStatus.SUING_WON || 
                 lawsuit.getStatus() == LawsuitStatus.SUED_WON) {
@@ -141,98 +190,99 @@ public class Citizen extends AbstractUser
                 i++;
             }
         }
-    }
-
-    private static void displayLawsuitAcceptingLawyers(SystemClass systemClassRef) {
-        systemClassRef.displayLawsuitAcceptingLawyers();
-    }
-
-    private static Integer selectLawyer(SystemClass systemClassRef, Integer lawsuitId) {
-        
-        System.out.println("1. Select lawyer that accepts lawsuits" + "\n" +
-                           "2. Request lawyer from state" + "\n" +
-                           "0. Go Back" + "\n" +
-                           "Choice: ");
-        while(true)
-        {
-            int choice;
-            try {
-                choice = Utils.readIntegerInput();
-            } catch (Exception e) {
-                System.out.println(Utils.INVALID_INPUT);
-                continue;
-            }
-            Integer lawyerId = null;
-            if(choice == 1)
-            {
-                displayLawsuitAcceptingLawyers(systemClassRef);
-                System.out.print("Select: ");
-                int index = Utils.readIntegerInput() - 1;
-                lawyerId = getLawyer(index, systemClassRef);
-            }
-            else if(choice == 2)
-            {
-                lawyerId = systemClassRef.assignStateAttorney(lawsuitId);
-                if(lawyerId == null)
-                {
-                    System.out.println("No lawyers available in state. Try again later.");
-                }
-            }
-            else
-            {
-                System.out.println(Utils.INVALID_CHOICE);
-            }
-            if (lawyerId != null) {
-                System.out.println("Selected Lawyer\n" + systemClassRef.getLawyer(lawyerId));
-                return lawyerId;
-            }
-        }
-    }
-    private static Integer getLawyer(int index, SystemClass systemClassRef) {
-        Integer lawyerId;
-        try {
-            lawyerId = systemClassRef.getLawsuitAcceptingLawyerByIndex(index);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println(Utils.INVALID_CHOICE);
-            return null;
-        }
-        return lawyerId;
     }
     
+    /**
+     * This function adds a lawsuit to a citizen's list of sued lawsuits
+     * 
+     * @param systemClassRef a reference to the system class
+     * @param suedCitizenId The id of the citizen who is being sued.
+     * @param lawsuitId the id of the lawsuit
+     */
     private static void addLawsuitToSuedCitizen(SystemClass systemClassRef, 
-                                                Integer suedCitizenId, Integer lawsuitId) {
+                                                int suedCitizenId, int lawsuitId) {
         Citizen suedCitizen = (Citizen) systemClassRef.getSystemObject(suedCitizenId);
         suedCitizen.addSuedLawsuit(lawsuitId);
     }
 
-    public void addSuingLawsuit(Integer lawsuitId) {
+    /**
+     * This function adds a lawsuit id to the list of lawsuits that the user is suing.
+     * 
+     * @param lawsuitId The id of the lawsuit that is being sued.
+     */
+    public void addSuingLawsuit(int lawsuitId) {
         suingLawsuits.add(lawsuitId);
     }
 
-    public void addSuedLawsuit(Integer lawsuitId) {
+    /**
+     * This function adds a lawsuit id to the list of lawsuits that the user has sued
+     * 
+     * @param lawsuitId The id of the lawsuit
+     */
+    public void addSuedLawsuit(int lawsuitId) {
         suedLawsuits.add(lawsuitId);
     }
 
+    /**
+     * It adds a lawyer to a lawsuit
+     * 
+     * @param systemClassRef is a reference to the system class
+     */
     private void addLawyerAsSuedCitizen(SystemClass systemClassRef) {
+        if (suedLawsuits.isEmpty()) {
+            System.out.println("There are no sued lawsuits.");
+            return;
+        }
 
         int i = 1;
-        for (Integer lawsuitId : suedLawsuits) {
+        for (var lawsuitId : suedLawsuits) {
             System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
             i++;
         }
-        System.out.println("Select: ");
-        Integer lawsuitId = Utils.readIntegerInput();
+
+        System.out.println("Choice: ");
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        int lawsuitId;
+        try {
+            lawsuitId = (int)suedLawsuits.toArray()[choice - 1];
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+
+        int suedLawyer = selectLawyer(systemClassRef);
+        if (suedLawyer == -1) {
+            return;
+        }
+        System.out.println("\nSelected Lawyer: ");
+        System.out.println(systemClassRef.getLawyer(suedLawyer));
+
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-        Integer suedLawyer = selectLawyer(systemClassRef, lawsuitId);
         lawsuit.setSuedLawyer(suedLawyer);
         systemClassRef.assignLawyerToLawsuit(suedLawyer, lawsuitId);
     }
 
+    /**
+     * It returns the string representation of the object.
+     * 
+     * @return The superclass's toString() method.
+     */
     @Override
     public String toString() {
         return super.toString();
     }
 
+    /**
+     * It displays a menu for the citizen 
+     * 
+     * @param systemClassRef This is a reference to the system class.
+     */
     @Override
     public void menu(SystemClass systemClassRef) {
         System.out.println("\n--- Citizen Menu ---");
@@ -254,7 +304,7 @@ public class Citizen extends AbstractUser
             }
             switch (choice) {
                 case 1:
-                    createLawsuit(systemClassRef);
+                    createLawsuitMenu(systemClassRef);
                     break;
                 case 2:
                     displaySuingLawsuits(systemClassRef);
@@ -266,7 +316,7 @@ public class Citizen extends AbstractUser
                     displayCompletedLawsuits(systemClassRef);
                     break;
                 case 5:
-                    displayLawsuitAcceptingLawyers(systemClassRef);
+                    systemClassRef.displayLawsuitAcceptingLawyers();
                     break;
                 case 6:
                     addLawyerAsSuedCitizen(systemClassRef);

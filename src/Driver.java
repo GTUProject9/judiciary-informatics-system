@@ -51,7 +51,13 @@ public class Driver {
             else
             {
                 System.out.println("\n Enter your ID: ");
-                int id = Utils.readIntegerInput();
+                int id;
+                try {
+                    id = Utils.readIntegerInput();
+                } catch (Exception e) {
+                    System.out.println(Utils.INVALID_INPUT);
+                    continue;
+                }
                 
                 System.out.println("\n Enter your password: ");
                 String password = Utils.readStringInput();

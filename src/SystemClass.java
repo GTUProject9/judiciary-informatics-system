@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
-import java.util.Set;
 
+import enums.LawsuitStatus;
 import enums.SystemObjectTypes;
 
 public class SystemClass 
@@ -13,11 +13,11 @@ public class SystemClass
     // System Objects: Lawsuit, citizen, lawyer, lawoffice owner, judge, government official
     private List<TreeMap<Integer, AbstractSystemObject>> systemObjects;
 
-    private Queue<Lawyer> stateAttorneyReferences;
+    private Queue<Integer> stateAttorneys;
 
-    private Queue<Lawyer> stateAttorneyApplicants;
+    private Queue<Integer> stateAttorneyApplicants;
 
-    private List<PriorityQueue<Lawsuit>> lawsuitsByDate;
+    private List<PriorityQueue<Integer>> lawsuitsByDate;
 
     private ArrayList<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
 
@@ -36,7 +36,7 @@ public class SystemClass
             systemObjects.add(new TreeMap<>());
         }
 
-        stateAttorneyReferences = new LinkedList<>();
+        stateAttorneys = new LinkedList<>();
         jobAdvertisementsReferences = new ArrayList<>();
         stateAttorneyApplicants = new LinkedList<>();
         
@@ -44,7 +44,7 @@ public class SystemClass
         for (int i = 0; i < JUDGE_NUMBER; i++)
         {
             lawsuitsByDate.add(new PriorityQueue<>((lawsuit1, lawsuit2) -> 
-                                                    lawsuit1.getDate().compareTo(lawsuit2.getDate())));
+                                                    getLawsuit(lawsuit1).getDate().compareTo(getLawsuit(lawsuit2).getDate())));
         }
     }
     
@@ -65,12 +65,12 @@ public class SystemClass
             Lawsuit lawsuit = (Lawsuit) systemObject;
             if (lawsuit.getJudge() != null)
             {
-                lawsuitsByDate.get(lawsuit.getJudge() % JUDGE_NUMBER - 1).add(lawsuit);
+                lawsuitsByDate.get(lawsuit.getJudge() % JUDGE_NUMBER - 1).add(lawsuit.getId());
             }
         }
         if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).isStateAttorney())
         {
-            stateAttorneyReferences.offer((Lawyer) systemObject);
+            stateAttorneys.offer(systemObject.getId());
         }
         if (systemObjectType == SystemObjectTypes.LAWYER)
         {
@@ -105,7 +105,7 @@ public class SystemClass
         }
         if (systemObjectType == SystemObjectTypes.LAWYER && ((Lawyer) systemObject).isStateAttorney())
         {
-            stateAttorneyReferences.add((Lawyer) systemObject);
+            stateAttorneys.add(systemObject.getId());
         }
         if (systemObjectType == SystemObjectTypes.LAWYER)
         {
@@ -136,9 +136,9 @@ public class SystemClass
      * 
      * @param stateAttorney The state attorney to add to the list of state attorneys.
      */
-    public void addStateAttorney(Lawyer stateAttorney)
+    public void addStateAttorney(int stateAttorneyId)
     {
-        stateAttorneyReferences.offer(stateAttorney);
+        stateAttorneys.offer(stateAttorneyId);
     }
 
     
@@ -209,25 +209,80 @@ public class SystemClass
      * 
      * @return The first element in the queue.
      */
-    public Lawyer peekStateAttorneyApplicant() {
-        return stateAttorneyApplicants.peek();
+    public int peekStateAttorneyApplicant() {
+        Integer applicantId = stateAttorneyApplicants.peek();
+        return applicantId == null ? -1 : applicantId;
     }
 
-    public Lawyer pollStateAttorney() {
-        return stateAttorneyApplicants.poll();
+    /**
+     * If the queue is empty, return -1, otherwise return the first element in the queue
+     * 
+     * @return The applicantId is being returned.
+     */
+    public int pollStateAttorneyApplicant() {
+        Integer applicantId = stateAttorneyApplicants.poll();
+        return applicantId == null ? -1 : applicantId;
     }
+
+    /**
+     * If there are no state attorneys, return -1, otherwise return the first state attorney in the
+     * queue and add it to the end of the queue.
+     * 
+     * @return The first element in the queue.
+     */
+    public int pollStateAttorney() {
+        Integer stateAttorney = stateAttorneys.poll();
+        if (stateAttorney == null)
+            return -1;
+    
+        stateAttorneys.offer(stateAttorney);
+        return stateAttorney;
+    }
+
     // Print state attorney applicants
     public void printStateAttorneyApplicants() {
-        int i = 0;
+        int i = 1;
         System.out.println("State attorney applicants: ");
-        for (Lawyer lawyer : stateAttorneyApplicants) {
-            System.out.println(i + ". " + lawyer.getId());
+        for (var applicantId : stateAttorneyApplicants) {
+            System.out.println(i + ". " + getLawyer(applicantId));
         }
-        System.out.println();
+    }
+    
+    public void addLawsuitToLawyer(int lawyerId, int lawsuitId) {
+        Lawyer lawyer = (Lawyer) getSystemObject(lawyerId);
+        lawyer.addLawsuit(lawsuitId);
+    }
+    
+    /**
+     * This function displays all the judges in the system
+     */
+    public void displayJudges() {
+        int i = 1;
+        System.out.println("Judges: ");
+        for (var judge : systemObjects.get(SystemObjectTypes.JUDGE.getSystemObjectCode() - 1).values()) {
+            System.out.println(i + ". " + judge);
+            i++;
+        }
     }
 
-    public Lawyer getStateAttorney() {
-        return stateAttorneyReferences.poll();
+    /**
+     * This function displays all the lawsuits that are on hold.
+     */
+    public void displayHoldLawsuits()
+    {
+        int i = 1;
+        System.out.println("Pending lawsuits: ");
+        for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values()) {
+            if (((Lawsuit)lawsuit).getStatus() == LawsuitStatus.HOLD)
+            {
+                System.out.println(i + ". " + lawsuit);
+                i++;
+            }
+        }
+    }
+
+    public Judge getJudge(int id) {
+        return (Judge) getSystemObject(id);
     }
 
     // ============ JUDGE ============
@@ -241,7 +296,7 @@ public class SystemClass
      */
     public Lawsuit getHighestPriorityLawsuit(int judgeId)
     {
-        return lawsuitsByDate.get(judgeId % JUDGE_NUMBER - 1).poll();
+        return getLawsuit(lawsuitsByDate.get(judgeId % JUDGE_NUMBER - 1).poll());
     }
     
 
@@ -263,7 +318,7 @@ public class SystemClass
      */
     public void addLawsuitByDate(Lawsuit lawsuit)
     {
-        lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit);
+        lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).add(lawsuit.getId());
     }
 
     // ============ CITIZEN ============
@@ -295,21 +350,16 @@ public class SystemClass
             }
         }
     }
-
+    
     /**
-     * > Assigns a lawyer to a lawsuit, if there is one available
+     * It returns the first element of the stateAttorneyReferences queue.
      * 
-     * @param lawsuitId The id of the lawsuit that needs to be assigned to a lawyer.
-     * @return The id of the lawyer assigned to the lawsuit.
+     * @return The stateAttorneyReferences.peek() method returns the top element of the queue without
+     * removing it.
      */
-    public Integer assignStateAttorney(int lawsuitId)
-    {   
-        Lawyer lawyer = stateAttorneyReferences.poll();
-        if (lawyer == null)
-            return null;
-            
-        stateAttorneyReferences.offer(lawyer);
-        return lawyer.getId();
+    public int peekStateAttorney() {
+        Integer stateAttorneyId = stateAttorneys.peek();
+        return stateAttorneyId == null ? -1 : stateAttorneyId;
     }
 
     /**
@@ -329,7 +379,7 @@ public class SystemClass
      * @param index the index of the lawyer in the list of lawyers who accept lawsuits
      * @return The id of the lawyer that accepts lawsuits.
      */
-    public Integer getLawsuitAcceptingLawyerByIndex(int index) {
+    public int getLawsuitAcceptingLawyerByIndex(int index) {
         for (var object : systemObjects.get(SystemObjectTypes.LAWYER.getSystemObjectCode() - 1).values())
         {
             if (((Lawyer) object).acceptsLawsuits())
@@ -339,7 +389,7 @@ public class SystemClass
                 index--;
             }
         }
-        return null;
+        return -1;
     } 
 
     /**
@@ -366,7 +416,7 @@ public class SystemClass
      */
     public void addStateAttorneyApplicant(Lawyer stateAttorney)
     {
-        stateAttorneyApplicants.offer(stateAttorney);
+        stateAttorneyApplicants.offer(stateAttorney.getId());
     }
 
     // get citizen
