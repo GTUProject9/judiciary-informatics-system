@@ -65,10 +65,10 @@ public class Judge extends Citizen{
             return;
         }
         
-        // if (lawsuit.getSuingDefence() == null || lawsuit.getSuedDefence() == null ) {
-        //     System.out.println("\nLawyers should add defences.");
-        //     return;
-        // }
+        if (lawsuit.getSuingDefence() == null || lawsuit.getSuedDefence() == null ) {
+            System.out.println("\nLawyers should add defences.");
+            return;
+        }
 
         System.out.println("\nDate: "+lawsuit.getDate());
         System.out.println("Lawsuit Type: "+lawsuit.getLawsuitType());
