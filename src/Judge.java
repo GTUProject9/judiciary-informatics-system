@@ -117,6 +117,10 @@ public class Judge extends Citizen{
                         assignedLawsuits.removeIf(integer -> integer.equals(lawsuit.getId()));
                         QuickSort.sort(assignedLawsuits);
                         systemClassRefReference.pollHighestPriorityLawsuit(this.id);
+                        Lawyer suingLawyer = systemClassRefReference.getLawyer(lawsuit.getSuingLawyer());
+                        Lawyer suedLawyer = systemClassRefReference.getLawyer(lawsuit.getSuedLawyer());
+                        suingLawyer.concludeLawsuit(lawsuit.getId());
+                        suedLawyer.concludeLawsuit(lawsuit.getId());
                     }
                     return;
                 case 0:

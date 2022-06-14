@@ -228,6 +228,8 @@ public class Lawyer extends Citizen {
             System.out.println((i + 1) + ".\n" + systemClassRef.getLawsuit(lawsuitId));
             i++;
         }
+        if (i == 0)
+            System.out.println("No lawsuits have been concluded.");
     }
 
     /**
@@ -257,6 +259,11 @@ public class Lawyer extends Citizen {
 
     public void setEmployerId(Integer employerId) {
         this.employerId = employerId;
+    }
+
+    public void concludeLawsuit(Integer lawsuitId) {
+        continuingLawsuits.remove(lawsuitId);
+        concludedLawsuits.add(lawsuitId);
     }
 
     @Override

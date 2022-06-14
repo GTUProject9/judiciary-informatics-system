@@ -262,7 +262,7 @@ public class GovernmentOfficial extends Citizen
         }
         System.out.println("Suing lawyer assigned from state to the lawsuit: " + suingLawyerId);
         System.out.println("Sued lawyer assigned from state to the lawsuit: " + suedLawyerId);
-
+        System.out.println();
         Date date = SystemObjectCreator.randomDate();
         Lawsuit lawsuit = new Lawsuit(date, suingId, suedId, suingLawyerId, 
                                       suedLawyerId, lawsuitType, caseFile);
