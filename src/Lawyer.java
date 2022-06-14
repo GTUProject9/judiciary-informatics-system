@@ -74,7 +74,7 @@ public class Lawyer extends Citizen {
      */
     public void applyForJobs(SystemClass systemClassRef){
         systemClassRef.displayJobAdvertisements();
-        System.out.print("Enter employer ID to apply for job (0 to exit): ");
+        System.out.print("\nEnter employer ID to apply for job (0 to exit): ");
         int ownerId;
         try {
             ownerId = Utils.readIntegerInput();
@@ -91,7 +91,7 @@ public class Lawyer extends Citizen {
         JobApplication jobApplication = createJobApplication(ownerId, id, application);
         systemClassRef.addJobApplication(jobApplication);
 
-        System.out.println("Job application completed.");
+        System.out.println("\nJob application completed.");
     }
 
     /**

@@ -264,16 +264,29 @@ public class SystemClass
 
     // ============ JUDGE ============
     /**
-     * "Get the highest priority lawsuit for a given judge."
+     * "Peek the highest priority lawsuit for a given judge."
      * 
      * The function is called getHighestPriorityLawsuit and it takes one parameter, judgeId
      * 
      * @param judgeId The ID of the judge who is currently handling the case.
      * @return The highest priority lawsuit for a given judge.
      */
-    public Lawsuit getHighestPriorityLawsuit(int judgeId)
+    public Lawsuit peekHighestPriorityLawsuit(int judgeId)
     {
-        return getLawsuit(lawsuitsByDate.get((judgeId - 1) % JUDGE_NUMBER).poll());
+        Integer lawsuit = lawsuitsByDate.get((judgeId - 1) % JUDGE_NUMBER).peek();
+        return lawsuit == null ? null : getLawsuit(lawsuit);
+    }
+
+    /**
+     * "Poll the highest priority lawsuit for a given judge."
+     * 
+     * @param judgeId The ID of the judge who is currently handling the case.
+     * @return The highest priority lawsuit for a given judge.
+     */
+    public Lawsuit pollHighestPriorityLawsuit(int judgeId)
+    {
+        Integer lawsuit = lawsuitsByDate.get((judgeId - 1) % JUDGE_NUMBER).poll();
+        return lawsuit == null ? null : getLawsuit(lawsuit);
     }
     
 
@@ -359,6 +372,15 @@ public class SystemClass
      */
     public int getLawsuitAcceptingLawyerByIndex(int index) {
         for (var object : systemObjects.get(SystemObjectTypes.LAWYER.getSystemObjectCode() - 1).values())
+        {
+            if (((Lawyer) object).acceptsLawsuits())
+            {
+                if (index == 0)
+                    return object.getId();
+                index--;
+            }
+        }
+        for (var object : systemObjects.get(SystemObjectTypes.LAWOFFICE_OWNER.getSystemObjectCode() - 1).values())
         {
             if (((Lawyer) object).acceptsLawsuits())
             {
@@ -470,6 +492,9 @@ public class SystemClass
         return (LawOfficeOwner) getSystemObject(id);
     }
     
+    /**
+     * It displays a menu and calls the appropriate function based on the user's choice
+     */
     public void archiveMenu()
     {
         System.out.println("\n\tArchive menu");
@@ -579,6 +604,9 @@ public class SystemClass
         }
     }
 
+    /**
+     * It displays all concluded lawsuits
+     */
     public void displayConcludedLawsuits()
     {
         int i = 1;
@@ -593,6 +621,9 @@ public class SystemClass
         }
     }
    
+    /**
+     * It displays all the lawsuits that are assigned to a specific judge
+     */
     public void displayLawsuitsByJudge()
     {
         System.out.println("Enter the judge id: ");
@@ -625,6 +656,9 @@ public class SystemClass
         }
     }
 
+    /**
+     * It displays all the lawsuits that a lawyer is involved in
+     */
     public void displayLawsuitsByLawyer()
     {
         System.out.println("Enter the lawyer id: ");
@@ -657,6 +691,9 @@ public class SystemClass
         }
     }
 
+    /**
+     * It displays all the lawsuits that a citizen is involved in
+     */
     public void displayLawsuitsByCitizen()
     {
         System.out.println("Enter the citizen id: ");
@@ -689,6 +726,9 @@ public class SystemClass
         }
     }
 
+    /**
+     * It displays all the lawsuits of a particular type.
+     */
     public void displayLawsuitsFilteredByLawsuitTypes()
     {
         System.out.println("Types of lawsuits");

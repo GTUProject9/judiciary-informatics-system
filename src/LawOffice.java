@@ -21,7 +21,7 @@ public class LawOffice
 
         @Override
         public String toString() {
-            return "JobAdvertisement \nownerId=" + ownerId + ", \ntitle=" + title + ", \ndescription=" + description;
+            return "Job Advertisement \nownerId=" + ownerId + ", \ntitle=" + title + ", \ndescription=" + description;
         }
     }
 
@@ -116,7 +116,7 @@ public class LawOffice
 
     public Lawyer.JobApplication getJobApplication(int index) {
         if (index >= 0 && index < jobApplications.size()) {
-            return jobApplications.remove(index);
+            return jobApplications.get(index);
         } else {
             throw new IndexOutOfBoundsException();
         }
@@ -149,7 +149,7 @@ public class LawOffice
         int i = 0;
         for (var jobApplication : jobApplications) {
             if (jobApplication.getStatus() == JobApplicationStatus.PENDING) {
-                System.out.println((i + 1) + ". " + jobApplication);
+                System.out.println((i + 1) + ". " + jobApplication + "\n");
             } else {
                 System.out.println("Completed job application.");
             }

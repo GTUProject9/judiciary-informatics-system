@@ -60,7 +60,7 @@ public class Judge extends Citizen{
      */
     private void concludeLawsuit(SystemClass systemClassRefReference) {
 
-        Lawsuit lawsuit = systemClassRefReference.getHighestPriorityLawsuit(id);
+        Lawsuit lawsuit = systemClassRefReference.peekHighestPriorityLawsuit(id);
       
         if (lawsuit == null) {
             System.out.println("There is no assigned lawsuits.");
@@ -99,6 +99,7 @@ public class Judge extends Citizen{
             else
                 System.out.println("Prosecutor's Lawyer: None");
             System.out.println("\n");
+
             System.out.println("1. Show Defense of Defendant");
             System.out.println("2. Show Defense of Prosecutor");
             System.out.println("3. Show Court Records");
@@ -127,12 +128,14 @@ public class Judge extends Citizen{
                     changeStatus(systemClassRefReference,lawsuit);
                     lawsuit = (Lawsuit) systemClassRefReference.getSystemObject(lawsuit.id);
                     int id = lawsuit.getId();
-                    if (lawsuit.getStatus() == LawsuitStatus.SUED_WON || lawsuit.getStatus() == LawsuitStatus.SUING_WON) {
+                    if (lawsuit.getStatus() == LawsuitStatus.SUED_WON || 
+                        lawsuit.getStatus() == LawsuitStatus.SUING_WON) {
                         concludedLawsuits.add(id);
                         QuickSort.sort(concludedLawsuits);
                         assignedLawsuits.removeIf(integer -> integer.equals(id));
                         QuickSort.sort(assignedLawsuits);
                     }
+                    systemClassRefReference.pollHighestPriorityLawsuit(id);
                     break;
                 case 5:
                     return;

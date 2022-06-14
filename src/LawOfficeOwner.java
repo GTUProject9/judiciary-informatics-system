@@ -28,6 +28,8 @@ public class LawOfficeOwner extends Lawyer {
         LawOffice.JobAdvertisement jobAdvertisement = lawOffice.createJobAdvertisement(id, title, description);
         lawOffice.addJobAdvertisement(jobAdvertisement);
         systemClassRef.addJobAdvertisement(jobAdvertisement);
+
+        System.out.println("\nJob advertisement published successfully.");
     }
 
     /**
