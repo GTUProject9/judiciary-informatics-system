@@ -105,7 +105,13 @@ public class Citizen extends AbstractUser
         System.out.println("2. Request lawyer from state");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
-        int choice = Utils.readIntegerInput();
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (NumberFormatException e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return -1;
+        }
 
         if (choice == 0) {
             System.out.println("Canceled.");
