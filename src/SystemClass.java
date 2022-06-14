@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
+import enums.LawsuitTypes;
 import enums.LawsuitStatus;
 import enums.SystemObjectTypes;
 
@@ -63,7 +66,7 @@ public class SystemClass
         if (systemObjectType == SystemObjectTypes.LAWSUIT)
         {
             Lawsuit lawsuit = (Lawsuit) systemObject;
-            if (lawsuit.getJudge() != null)
+            if (lawsuit.getJudge() != -1)
             {
                 lawsuitsByDate.get(lawsuit.getJudge() % JUDGE_NUMBER - 1).add(lawsuit.getId());
             }
@@ -98,7 +101,7 @@ public class SystemClass
         if (systemObjectType == SystemObjectTypes.LAWSUIT)
         {
             Lawsuit lawsuit = (Lawsuit) systemObject;
-            if (lawsuit.getJudge() != null)
+            if (lawsuit.getJudge() != -1)
             {
                 lawsuitsByDate.get(lawsuit.getJudge() % 10 - 1).remove(lawsuit);
             }
@@ -268,7 +271,7 @@ public class SystemClass
     /**
      * This function displays all the lawsuits that are on hold.
      */
-    public void displayHoldLawsuits()
+    public void displayPendingLawsuits()
     {
         int i = 1;
         System.out.println("Pending lawsuits: ");
@@ -451,7 +454,7 @@ public class SystemClass
         int i = 1;
         for (LawOffice.JobAdvertisement jobAdvertisement : jobAdvertisementsReferences)
         {
-            System.out.println(i + ". " + jobAdvertisement);
+            System.out.println(i + ".\n" + jobAdvertisement.toString());
             i++;
         }
     }
@@ -477,13 +480,275 @@ public class SystemClass
      */
     public void addJobApplication(Lawyer.JobApplication jobApplication)
     {
-        LawOfficeOwner owner = (LawOfficeOwner) getSystemObject(jobApplication.getOwnerId());
+        LawOfficeOwner owner = getLawOfficeOwner(jobApplication.getOwnerId());
         owner.getOffice().addJobApplication(jobApplication);
+    }
+
+    /**
+     * This function returns a LawOfficeOwner object from the TreeMap of system objects.
+     * 
+     * @param id The id of the object you want to get.
+     * @return A LawOfficeOwner object.
+     */
+    public LawOfficeOwner getLawOfficeOwner(int id)
+    {
+        return (LawOfficeOwner) getSystemObject(id);
     }
     
     public void archiveMenu()
     {
-        System.out.println("");
+        System.out.println("\n\tArchive menu");
+        System.out.println("\n1. Display all lawsuits");
+        System.out.println("2. Display all lawsuits by date");
+        System.out.println("3. Display pending lawsuits");
+        System.out.println("4. Display concluded lawsuits");
+        System.out.println("5. Display lawsuits by judge");
+        System.out.println("6. Display lawsuits by lawyer");
+        System.out.println("7. Display lawsuits by citizen");
+        System.out.println("8. Display lawsuits filtered by lawsuit types");
+        System.out.println("0. Back");
+        System.out.println("Enter your choice: ");
+        int choice;
+        try
+        {
+            choice = Utils.readIntegerInput();
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                displayAllLawsuits();
+                break;
+            case 2:
+                displayLawsuitsByDate();
+                break;
+            case 3:
+                displayPendingLawsuits();
+                break;
+            case 4:
+                displayConcludedLawsuits();
+                break;
+            case 5:
+                displayLawsuitsByJudge();
+                break;
+            case 6:
+                displayLawsuitsByLawyer();
+                break;
+            case 7:
+                displayLawsuitsByCitizen();
+                break;
+            case 8:
+                displayLawsuitsFilteredByLawsuitTypes();
+                break;
+            case 0:
+                return;
+            default:
+                System.out.println(Utils.INVALID_INPUT);
+                break;
+        }
+        archiveMenu();
+    }
+
+    /**
+     * This function displays all lawsuits.
+     */
+    private void displayAllLawsuits()
+    {
+        int i = 1;
+        for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            System.out.println(i + ".\n" + lawsuit.toString());
+            i++;
+        }
+    }
+
+    /**
+     * This function displays lawsuits by date.
+     */
+    private void displayLawsuitsByDate()
+    {
+        System.out.println("Enter initial date (yyyyMMdd): ");
+        String input = Utils.readStringInput();
+        Date startDate;
+        try {
+            startDate = new SimpleDateFormat("yyyyMMdd").parse(input);
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+
+        System.out.println("Enter final date (yyyyMMdd): ");
+        input = Utils.readStringInput();
+        Date endDate;
+        try {
+            endDate = new SimpleDateFormat("yyyyMMdd").parse(input);
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getDate().after(startDate) && lawsuit.getDate().before(endDate))
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
+    }
+
+    public void displayConcludedLawsuits()
+    {
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getStatus() == LawsuitStatus.SUED_WON || lawsuit.getStatus() == LawsuitStatus.SUING_WON)
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
+    }
+   
+    public void displayLawsuitsByJudge()
+    {
+        System.out.println("Enter the judge id: ");
+        int judgeId;
+        try
+        {
+            judgeId = Utils.readIntegerInput();
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        Judge judge = getJudge(judgeId);
+        if (judge == null)
+        {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getJudge() == judge.getId())
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
+    }
+
+    public void displayLawsuitsByLawyer()
+    {
+        System.out.println("Enter the lawyer id: ");
+        int lawyerId;
+        try
+        {
+            lawyerId = Utils.readIntegerInput();
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        Lawyer lawyer = getLawyer(lawyerId);
+        if (lawyer == null)
+        {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getSuedLawyer() == lawyer.getId() || lawsuit.getSuingLawyer() == lawyer.getId())
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
+    }
+
+    public void displayLawsuitsByCitizen()
+    {
+        System.out.println("Enter the citizen id: ");
+        int citizenId;
+        try
+        {
+            citizenId = Utils.readIntegerInput();
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        Citizen citizen = getCitizen(citizenId);
+        if (citizen == null)
+        {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+        
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getSuingCitizen() == citizen.getId() || lawsuit.getSuedCitizen() == citizen.getId())
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
+    }
+
+    public void displayLawsuitsFilteredByLawsuitTypes()
+    {
+        System.out.println("Types of lawsuits");
+        System.out.println("1. Personal Injury");
+        System.out.println("2. Product Liability");
+        System.out.println("3. Family Law Dispute");
+        System.out.println("4. Criminal");
+        System.out.println("Choice: ");
+        int choice;
+        try
+        {
+            choice = Utils.readIntegerInput();
+        }
+        catch (NumberFormatException e)
+        {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        if (choice < 1 || choice > 4)
+        {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+
+        LawsuitTypes lawsuitType = LawsuitTypes.values()[choice - 1];
+        int i = 1;
+        for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
+        {
+            Lawsuit lawsuit = (Lawsuit) obj;
+            if (lawsuit.getLawsuitType() == lawsuitType)
+            {
+                System.out.println(i + ".\n" + lawsuit.toString());
+                i++;
+            }
+        }
     }
 
     // ============ LAW OFFICE OWNER ============

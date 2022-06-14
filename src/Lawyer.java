@@ -47,18 +47,21 @@ public class Lawyer extends Citizen {
     
     protected boolean stateAttorney;
     protected boolean acceptsLawsuits;
-    protected List<JobApplication> jobApplications = new LinkedList<>();
     protected Integer employerId;
-    protected TreeSet<Integer> continuingLawsuits =new TreeSet<>();
+    protected List<JobApplication> jobApplications = new LinkedList<>();
     protected TreeSet<Integer> concludedLawsuits =new TreeSet<>();
+    protected TreeSet<Integer> continuingLawsuits =new TreeSet<>();
 
+    // A constructor.
     public Lawyer(int id,String password,String name,String surname, String email,String phone){
         super(id, password, name, surname,  email, phone);
         stateAttorney = false;
         acceptsLawsuits = false;
     }
 
-    public Lawyer(int id,String password,String name,String surname, String email,String phone, boolean stateAttorney, boolean acceptsLawsuits){
+    // A constructor.
+    public Lawyer(int id,String password,String name,String surname, String email,
+                  String phone, boolean stateAttorney, boolean acceptsLawsuits){
         super(id, password, name, surname,  email, phone);
         this.stateAttorney = stateAttorney;
         this.acceptsLawsuits = acceptsLawsuits;
@@ -67,23 +70,28 @@ public class Lawyer extends Citizen {
     /**
      * This function takes the data structure where job postings are kept.
      * It displays these and allows the lawyer to apply to one of them.
-     * @param /*Job adverts data structure.
+     * @param systemClassRef This is a reference to the system class.
      */
     public void applyForJobs(SystemClass systemClassRef){
-        //Create a JobApplication, find owner, add reference to its LawOffice jobApplications also.
-
         systemClassRef.displayJobAdvertisements();
-        System.out.println("Enter employer id to apply for job");
-        int ownerId = Utils.readIntegerInput();
-        
+        System.out.print("Enter employer ID to apply for job (0 to exit): ");
+        int ownerId;
+        try {
+            ownerId = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        if (ownerId == 0) {
+            return;
+        }
 
-        // Get application from user
-        System.out.println("Enter application");
+        System.out.print("Enter application text: ");
         String application = Utils.readStringInput();
-
         JobApplication jobApplication = createJobApplication(ownerId, id, application);
-
         systemClassRef.addJobApplication(jobApplication);
+
+        System.out.println("Job application completed.");
     }
 
     /**
@@ -101,18 +109,31 @@ public class Lawyer extends Citizen {
     /**
      * This function displays the lawyer's active cases.
      * Allows the defense to add to the selected case.
-     *
      */
     public void addDefenseToTheLawsuit(SystemClass systemClassRef){
         displayContinuingLawsuits(systemClassRef);
-        System.out.println("Please enter the lawsuit ID you want to add defense to: ");
-        int lawsuitId = Utils.readIntegerInput();
+        System.out.println("Please enter the lawsuit ID: ");
+        int lawsuitId;
+        try {
+            lawsuitId = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+
+        Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
+        if (lawsuit == null) {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
+        if (!continuingLawsuits.contains(lawsuitId)) {
+            System.out.println(Utils.INVALID_CHOICE);
+            return;
+        }
 
         System.out.println("Please enter the defense: ");
         String defense = Utils.readStringInput();
 
-
-        Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
         if (lawsuit.getSuingLawyer() == id) {
             lawsuit.setSuingDefence(defense);
         }
@@ -176,7 +197,6 @@ public class Lawyer extends Citizen {
         System.out.println("Continuing Lawsuits");
         int i = 1;
         for(Integer lawsuitId : continuingLawsuits){
-            System.out.println(lawsuitId + " " + i);
             System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
             i++;
         }
@@ -235,7 +255,13 @@ public class Lawyer extends Citizen {
         System.out.println("1. Accept lawsuits");
         System.out.println("2. Does not accept lawsuits");
         System.out.println("0. Back");
-        int choice = Utils.readIntegerInput();
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
         switch (choice) {
             case 1:
                 acceptsLawsuits = true;
@@ -246,18 +272,22 @@ public class Lawyer extends Citizen {
             case 0:
                 return;
             default:
-                System.out.println("Invalid choice");
+                System.out.println(Utils.INVALID_CHOICE);
                 acceptsLawsuitsMenu();
                 break;
         }
     }
 
+    /**
+     * The function is a menu for the lawyer, it has 8 options, each option calls a different function.
+     * 
+     * @param systemClassRef is a reference to the system class.
+     */
     @Override
     public void menu(SystemClass systemClassRef) {
 
         System.out.println("\n--- Lawyer Menu ---");
         while(true){
-
             System.out.println("\n1. Apply for jobs");
             System.out.println("2. Add Defense To The Law Suit");
             System.out.println("3. Apply For Being State Attorney");
@@ -265,7 +295,7 @@ public class Lawyer extends Citizen {
             System.out.println("5. Access To The Archive");
             System.out.println("6. View continuing lawsuits");
             System.out.println("7. View concluded lawsuits");
-            System.out.println("8. Change accepting lawsuits");
+            System.out.println("8. Change accepting lawsuits status");
             System.out.println("0. Exit");
             System.out.print("Choice: ");
             int choice;
@@ -275,7 +305,6 @@ public class Lawyer extends Citizen {
                 System.out.println(Utils.INVALID_INPUT);
                 continue;
             }
-
             switch (choice){
                 case 1:
                     applyForJobs(systemClassRef);
@@ -306,10 +335,8 @@ public class Lawyer extends Citizen {
                 default:
                     System.out.println("Invalid choice");
                     break;
-
             }
         }
-
     }
     
     public void citizenMenu(SystemClass systemClassRef)

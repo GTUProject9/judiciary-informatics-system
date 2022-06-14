@@ -6,11 +6,11 @@ import enums.LawsuitStatus;
 public class Lawsuit extends AbstractSystemObject
 {
     private Date date;
-    private Integer judge;
-    private Integer suingCitizen;
-    private Integer suedCitizen;
-    private Integer suingLawyer;
-    private Integer suedLawyer;
+    private int judge;
+    private int suingCitizen;
+    private int suedCitizen;
+    private int suingLawyer;
+    private int suedLawyer;
     private String suingDefence;
     private String suedDefence;
     //Personal Injury Lawsuit, Product Liability Lawsuit, Divorce and Family Law Disputes, Criminal Cases
@@ -19,42 +19,42 @@ public class Lawsuit extends AbstractSystemObject
     private String courtRecords;
     private LawsuitStatus status;
 
-    public Lawsuit(Integer id, Date date, LawsuitTypes lawsuitType, String caseFile) {
+    public Lawsuit(int id, Date date, LawsuitTypes lawsuitType, String caseFile) {
         super(id);
         this.date = date;
-        this.judge = null;
-        this.suingCitizen = null;
-        this.suedCitizen = null;
-        this.suingLawyer = null;
-        this.suedLawyer = null;
+        this.judge = -1;
+        this.suingCitizen = -1;
+        this.suedCitizen = -1;
+        this.suingLawyer = -1;
+        this.suedLawyer = -1;
         this.lawsuitType = lawsuitType;
         this.caseFile = caseFile;
         this.courtRecords = null;
         this.status = LawsuitStatus.HOLD;
     }
 
-    public Lawsuit(Date date, Integer suingCitizen, Integer suedCitizen,
-                   Integer suingLawyer, LawsuitTypes lawsuitType,
+    public Lawsuit(Date date, int suingCitizen, int suedCitizen,
+                   int suingLawyer, LawsuitTypes lawsuitType,
                    String caseFile) {
         super();
         this.date = date;
-        this.judge = null;
+        this.judge = -1;
         this.suingCitizen = suingCitizen;
         this.suedCitizen = suedCitizen;
         this.suingLawyer = suingLawyer;
-        this.suedLawyer = null;
+        this.suedLawyer = -1;
         this.lawsuitType = lawsuitType;
         this.caseFile = caseFile;
         this.courtRecords = null;
         this.status = LawsuitStatus.HOLD;
     }
     
-    public Lawsuit(Date date, Integer suingCitizen, Integer suedCitizen,
-                   Integer suingLawyer, Integer suedLawyer, LawsuitTypes lawsuitType,
+    public Lawsuit(Date date, int suingCitizen, int suedCitizen,
+                   int suingLawyer, int suedLawyer, LawsuitTypes lawsuitType,
                    String caseFile) {
         super();
         this.date = date;
-        this.judge = null;
+        this.judge = -1;
         this.suingCitizen = suingCitizen;
         this.suedCitizen = suedCitizen;
         this.suingLawyer = suingLawyer;
@@ -91,43 +91,43 @@ public class Lawsuit extends AbstractSystemObject
         return this.date;
     }
 
-    public void setJudge(Integer judge){
+    public void setJudge(int judge){
         this.judge = judge;
     }
 
-    public Integer getJudge(){
+    public int getJudge(){
         return this.judge;
     }
 
-    public void setSuingCitizen(Integer citizen){
+    public void setSuingCitizen(int citizen){
         this.suingCitizen = citizen;
     }
 
-    public Integer getSuingCitizen(){
+    public int getSuingCitizen(){
         return this.suingCitizen;
     }
 
-    public void setSuedCitizen(Integer citizen){
+    public void setSuedCitizen(int citizen){
         this.suedCitizen = citizen;
     }
 
-    public Integer getSuedCitizen(){
+    public int getSuedCitizen(){
         return this.suedCitizen;
     }
 
-    public void setSuingLawyer(Integer lawyer){
+    public void setSuingLawyer(int lawyer){
         this.suingLawyer = lawyer;
     }
 
-    public Integer getSuingLawyer(){
+    public int getSuingLawyer(){
         return this.suingLawyer;
     }
 
-    public void setSuedLawyer(Integer lawyer){
+    public void setSuedLawyer(int lawyer){
         this.suedLawyer = lawyer;
     }
 
-    public Integer getSuedLawyer(){
+    public int getSuedLawyer(){
         return suedLawyer;
     }
 
@@ -181,8 +181,8 @@ public class Lawsuit extends AbstractSystemObject
 
     @Override
     public String toString() {
-        return super.toString() + " " + date + " " + judge + " " + suingCitizen + " " + suedCitizen + " " + suingLawyer + " " + 
-                     suedLawyer + " " + suingDefence + " " + suedDefence + " " + lawsuitType + " " + caseFile + " " + courtRecords + " " + status;
-
+        return super.toString() + " " + date + " " + judge + " " + suingCitizen + " " + suedCitizen + " " + 
+               suingLawyer + " " + suedLawyer + " " + suingDefence + " " + suedDefence + " " + lawsuitType + " " + 
+               caseFile + " " + courtRecords + " " + status;
     }
 }

@@ -73,26 +73,26 @@ public class Judge extends Citizen{
             System.out.println("Status: "+lawsuit.getStatus().getStatus());
             Citizen defendant = null,prosecutor = null;
             Lawyer defendantLayer = null,prosecutorLayer = null;
-            if (lawsuit.getSuingCitizen() != null)
+            if (lawsuit.getSuingCitizen() != -1)
                 defendant = (Citizen) systemClassRefReference.getSystemObject(lawsuit.getSuingCitizen());
 
             if (defendant != null)
                 System.out.println("Defendant: "+ defendant.firstName + " " + defendant.lastName);
             else
                 System.out.println("Defendant: None");
-            if (lawsuit.getSuingLawyer() != null)
+            if (lawsuit.getSuingLawyer() != -1)
                  defendantLayer = (Lawyer) systemClassRefReference.getSystemObject(lawsuit.getSuingLawyer());
             if (defendantLayer != null)
                 System.out.println("Defendant's Lawyer: "+ defendantLayer.firstName + " " + defendantLayer.lastName);
             else
                 System.out.println("Defendant's Lawyer: None");
-            if (lawsuit.getSuedCitizen() != null)
+            if (lawsuit.getSuedCitizen() != -1)
                 prosecutor = (Citizen) systemClassRefReference.getSystemObject(lawsuit.getSuedCitizen());
             if (prosecutor != null)
                 System.out.println("Prosecutor: "+ prosecutor.firstName + " " + prosecutor.lastName);
             else
                 System.out.println("Prosecutor: None");
-            if (lawsuit.getSuedLawyer() != null)
+            if (lawsuit.getSuedLawyer() != -1)
                 prosecutorLayer = (Lawyer) systemClassRefReference.getSystemObject(lawsuit.getSuedLawyer());
             if (prosecutorLayer != null)
                 System.out.println("Prosecutor's Lawyer: "+ prosecutorLayer.firstName + " " + prosecutorLayer.lastName);
