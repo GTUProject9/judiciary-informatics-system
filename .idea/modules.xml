@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LawManagementSystem.iml" filepath="$PROJECT_DIR$/LawManagementSystem.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JudiciaryInformaticsSystem.iml" filepath="$PROJECT_DIR$/JudiciaryInformaticsSystem.iml" />
     </modules>
   </component>
 </project>
