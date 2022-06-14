@@ -59,9 +59,8 @@ public class Judge extends Citizen{
      * @param systemClassRefReference System object that holds objects by id
      */
     private void concludeLawsuit(SystemClass systemClassRefReference) {
-
         Lawsuit lawsuit = systemClassRefReference.peekHighestPriorityLawsuit(id);
-      
+        
         if (lawsuit == null) {
             System.out.println("There is no assigned lawsuits.");
             return;
