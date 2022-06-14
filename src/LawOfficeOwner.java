@@ -130,6 +130,8 @@ public class LawOfficeOwner extends Lawyer {
         } else {
             lawsuit.setSuedLawyer(employee.id);
         }
+
+        System.out.println("\nLawsuit with ID " + lawsuitId + " assigned to " + employee.firstName + " " + employee.lastName);
     }
 
     /**

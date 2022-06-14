@@ -1,5 +1,6 @@
 import enums.LawsuitStatus;
 import enums.LawsuitTypes;
+import enums.SystemObjectTypes;
 
 import java.util.Date;
 
@@ -53,59 +54,51 @@ public class GovernmentOfficial extends Citizen
     public void assignLawsuitToJudgeMenu(SystemClass systemClassRef)
     {
         systemClassRef.displayPendingLawsuits();
-        System.out.print("Enter the ID of the lawsuit (0 to exit): ");
-        int lawsuitId;
+        System.out.print("Select a lawsuit (0 to exit): ");
+        int choice;
         try {
-            lawsuitId = Utils.readIntegerInput();
+            choice = Utils.readIntegerInput();
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-
-        if (lawsuitId == 0)
+        if (choice == 0)
             return;
 
-        Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
+        Lawsuit lawsuit = systemClassRef.getPendingLawsuitByIndex(choice - 1);
         if (lawsuit == null) {
-            System.out.println("The lawsuit with ID " + lawsuitId + " does not exist.");
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
         if (lawsuit.getStatus() != LawsuitStatus.HOLD) {
-            System.out.println("The lawsuit with ID " + lawsuitId + " is not pending.");
+            System.out.println("The lawsuit with ID " + lawsuit.getId() + " is not pending.");
             return;
         }
-        // It will be activated later.
-        // if (lawsuit.getSuingDefence() == null || lawsuit.getSuedDefence() == null) {
-        //     System.out.println("The lawsuit with ID " + lawsuitId + " is not a defenced by lawyers yet.");
-        //     return;
-        // }
 
         systemClassRef.displayJudges();
-        System.out.print("Enter the ID of the judge (0 to exit): ");
-        int judgeId;
+        System.out.print("Select a judge (0 to exit): ");
         try {
-            judgeId = Utils.readIntegerInput();
+            choice = Utils.readIntegerInput();
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-        if (judgeId == 0)
+        if (choice == 0)
             return;
         
-        Judge judge = systemClassRef.getJudge(judgeId);
-        if (judge == null)
-        {
-            System.out.println("The judge with ID " + judgeId + " does not exist.");
+        Judge judge = (Judge)systemClassRef.getSystemObjectByIndex(choice - 1, SystemObjectTypes.JUDGE);
+        if (judge == null) {
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
 
-        judge.assignLawsuit(lawsuitId);
-        lawsuit.setJudge(judgeId);
+        judge.assignLawsuit(lawsuit.getId());
+        lawsuit.setJudge(judge.getId());
         lawsuit.setStatus(LawsuitStatus.STILL_GOING);
         systemClassRef.addLawsuitByDate(lawsuit);
 
-        System.out.println("The lawsuit with ID " + lawsuitId + 
-                           "\nhas been assigned to the judge with ID " + judgeId + ".");
+        System.out.println("The lawsuit with ID " + lawsuit.getId() + 
+                           "\nhas been assigned to the judge with ID " + judge.getId() + ".");
     }
 
     /**
@@ -117,32 +110,31 @@ public class GovernmentOfficial extends Citizen
     private void assignLawsuitToJudge(SystemClass systemClassRef, int lawsuitId)
     {
         systemClassRef.displayJudges();
-        System.out.print("Enter the ID of the judge (0 to exit): ");
-        int judgeId;
+        System.out.print("Select a judge (0 to exit): ");
+        int choice;
         try {
-            judgeId = Utils.readIntegerInput();
+            choice = Utils.readIntegerInput();
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-        if (judgeId == 0)
+        if (choice == 0)
             return;
         
-        Judge judge = systemClassRef.getJudge(judgeId);
-        if (judge == null)
-        {
-            System.out.println("The judge with ID " + judgeId + " does not exist.");
+        Judge judge = (Judge)systemClassRef.getSystemObjectByIndex(choice - 1, SystemObjectTypes.JUDGE);
+        if (judge == null) {
+            System.out.println(Utils.INVALID_CHOICE);
             return;
         }
-        judge.assignLawsuit(lawsuitId);
         
+        judge.assignLawsuit(lawsuitId);
         Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-        lawsuit.setJudge(judgeId);
+        lawsuit.setJudge(judge.getId());
         lawsuit.setStatus(LawsuitStatus.STILL_GOING);
         systemClassRef.addLawsuitByDate(lawsuit);
 
         System.out.println("The lawsuit with ID " + lawsuitId + 
-                           "\nhas been assigned to the judge with ID " + judgeId + ".");
+                           "\nhas been assigned to the judge with ID " + judge.getId() + ".");
     }
 
     /**
@@ -194,6 +186,8 @@ public class GovernmentOfficial extends Citizen
      * @param systemClassRef a reference to the system class
      */
     public void publishLawsuit(SystemClass systemClassRef) {
+        
+        System.out.println("0. Go Back");
         System.out.print("Enter suing citizen ID: ");
         int suingId;
         try {
@@ -202,6 +196,8 @@ public class GovernmentOfficial extends Citizen
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
+        if (suingId == 0)
+            return;
         
         Citizen suingCitizen = (Citizen) systemClassRef.getCitizen(suingId);
         if (suingCitizen == null)
@@ -211,21 +207,29 @@ public class GovernmentOfficial extends Citizen
         }
 
         System.out.print("Enter sued citizen ID: ");
-        int suedId = Utils.readIntegerInput();
+        int suedId;
+        try {
+            suedId = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        if (suedId == 0)
+            return;
+        
         Citizen suedCitizen = (Citizen) systemClassRef.getCitizen(suedId);
         if (suedCitizen == null)
         {
-            System.out.println("The citizen does not exist.");
+            System.out.println("\nThe citizen does not exist.");
             return;
         }
 
         // Select the lawsuit type
-        System.out.println("Select the lawsuit type:");
+        System.out.println("\nSelect the lawsuit type:");
         System.out.println("1. Personal Injury Lawsuit");
         System.out.println("2. Product Liability Lawsuit");
         System.out.println("3. Divorce and Family Law Disputes");
         System.out.println("4. Criminal Cases");
-        System.out.println("0. Exit");
         
         int choice;
         try {
@@ -234,10 +238,8 @@ public class GovernmentOfficial extends Citizen
             System.out.println(Utils.INVALID_INPUT);
             return;
         }
-
-        if (choice == 0){
+        if (choice == 0)
             return;
-        }
 
         LawsuitTypes lawsuitType;
         try {
@@ -258,10 +260,12 @@ public class GovernmentOfficial extends Citizen
             System.out.println("There is no state attorney in the queue.");
             return;
         }
+        System.out.println("Suing lawyer assigned from state to the lawsuit: " + suingLawyerId);
+        System.out.println("Sued lawyer assigned from state to the lawsuit: " + suedLawyerId);
 
         Date date = SystemObjectCreator.randomDate();
-        Lawsuit lawsuit = new Lawsuit(date, suingId, suedId, suingLawyerId, suedLawyerId, 
-                                      lawsuitType, caseFile);
+        Lawsuit lawsuit = new Lawsuit(date, suingId, suedId, suingLawyerId, 
+                                      suedLawyerId, lawsuitType, caseFile);
         
         systemClassRef.addLawsuit(lawsuit);
 
@@ -320,7 +324,7 @@ public class GovernmentOfficial extends Citizen
                 case 0:
                     return;
                 default:
-                    System.out.println("Invalid selection.");
+                    System.out.println(Utils.INVALID_CHOICE);
             }
         }
     }

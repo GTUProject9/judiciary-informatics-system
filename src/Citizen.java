@@ -145,10 +145,14 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displaySuingLawsuits(SystemClass systemClassRef) {
-        int i = 1;
+        if (suingLawsuits.isEmpty()) {
+            System.out.println("You have no suing lawsuits.");
+            return;
+        }
+        int i = 0;
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-            System.out.println("\n" + i + ". Lawsuit\n" + lawsuit);
+            System.out.println((i + 1) + ". Lawsuit\n" + lawsuit);
             i++;
         }
     }
@@ -159,10 +163,14 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displaySuedLawsuits(SystemClass systemClassRef) {
-        int i = 1;
+        if (suedLawsuits.isEmpty()) {
+            System.out.println("You have no lawsuits that have been sued.");
+            return;
+        }
+        int i = 0;
         for (var lawsuitId : suedLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
-            System.out.println("\n" + i + ". Lawsuit\n" + lawsuit);
+            System.out.println((i + 1) + ". Lawsuit\n" + lawsuit);
             i++;
         }
     }
@@ -173,12 +181,17 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
-        int i = 1;
+        if (suingLawsuits.isEmpty() && suedLawsuits.isEmpty()) {
+            System.out.println("No lawsuits completed.");
+            return;
+        }
+        
+        int i = 0;
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             if (lawsuit.getStatus() == LawsuitStatus.SUING_WON || 
                 lawsuit.getStatus() == LawsuitStatus.SUED_WON) {
-                    System.out.println(i + ". " + lawsuit.getCaseFile());
+                    System.out.println((i + 1)+ ". " + lawsuit);
                 i++;
             }
         }
@@ -186,10 +199,11 @@ public class Citizen extends AbstractUser
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             if (lawsuit.getStatus() == LawsuitStatus.SUING_WON || 
                 lawsuit.getStatus() == LawsuitStatus.SUED_WON) {
-                    System.out.println(i + ". " + lawsuit.getCaseFile());
+                    System.out.println((i + 1) + ". " + lawsuit);
                 i++;
             }
         }
+        
     }
     
     /**
@@ -234,9 +248,9 @@ public class Citizen extends AbstractUser
             return;
         }
 
-        int i = 1;
+        int i = 0;
         for (var lawsuitId : suedLawsuits) {
-            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
+            System.out.println((i + 1) + ".\n" + systemClassRef.getLawsuit(lawsuitId));
             i++;
         }
 

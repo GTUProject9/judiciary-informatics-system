@@ -112,10 +112,21 @@ public class Lawyer extends Citizen {
      */
     public void addDefenseToTheLawsuit(SystemClass systemClassRef){
         displayContinuingLawsuits(systemClassRef);
-        System.out.println("Please enter the lawsuit ID: ");
+        System.out.println("0. Go back");
+        System.out.println("Select a lawsuit: ");
+        int choice;
+        try {
+            choice = Utils.readIntegerInput();
+        } catch (Exception e) {
+            System.out.println(Utils.INVALID_INPUT);
+            return;
+        }
+        if (choice == 0) {
+            return;
+        }
         int lawsuitId;
         try {
-            lawsuitId = Utils.readIntegerInput();
+            lawsuitId = (int) continuingLawsuits.toArray()[choice - 1];
         } catch (Exception e) {
             System.out.println(Utils.INVALID_INPUT);
             return;
@@ -140,6 +151,8 @@ public class Lawyer extends Citizen {
         else {
             lawsuit.setSuedDefence(defense);
         }
+
+        System.out.println("\nDefense added to the lawsuit.");
     }
 
     /**
@@ -160,10 +173,10 @@ public class Lawyer extends Citizen {
      * This function prints out the job applications in the jobApplications array list
      */
     public void viewJobApplications(){
-        int i = 1;
+        int i = 0;
         System.out.println("Job applications:");
         for(JobApplication jobApplication : jobApplications){
-            System.out.println(i + ".\n" + jobApplication);
+            System.out.println((i + 1) + ".\n" + jobApplication);
             i++;
         }
     }
@@ -195,10 +208,9 @@ public class Lawyer extends Citizen {
      */
     private void displayContinuingLawsuits(SystemClass systemClassRef) {
         System.out.println("Continuing Lawsuits");
-        int i = 1;
-        for(Integer lawsuitId : continuingLawsuits){
-            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
-            i++;
+        Object[] lawsuits = continuingLawsuits.toArray();
+        for(int i = 0; i < lawsuits.length; i++){
+            System.out.println((i + 1) + ".\n" + systemClassRef.getLawsuit((int) lawsuits[i]));
         }
     }   
 
@@ -209,9 +221,9 @@ public class Lawyer extends Citizen {
      */
     private void displayConcludedLawsuits(SystemClass systemClassRef) {
         System.out.println("Concluded Lawsuits");
-        int i = 1;
+        int i = 0;
         for(Integer lawsuitId : concludedLawsuits){
-            System.out.println(i + ".\n" + systemClassRef.getLawsuit(lawsuitId));
+            System.out.println((i + 1) + ".\n" + systemClassRef.getLawsuit(lawsuitId));
             i++;
         }
     }

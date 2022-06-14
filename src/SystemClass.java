@@ -250,12 +250,26 @@ public class SystemClass
         int i = 1;
         System.out.println("Pending lawsuits: ");
         for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values()) {
-            if (((Lawsuit)lawsuit).getStatus() == LawsuitStatus.HOLD)
+            if (((Lawsuit) lawsuit).getStatus() == LawsuitStatus.HOLD)
             {
                 System.out.println(i + ". " + lawsuit);
                 i++;
             }
         }
+    }
+
+    public Lawsuit getPendingLawsuitByIndex(int index)
+    {
+        for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values()) {
+            if (((Lawsuit) lawsuit).getStatus() == LawsuitStatus.HOLD)
+            {
+                if (index == 0)
+                    return (Lawsuit) lawsuit;
+                index--;
+            }
+
+        }
+        return null;
     }
 
     public Judge getJudge(int id) {
