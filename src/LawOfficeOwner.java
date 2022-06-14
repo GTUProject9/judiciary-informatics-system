@@ -19,9 +19,9 @@ public class LawOfficeOwner extends Lawyer {
      * @param systemClassRef the system class reference
      */
     private void publishJobAdvertisement(SystemClass systemClassRef) {
-        System.out.print("\nEnter the title of the job advertisement: ");
+        System.out.print("\nEnter the title: ");
         String title = Utils.readStringInput();
-        System.out.print("Enter the description of the job advertisement: ");
+        System.out.print("Enter the description: ");
         String description = Utils.readStringInput();
 
         // Add the job advertisement to the system.
