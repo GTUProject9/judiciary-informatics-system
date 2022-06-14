@@ -1,7 +1,6 @@
 import enums.LawsuitStatus;
 import enums.LawsuitTypes;
 import enums.SystemObjectTypes;
-
 import java.util.Date;
 
 public class GovernmentOfficial extends Citizen 

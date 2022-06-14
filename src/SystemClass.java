@@ -15,13 +15,9 @@ public class SystemClass
 {
     // System Objects: Lawsuit, citizen, lawyer, lawoffice owner, judge, government official
     private List<TreeMap<Integer, AbstractSystemObject>> systemObjects;
-
     private Queue<Integer> stateAttorneys;
-
     private Queue<Integer> stateAttorneyApplicants;
-
     private List<PriorityQueue<Integer>> lawsuitsByDate;
-
     private ArrayList<LawOffice.JobAdvertisement> jobAdvertisementsReferences;
 
     private int lawyerCounter;
