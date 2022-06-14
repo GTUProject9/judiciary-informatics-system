@@ -165,7 +165,9 @@ public class Lawyer extends Citizen {
         if(!stateAttorney){
             systemClassRef.addStateAttorneyApplicant(this);
             System.out.println("You have applied for being a state attorney.");
+            return;
         }
+        System.out.println("You are already a state attorney.");
     }
 
 
