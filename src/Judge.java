@@ -103,10 +103,10 @@ public class Judge extends Citizen{
 
             switch (choice) {
                 case 1:
-                    System.out.println("Defense of Defendant: "+lawsuit.getSuingDefence());
+                    System.out.println("Defense of Defendant: "+lawsuit.getSuingDefence() + "\n");
                     break;
                 case 2:
-                    System.out.println("Defense of Prosecutor: "+lawsuit.getSuedDefence());
+                    System.out.println("Defense of Prosecutor: "+lawsuit.getSuedDefence() + "\n");
                     break;
                 case 3:
                     changeStatus(systemClassRefReference, lawsuit);
@@ -121,6 +121,8 @@ public class Judge extends Citizen{
                         Lawyer suedLawyer = systemClassRefReference.getLawyer(lawsuit.getSuedLawyer());
                         suingLawyer.concludeLawsuit(lawsuit.getId());
                         suedLawyer.concludeLawsuit(lawsuit.getId());
+
+                        System.out.println("\nLawsuit is concluded.\n");
                     }
                     return;
                 case 0:

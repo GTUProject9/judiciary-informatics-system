@@ -244,7 +244,7 @@ public class SystemClass
     public void displayPendingLawsuits()
     {
         int i = 1;
-        System.out.println("Pending lawsuits: ");
+        System.out.println("\n\tPending lawsuits:");
         for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values()) {
             if (((Lawsuit) lawsuit).getStatus() == LawsuitStatus.HOLD)
             {
@@ -574,6 +574,7 @@ public class SystemClass
      */
     private void displayAllLawsuits()
     {
+        System.out.println("\n\tAll lawsuits");
         int i = 1;
         for (var lawsuit : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -610,6 +611,7 @@ public class SystemClass
             return;
         }
 
+        System.out.println("\n\tLawsuits by date");
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -630,6 +632,7 @@ public class SystemClass
      */
     public void displayConcludedLawsuits()
     {
+        System.out.println("\n\tConcluded lawsuits");
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -668,6 +671,7 @@ public class SystemClass
             return;
         }
 
+        System.out.println("\n\tLawsuits by judge");
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -707,6 +711,7 @@ public class SystemClass
             return;
         }
 
+        System.out.println("\n\tLawsuits by lawyer");
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -744,7 +749,7 @@ public class SystemClass
             System.out.println(Utils.INVALID_CHOICE);
             return;
         }
-
+        System.out.println("\n\tLawsuits by citizen");
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {
@@ -788,6 +793,7 @@ public class SystemClass
         }
 
         LawsuitTypes lawsuitType = LawsuitTypes.values()[choice - 1];
+        System.out.println("\n\tLawsuits by type " + lawsuitType.toString());
         int i = 1;
         for (var obj : systemObjects.get(SystemObjectTypes.LAWSUIT.getSystemObjectCode() - 1).values())
         {

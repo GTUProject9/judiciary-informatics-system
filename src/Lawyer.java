@@ -368,9 +368,11 @@ public class Lawyer extends Citizen {
         switch (choice) {
             case 1:
                 acceptsLawsuits = true;
+                System.out.println("You are now accepting lawsuits.");
                 break;
             case 2:
                 acceptsLawsuits = false;
+                System.out.println("You are now not accepting lawsuits.");
                 break;
             case 0:
                 return;

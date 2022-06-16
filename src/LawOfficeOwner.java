@@ -195,10 +195,12 @@ public class LawOfficeOwner extends Lawyer {
             case 1:
                 acceptJobApplication(systemClassRef, jobApplication);
                 lawOffice.removeJobApplication(jobApplicationIndex);
+                System.out.println("\nJob application accepted successfully.\n");
                 break;
             case 2:
                 rejectJobApplication(jobApplication);
                 lawOffice.removeJobApplication(jobApplicationIndex);
+                System.out.println("\nJob application rejected successfully.\n");
                 break;
             default:
                 System.out.println(Utils.INVALID_CHOICE);

@@ -144,7 +144,7 @@ public class Citizen extends AbstractUser
         if (choice == 2) {
             lawyerId = systemClassRef.pollStateAttorney();
             if (lawyerId == -1) {
-                System.out.println("No lawyer available in state.");
+                System.out.println("\nNo lawyer available in state.");
                 return -1;
             }
         }
@@ -162,6 +162,7 @@ public class Citizen extends AbstractUser
             return;
         }
         int i = 0;
+        System.out.println("\nYour suing lawsuits:");
         System.out.println();
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
@@ -181,6 +182,7 @@ public class Citizen extends AbstractUser
             System.out.println("\nYou have no lawsuits that have been sued.");
             return;
         }
+        System.out.println("\nLawsuits that you have been sued:");
         int i = 0;
         System.out.println();
         for (var lawsuitId : suedLawsuits) {
@@ -196,6 +198,7 @@ public class Citizen extends AbstractUser
      * @param systemClassRef a reference to the system class
      */
     private void displayCompletedLawsuits(SystemClass systemClassRef) {
+        System.out.println("\nCompleted lawsuits:");
         int i = 0;
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
