@@ -152,10 +152,11 @@ public class Citizen extends AbstractUser
      */
     private void displaySuingLawsuits(SystemClass systemClassRef) {
         if (suingLawsuits.isEmpty()) {
-            System.out.println("You have no suing lawsuits.");
+            System.out.println("\nYou have no suing lawsuits.");
             return;
         }
         int i = 0;
+        System.out.println();
         for (var lawsuitId : suingLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             System.out.println((i + 1) + ". Lawsuit\n" + lawsuit);
@@ -171,10 +172,11 @@ public class Citizen extends AbstractUser
     private void displaySuedLawsuits(SystemClass systemClassRef) {
         
         if (suedLawsuits.isEmpty()) {
-            System.out.println("You have no lawsuits that have been sued.");
+            System.out.println("\nYou have no lawsuits that have been sued.");
             return;
         }
         int i = 0;
+        System.out.println();
         for (var lawsuitId : suedLawsuits) {
             Lawsuit lawsuit = systemClassRef.getLawsuit(lawsuitId);
             System.out.println((i + 1) + ". Lawsuit\n" + lawsuit);

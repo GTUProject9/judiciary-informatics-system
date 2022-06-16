@@ -315,8 +315,22 @@ public class Lawsuit extends AbstractSystemObject
      */
     @Override
     public String toString() {
-        return super.toString() + " " + date + " " + judge + " " + suingCitizen + " " + suedCitizen + " " + 
-               suingLawyer + " " + suedLawyer + " " + suingDefence + " " + suedDefence + " " + lawsuitType + " " + 
-               caseFile + " " + courtRecords + " " + status;
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Case ID: " + this.id + "\n");
+        sb.append("Date: " + this.date + "\n");
+        sb.append("Judge ID: " + this.judge + "\n");
+        sb.append("Suing Citizen ID: " + this.suingCitizen + "\n");
+        sb.append("Sued Citizen ID: " + this.suedCitizen + "\n");
+        sb.append("Suing Lawyer ID: " + this.suingLawyer + "\n");
+        sb.append("Sued Lawyer ID: " + this.suedLawyer + "\n");
+        sb.append("Suing Defence: " + this.suingDefence + "\n");
+        sb.append("Sued Defence: " + this.suedDefence + "\n");
+        sb.append("Lawsuit Type: " + this.lawsuitType + "\n");
+        sb.append("Case File: " + this.caseFile + "\n");
+        sb.append("Court Records: " + this.courtRecords + "\n");
+        sb.append("Status: " + this.status + "\n");
+
+        return sb.toString();
     }
 }
