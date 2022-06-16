@@ -222,6 +222,11 @@ public class Judge extends Citizen{
             }
         }
     }
+    /**
+     * This function is a menu for the citizen class
+     * 
+     * @param systemClassRef This is a reference to the system class.
+     */
     public void citizenMenu(SystemClass systemClassRef)
     {
         super.menu(systemClassRef);

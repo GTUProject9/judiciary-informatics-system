@@ -117,6 +117,12 @@ public class Lawyer extends Citizen {
             return;
         }
 
+        LawOfficeOwner theOwner = systemClassRef.getLawOfficeOwner(ownerId);
+        if (theOwner == null) {
+            System.out.println("No such employer exists.");
+            return;
+        }
+
         System.out.print("Enter application text: ");
         String application = Utils.readStringInput();
         JobApplication jobApplication = createJobApplication(ownerId, id, application);
