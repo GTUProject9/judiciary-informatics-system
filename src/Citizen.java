@@ -101,7 +101,7 @@ public class Citizen extends AbstractUser
      * @return The lawyerId is being returned.
      */
     private static int selectLawyer(SystemClass systemClassRef) {
-        System.out.println("1. Select lawyer that accepts lawsuits");
+        System.out.println("\n1. Select lawyer that accepts lawsuits");
         System.out.println("2. Request lawyer from state");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
