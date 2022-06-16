@@ -464,6 +464,9 @@ public class SystemClass
             System.out.println(i + ".\n" + jobAdvertisement.toString());
             i++;
         }
+        
+        if (jobAdvertisementsReferences.isEmpty())
+            System.out.println("No job advertisements.");
     }
     
     /**
@@ -575,6 +578,9 @@ public class SystemClass
             System.out.println(i + ".\n" + lawsuit.toString());
             i++;
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits.");
     }
 
     /**
@@ -612,6 +618,9 @@ public class SystemClass
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found in given interval.");
     }
 
     /**
@@ -629,6 +638,9 @@ public class SystemClass
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found");
     }
    
     /**
@@ -664,6 +676,10 @@ public class SystemClass
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found");
+
     }
 
     /**
@@ -699,6 +715,9 @@ public class SystemClass
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found");
     }
 
     /**
@@ -734,6 +753,9 @@ public class SystemClass
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found");
     }
 
     /**
@@ -770,10 +792,13 @@ public class SystemClass
             Lawsuit lawsuit = (Lawsuit) obj;
             if (lawsuit.getLawsuitType() == lawsuitType)
             {
-                System.out.println(i + ".\n" + lawsuit.toString());
+                System.out.println(i + ". " + lawsuit.toString());
                 i++;
             }
         }
+
+        if (i == 1)
+            System.out.println("No lawsuits found");
     }
 
     // ============ LAW OFFICE OWNER ============

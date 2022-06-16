@@ -212,6 +212,10 @@ public class Lawyer extends Citizen {
      * This function prints out the job applications in the jobApplications array list
      */
     public void viewJobApplications(){
+        if (jobApplications.isEmpty()) {
+            System.out.println("You have no job applications.");
+            return;
+        }
         int i = 0;
         System.out.println("Job applications:");
         for(JobApplication jobApplication : jobApplications){
@@ -350,7 +354,7 @@ public class Lawyer extends Citizen {
      * depending on the input
      */
     private void acceptsLawsuitsMenu() {
-        System.out.println("You are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
+        System.out.println("\nYou are currently " + (acceptsLawsuits ? "accepting" : "not accepting") + " lawsuits.");
         System.out.println("1. Accept lawsuits");
         System.out.println("2. Does not accept lawsuits");
         System.out.println("0. Back");
