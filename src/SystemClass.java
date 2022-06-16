@@ -350,6 +350,8 @@ public class SystemClass
                 i++;
             }
         }
+        if (i == 1)
+            System.out.println("No lawyers accept lawsuits.");
     }
     
     /**

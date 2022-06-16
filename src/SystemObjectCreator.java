@@ -98,8 +98,8 @@ public final class SystemObjectCreator {
             String firstName = firstNames.get(getRandomNumber()  % firstNames.size());
             String lastName = lastNames.get(getRandomNumber() % lastNames.size());
             String email = firstName + lastName + id + EMAIL_DOMAIN;
-            boolean stateAttorney = getRandomNumber() % 2 == 0;
-            boolean acceptsLawsuits = getRandomNumber() % 2 == 0;
+            boolean stateAttorney = false;
+            boolean acceptsLawsuits = false;
 
             systemClassRef.registerSystemObject(new Lawyer(id, PASSWORD, firstName, lastName, 
                                                               email, PHONE, stateAttorney, acceptsLawsuits));

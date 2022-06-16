@@ -120,7 +120,7 @@ public class Citizen extends AbstractUser
         int lawyerId = -1;
         if (choice == 1) {
             systemClassRef.displayLawsuitAcceptingLawyers();
-            System.out.print("Select: ");
+            System.out.print("Select (0. Go Back): ");
             int index;
             try {
                 index = Utils.readIntegerInput();
@@ -128,6 +128,12 @@ public class Citizen extends AbstractUser
                 System.out.println(Utils.INVALID_INPUT);
                 return -1;
             }
+            
+            if (index == 0) 
+            {
+                return -1;
+            }
+
             lawyerId = systemClassRef.getLawsuitAcceptingLawyerByIndex(index - 1);
             if (lawyerId == -1)
             {
