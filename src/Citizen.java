@@ -255,6 +255,8 @@ public class Citizen extends AbstractUser
             return;
         }
 
+        System.out.println("\nSelect the lawsuit you want to add a lawyer to:");
+
         int i = 0, j = 0;
         for (var lawsuitId : suedLawsuits) {
             if (systemClassRef.getLawsuit(lawsuitId).getStatus() == LawsuitStatus.HOLD) {
